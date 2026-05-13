@@ -11,7 +11,14 @@ export default {
     if (typeof window !== 'undefined') {
       const initResizer = () => {
         const sidebar = document.querySelector('.VPSidebar') as HTMLElement;
-        if (!sidebar || document.querySelector('.sidebar-resizer')) return;
+        if (!sidebar) return;
+        
+        // 강제로 기본 넓이를 220px로 고정 (단, 한 번도 드래그 안 했을 때)
+        if (!document.documentElement.style.getPropertyValue('--vp-sidebar-width')) {
+            document.documentElement.style.setProperty('--vp-sidebar-width', '220px');
+        }
+
+        if (document.querySelector('.sidebar-resizer')) return;
 
         const resizer = document.createElement('div');
         resizer.className = 'sidebar-resizer';
