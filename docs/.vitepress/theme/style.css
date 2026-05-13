@@ -17,6 +17,7 @@
   
   --vp-nav-bg-color: #ffffff;
   --vp-layout-max-width: 900px;
+  --vp-sidebar-width: 240px; /* 노션 기본 사이드바 넓이와 비슷하게 줄임 */
 }
 
 .dark {
