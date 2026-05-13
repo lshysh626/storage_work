@@ -34,7 +34,8 @@ export default defineConfig({
           text: '공부',
           items: [
             { text: '인덱스', link: '/study/' },
-            { text: '첫 노트', link: '/study/welcome' }
+            { text: '첫 노트', link: '/study/welcome' },
+            { text: '📖 노션처럼 쓰기 (예시)', link: '/study/example' }
           ]
         }
       ]
