@@ -1,0 +1,10 @@
+﻿{
+    "questions":  {
+                      "id":  3,
+                      "type":  "essay",
+                      "question":  "SQL Injection 공격의 개념과 대응 방안 3가지를 서술하시오.",
+                      "answer":  "SQL Injection은 악의적인 SQL 구문을 입력하여 데이터베이스를 비정상적으로 조작하는 공격이다.\n대응 방안:\n1. 입력값 검증 및 필터링\n2. 준비된 구문(Prepared Statement) 사용\n3. 최소 권한 원칙 적용",
+                      "points":  12,
+                      "explanation":  ""
+                  }
+}

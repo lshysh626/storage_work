@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보보안기사 실기 마스터</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <aside id="sidebar">
+        <div class="logo">IS MASTER</div>
+        <ul class="nav-links">
+            <li class="active" data-view="dashboard">📊 대시보드</li>
+            <li data-view="quiz-selection">📝 기출 풀기</li>
+            <li data-view="stats">📈 학습 통계</li>
+            <li data-view="settings">⚙️ 설정</li>
+        </ul>
+        <div id="sync-btn" class="sync-btn">🔄 데이터 동기화</div>
+    </aside>
+
+    <main class="content">
+        <!-- Dashboard -->
+        <section id="dashboard" class="view active">
+            <h1>대시보드</h1>
+            <div id="stats-grid" class="stats-grid"></div>
+            <div id="parsed-sessions" style="margin-top: 2.5rem;"></div>
+        </section>
+
+        <!-- Quiz Selection -->
+        <section id="quiz-selection" class="view">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                <h1 style="margin-bottom: 0;">기출 풀기</h1>
+                <div class="mode-toggle-group">
+                    <button class="toggle-btn active" id="btn-immediate" onclick="setMode('immediate')">⚡ 즉시 채점</button>
+                    <button class="toggle-btn" id="btn-bulk" onclick="setMode('bulk')">🎯 실전 모드</button>
+                    <button class="toggle-btn" id="btn-study" onclick="setMode('study')">📖 학습 모드</button>
+                </div>
+            </div>
+            
+            <div class="mode-layout">
+                <div class="item-row full-width" onclick="startRandomQuiz()">
+                    <span class="icon">🎲</span>
+                    <div class="text">
+                        <strong>랜덤 풀이</strong>
+                        <span>전체 문제 무작위</span>
+                    </div>
+                </div>
+                <div class="row-half">
+                    <div class="item-row" onclick="toggleSessionSelection()">
+                        <span class="icon">📅</span>
+                        <div class="text">
+                            <strong>회차별 풀기</strong>
+                            <span>원하는 회차 선택</span>
+                        </div>
+                    </div>
+                    <div class="item-row" onclick="toggleTypeSelection()">
+                        <span class="icon">📂</span>
+                        <div class="text">
+                            <strong>유형별 풀기</strong>
+                            <span>단답형/서술형/실무형</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sub-list" class="sub-list hidden"></div>
+        </section>
+
+        <!-- Stats -->
+        <section id="stats" class="view">
+            <h1>학습 통계</h1>
+            <div id="stats-detail"></div>
+        </section>
+
+        <!-- Quiz View -->
+        <section id="quiz-view" class="view">
+            <div class="quiz-header">
+                <span class="quiz-badge" id="quiz-title">기출 풀기</span>
+                <span class="timer" id="timer">00:00</span>
+                <button class="close-btn" id="exit-quiz">×</button>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="quiz-progress"></div></div>
+
+            <div class="quiz-layout-container" id="quiz-layout-container">
+                <div class="quiz-body" id="quiz-main-panel" style="position: relative;">
+                    <div class="q-meta" style="margin-top: 1rem;">
+                        <span class="badge-num" id="q-number">Q1</span>
+                        <span class="badge-type" id="q-type">단답형</span>
+                        <span class="badge-pts" id="q-points">3점</span>
+                    </div>
+                    <div class="question-text" id="q-text"></div>
+                    <div id="inputs-container"></div>
+                    <div class="quiz-actions">
+                        <button class="btn-prev hidden" id="prev-btn">이전 (Ctrl+[)</button>
+                        <button class="btn-next" id="submit-btn">다음</button>
+                    </div>
+                    <div class="feedback hidden" id="feedback-area"></div>
+                </div>
+                
+                <div class="quiz-side-panel hidden" id="quiz-side-panel">
+                    <div id="explanation-container"></div>
+                    <div id="chat-container">
+                        <div class="chat-header">AI 튜터</div>
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-message ai-message">문제를 선택하면 해설이 표시되고, 질문을 입력하면 AI가 답변합니다.</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" placeholder="질문을 입력하세요...">
+                            <button id="chat-send-btn">전송</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW: Memo Panel -->
+                <div class="quiz-memo-panel hidden" id="quiz-memo-panel">
+                    <div class="chat-header" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255,255,255,0.05);">나만의 메모장</div>
+                    <textarea id="memo-pad" placeholder="여기에 자유롭게 메모하세요. 세션 동안 유지됩니다..." style="flex: 1; background: transparent; border: none; padding: 1.5rem; color: #cbd5e1; font-size: 1rem; line-height: 1.6; resize: none; outline: none; font-family: 'Inter', sans-serif;"></textarea>
+                </div>
+            </div>
+
+            <!-- Floating Toggle Buttons -->
+            <div class="floating-btn-group">
+                <div id="btn-toggle-ai" class="floating-btn" onclick="togglePanel('ai')">AI 튜터</div>
+                <div id="btn-toggle-memo" class="floating-btn" onclick="togglePanel('memo')">메모장</div>
+            </div>
+
+        </section>
+
+        <!-- Bulk Result View -->
+        <section id="bulk-result-view" class="view">
+            <div class="quiz-header">
+                <span class="quiz-badge">채점 결과</span>
+                <span class="timer" id="final-score">총점: 0점</span>
+                <button class="close-btn" onclick="switchView('dashboard')">×</button>
+            </div>
+            <div class="quiz-body" style="max-width: 900px;" id="bulk-result-container">
+                <!-- Results injected here -->
+            </div>
+        </section>
+
+        <!-- Settings View -->
+        <section id="settings" class="view">
+            <h1 style="margin-bottom: 2rem;">⚙️ 설정</h1>
+            <div class="settings-card" style="background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); padding: 2.5rem; max-width: 600px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.8rem;">🔑 AI API Key (Gemini)</label>
+                    <input type="password" id="setting-api-key" placeholder="AIzaSy..." style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.2rem; color: #fff; font-size: 1.1rem; outline: none;">
+                    <p style="color: var(--muted); font-size: 0.85rem; margin-top: 0.6rem;">* 비워두면 시스템 기본 키가 사용됩니다.</p>
+                </div>
+                <div style="margin-bottom: 2.5rem;">
+                    <label style="display: block; color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.8rem;">🧠 AI 모델 선택</label>
+                    <select id="setting-model" style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.2rem; color: #fff; font-size: 1.1rem; outline: none; cursor: pointer;">
+                        <option value="gemini-2.0-flash">Gemini 2.0 Flash (권장, 빠르고 안정적)</option>
+                        <option value="gemini-flash-latest">Gemini Flash Latest (최신 릴리즈)</option>
+                        <option value="gemini-3-flash-preview">Gemini 3 Flash Preview (최신 실험 버전)</option>
+                    </select>
+                </div>
+                <button onclick="saveSettings()" style="width: 100%; background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: #fff; font-weight: 800; font-size: 1.2rem; border: none; border-radius: 10px; padding: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);">설정 저장</button>
+            </div>
+        </section>
+    </main>
+</div>
+<script src="gemini.js"></script>
+<script src="main.js"></script>
+<script>// static mode - no backend</script></body>
+</html>

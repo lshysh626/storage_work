@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from 'firebase/firestore';
 import { db } from './firebase';
-import { Book, FileText, Plus, Menu, X, Trash2 } from 'lucide-react';
+import { Book, FileText, Plus, Menu, X, Trash2, GraduationCap } from 'lucide-react';
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -97,6 +97,22 @@ function App() {
             </div>
           ))}
         </div>
+
+        <a 
+          href="/storage_work/exam/" 
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ 
+            margin: '0 8px 4px 8px', padding: '8px 12px', display: 'flex', 
+            alignItems: 'center', gap: '8px', cursor: 'pointer', 
+            color: '#2383e2', fontSize: '14px', borderRadius: '4px', 
+            border: 'none', background: 'rgba(35,131,226,0.08)',
+            textDecoration: 'none', fontWeight: '500'
+          }}
+        >
+          <GraduationCap size={16} />
+          📚 기출돌려 (시험 훈련)
+        </a>
 
         <button className="add-note-btn" onClick={createNote}>
           <Plus size={16} />
