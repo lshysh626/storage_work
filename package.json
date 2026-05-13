@@ -9,6 +9,7 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "vitepress": "^1.6.3"
+    "vitepress": "^1.6.3",
+    "vitepress-sidebar": "^1.33.2"
   }
 }

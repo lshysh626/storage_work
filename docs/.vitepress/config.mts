@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { generateSidebar } from 'vitepress-sidebar'
 
 export default defineConfig({
   lang: 'ko-KR',
@@ -19,27 +20,26 @@ export default defineConfig({
       { text: '공부', link: '/study/' }
     ],
 
-    sidebar: {
-      '/work/': [
-        {
-          text: '업무',
-          items: [
-            { text: '인덱스', link: '/work/' },
-            { text: '환영합니다', link: '/work/welcome' }
-          ]
-        }
-      ],
-      '/study/': [
-        {
-          text: '공부',
-          items: [
-            { text: '인덱스', link: '/study/' },
-            { text: '첫 노트', link: '/study/welcome' },
-            { text: '📖 노션처럼 쓰기 (예시)', link: '/study/example' }
-          ]
-        }
-      ]
-    },
+    sidebar: generateSidebar([
+      {
+        documentRootPath: 'docs',
+        scanStartPath: 'work',
+        resolvePath: '/work/',
+        useTitleFromFileHeading: true,
+        useTitleFromFrontmatter: true,
+        useFolderTitleFromIndexFile: true,
+        collapsed: false,
+      },
+      {
+        documentRootPath: 'docs',
+        scanStartPath: 'study',
+        resolvePath: '/study/',
+        useTitleFromFileHeading: true,
+        useTitleFromFrontmatter: true,
+        useFolderTitleFromIndexFile: true,
+        collapsed: false,
+      }
+    ]),
 
     search: {
       provider: 'local',
