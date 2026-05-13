@@ -64,3 +64,43 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 6px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
+/* Sidebar Resizer (Notion Style) */
+.sidebar-resizer {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: transparent;
+  z-index: 100;
+  transition: background-color 0.2s;
+}
+
+.sidebar-resizer:hover, .sidebar-resizer:active {
+  background-color: var(--vp-c-divider);
+}
+
+/* 모바일 가독성 개선 및 리사이저 숨김 */
+@media (max-width: 959px) {
+  .sidebar-resizer {
+    display: none !important;
+  }
+  
+  .vp-doc h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .vp-doc h2 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .vp-doc p, .vp-doc li {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--vp-c-text-1);
+  }
+}
