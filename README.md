@@ -1,37 +1,16 @@
-# storage_work
+# React + Vite
 
-업무 + 공부를 정리하는 개인 노트 사이트 ([VitePress](https://vitepress.dev/) 기반).
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-배포 주소: <https://lshysh626.github.io/storage_work/>
+Currently, two official plugins are available:
 
-## 폴더 구조
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-```
-.
-├── .github/workflows/deploy.yml   # GitHub Actions 자동 빌드/배포
-├── docs/
-│   ├── .vitepress/config.mts      # 사이트 설정 (제목, 사이드바, 검색 등)
-│   ├── public/                    # 이미지 등 정적 파일 (사진 업로드 위치)
-│   ├── work/                      # 업무 노트
-│   └── study/                     # 공부 노트
-├── package.json
-└── .gitignore
-```
+## React Compiler
 
-## 새 노트 추가 (깃허브 웹에서)
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-1. 원하는 카테고리 폴더(`docs/work/` 또는 `docs/study/`) 들어가기
-2. `Add file` → `Create new file`
-3. 파일명 입력 (예: `2026-05-13-회의록.md`) 후 마크다운 작성
-4. `Commit changes` 누르면 GitHub Actions가 자동으로 빌드/배포 (1~2분 소요)
-5. 메뉴에 노출하려면 `docs/.vitepress/config.mts` 의 `sidebar` 에 한 줄 추가
+## Expanding the ESLint configuration
 
-## 사진 첨부
-
-`docs/public/images/` 에 사진 업로드 후 마크다운에서:
-
-```markdown
-![설명](/images/파일명.png)
-```
-
-자세한 예시는 `docs/study/welcome.md` 참고.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

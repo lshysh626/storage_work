@@ -1,4 +1,4 @@
-name: Deploy VitePress site to Pages
+name: Deploy Vite React App to GitHub Pages
 
 on:
   push:
@@ -20,8 +20,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -34,13 +32,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build with VitePress
-        run: npm run docs:build
+      - name: Build with Vite
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
+          path: dist
 
   deploy:
     needs: build
