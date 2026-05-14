@@ -165,43 +165,60 @@ async function renderDashboard() {
         }
 
         const featureCards = examFeatures.map(f => `
-            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:1.5rem; display:flex; flex-direction:column; gap:0.8rem;">
-                <div style="font-size:1.8rem;">${f.icon}</div>
-                <div style="font-weight:800; font-size:1.1rem; color:${f.color};">${f.title}</div>
-                <div style="font-size:0.9rem; color:var(--muted); line-height:1.5;">${f.desc}</div>
+            <div style="background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; gap: 1rem; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='${f.color}44'" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.06)'">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">${f.icon}</div>
+                <div style="font-weight: 900; font-size: 1.2rem; color: #fff; letter-spacing: -0.02em;">${f.title}</div>
+                <div style="font-size: 0.92rem; color: #94a3b8; line-height: 1.6; word-break: keep-all;">${f.desc}</div>
+                <div style="margin-top: auto; height: 3px; width: 30px; background: ${f.color}; border-radius: 10px; opacity: 0.6;"></div>
             </div>
         `).join('');
 
         const shortcutRows = shortcuts.map(s => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.8rem 0; border-bottom:1px solid rgba(255,255,255,0.03);">
-                <code style="background:rgba(255,255,255,0.1); color:#fff; padding:0.3rem 0.6rem; border-radius:6px; font-size:0.85rem; font-family:monospace; border:1px solid rgba(255,255,255,0.1);">${s.key}</code>
-                <span style="color:var(--muted); font-size:0.9rem;">${s.desc}</span>
+            <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);">
+                <kbd style="background: #1e293b; color: var(--primary); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.85rem; font-family: 'Inter', monospace; border: 1px solid rgba(56, 189, 248, 0.2); font-weight: 700; white-space: nowrap; box-shadow: 0 2px 0 rgba(0,0,0,0.3);">${s.key}</kbd>
+                <span style="color: #cbd5e1; font-size: 0.95rem; font-weight: 500;">${s.desc}</span>
             </div>
         `).join('');
 
         parsedDiv.innerHTML = `
-            <div style="display:flex; flex-direction:column; gap:2.5rem;">
-                <!-- Feature Guide -->
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem;">
-                    ${featureCards}
+            <div style="display: flex; flex-direction: column; gap: 3rem; animation: fadeIn 0.5s ease-out;">
+                
+                <!-- 1. Feature Guide (Top) -->
+                <div>
+                    <h3 style="font-weight: 900; font-size: 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
+                        <span style="color: var(--primary);">✨</span> 핵심 학습 기능
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
+                        ${featureCards}
+                    </div>
                 </div>
 
-                <!-- Session Data -->
-                ${sessionContent}
-
-                <!-- Shortcuts Guide -->
-                <div style="background:rgba(15,23,42,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:2rem;">
-                    <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1.5rem;">
-                        <span style="font-size:1.5rem;">⌨️</span>
-                        <h3 style="font-weight:800; font-size:1.3rem; margin:0;">기출돌려 단축키</h3>
+                <!-- 2. Shortcuts Guide (Middle) -->
+                <div style="background: linear-gradient(to right, rgba(15, 23, 42, 0.4), rgba(30, 41, 59, 0.2)); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 2rem;">
+                        <span style="font-size: 1.5rem;">⌨️</span>
+                        <h3 style="font-weight: 800; font-size: 1.4rem; margin: 0; color: #fff;">학습 효율 단축키</h3>
                     </div>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1rem 3rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem;">
                         ${shortcutRows}
                     </div>
                 </div>
+
+                <!-- 3. Session Data (Bottom) -->
+                <div id="parsed-data-section">
+                    ${sessionContent}
+                </div>
+
+                <style>
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                </style>
             </div>
         `;
     } catch (e) {
+
 
         console.error('RenderDashboard Error:', e);
         parsedDiv.innerHTML = `
