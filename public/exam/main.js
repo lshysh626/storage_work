@@ -1,4 +1,4 @@
-const API_URL = ''; // No backend needed for static version
+const API_URL = ''; // No backend needed for static version (v1.0.1)
 // ─── State ───────────────────────────────────────────────
 let state = {
     view: 'dashboard',
@@ -143,10 +143,12 @@ async function renderDashboard() {
                 </div>
             </div>
         `;
-    } catch {
+    } catch (e) {
+        console.error('RenderDashboard Error:', e);
         parsedDiv.innerHTML = `
             <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; text-align:center; color:var(--muted);">
-                서버 연결 오류 — 백엔드 서버가 실행 중인지 확인해주세요.
+                데이터를 불러오지 못했습니다. (Error: ${e.message})<br>
+                경로: ./data/sessions.json
             </div>
         `;
     }
