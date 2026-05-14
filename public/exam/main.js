@@ -181,30 +181,33 @@ async function renderDashboard() {
         `).join('');
 
         parsedDiv.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: 3rem; animation: fadeIn 0.5s ease-out;">
+            <div style="display: flex; flex-direction: column; gap: 2.5rem; animation: fadeIn 0.5s ease-out;">
                 
-                <!-- 1. Feature Guide (Top) -->
-                <div>
-                    <h3 style="font-weight: 900; font-size: 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
-                        <span style="color: var(--primary);">✨</span> 핵심 학습 기능
-                    </h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
-                        ${featureCards}
+                <!-- Top Row: Features (Left) + Shortcuts (Right) -->
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; align-items: start;">
+                    
+                    <!-- Left: Features -->
+                    <div>
+                        <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff;">
+                            <span style="color: var(--primary);">✨</span> 핵심 기능
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            ${featureCards}
+                        </div>
+                    </div>
+
+                    <!-- Right: Shortcuts -->
+                    <div>
+                        <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff;">
+                            <span style="font-size: 1.4rem;">⌨️</span> 단축키 가이드
+                        </h3>
+                        <div style="background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; height: calc(100% - 2.5rem);">
+                            ${shortcutRows}
+                        </div>
                     </div>
                 </div>
 
-                <!-- 2. Shortcuts Guide (Middle) -->
-                <div style="background: linear-gradient(to right, rgba(15, 23, 42, 0.4), rgba(30, 41, 59, 0.2)); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem;">
-                    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 2rem;">
-                        <span style="font-size: 1.5rem;">⌨️</span>
-                        <h3 style="font-weight: 800; font-size: 1.4rem; margin: 0; color: #fff;">학습 효율 단축키</h3>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem;">
-                        ${shortcutRows}
-                    </div>
-                </div>
-
-                <!-- 3. Session Data (Bottom) -->
+                <!-- Bottom: Session Data -->
                 <div id="parsed-data-section">
                     ${sessionContent}
                 </div>
@@ -214,9 +217,16 @@ async function renderDashboard() {
                         from { opacity: 0; transform: translateY(10px); }
                         to { opacity: 1; transform: translateY(0); }
                     }
+                    /* 반응형 대응 */
+                    @media (max-width: 1100px) {
+                        div[style*="grid-template-columns: 1.2fr 0.8fr"] {
+                            grid-template-columns: 1fr !important;
+                        }
+                    }
                 </style>
             </div>
         `;
+
     } catch (e) {
 
 
