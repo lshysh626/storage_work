@@ -11,6 +11,7 @@ let state = {
     bulkScoring: false,
     quizMode: 'immediate',
     userAnswers: [],
+    questionStates: [], // { scored: boolean, feedback: string, isCorrect: boolean, score: number, explanation: string, chat: [] }
     currentSessionId: null
 };
 
@@ -511,6 +512,14 @@ function launchQuiz(questions, title) {
         return;
     }
     state.userAnswers = new Array(questions.length).fill('');
+    state.questionStates = questions.map(() => ({
+        scored: false,
+        feedback: '',
+        isCorrect: false,
+        score: 0,
+        explanation: '',
+        chat: []
+    }));
     
     state.questions = questions;
     state.index = 0;
@@ -579,6 +588,10 @@ function renderQuestion() {
     state.submitting = false;
     const nextBtn = document.getElementById('submit-btn');
 
+    // Restore previous answer if exists
+    const qState = state.questionStates[state.index];
+    const savedAns = state.userAnswers[state.index];
+
     if (state.quizMode === 'study') {
         container.innerHTML = `
             <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 1.5rem; margin-top: 1rem;">
@@ -597,14 +610,17 @@ function renderQuestion() {
             blanks.forEach(label => {
                 const row = document.createElement('div');
                 row.className = 'input-row';
+                const currentVal = (savedAns && savedAns.includes(`(${label})`)) 
+                    ? savedAns.split(`(${label})`)[1].split(' / ')[0].trim() 
+                    : '';
                 row.innerHTML = `
                     <span class="input-label">(${label})</span>
-                    <input class="ans-input" type="text" data-label="${label}" placeholder="답안 입력...">
+                    <input class="ans-input" type="text" data-label="${label}" placeholder="답안 입력..." value="${currentVal}" ${qState.scored ? 'disabled' : ''}>
                 `;
                 container.appendChild(row);
             });
         } else {
-            container.innerHTML = `<textarea class="textarea-ans" placeholder="답안을 입력하세요..."></textarea>`;
+            container.innerHTML = `<textarea class="textarea-ans" placeholder="답안을 입력하세요..." ${qState.scored ? 'disabled' : ''}>${savedAns || ''}</textarea>`;
         }
         
         if (state.bulkScoring) {
@@ -616,14 +632,53 @@ function renderQuestion() {
                 nextBtn.style.background = '';
             }
         } else {
-            nextBtn.textContent = '제출 (Ctrl+Enter)';
-            nextBtn.style.background = '';
+            if (qState.scored) {
+                nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
+                nextBtn.style.background = '';
+            } else {
+                nextBtn.textContent = '제출 (Ctrl+Enter)';
+                nextBtn.style.background = '';
+            }
         }
 
-        setTimeout(() => {
-            const f = container.querySelector('input, textarea');
-            if (f) f.focus();
-        }, 80);
+        // Restore Feedback if scored
+        if (qState.scored) {
+            const fb = document.getElementById('feedback-area');
+            fb.innerHTML = `
+                <div style="border-left: 4px solid ${qState.isCorrect ? 'var(--primary)' : '#f87171'}; padding-left: 1rem;">
+                    <strong>${qState.isCorrect ? '✅ 정답' : '⚠️ 오답/부분점수'} (${qState.score}점)</strong>
+                    <div style="margin-top:0.8rem; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 6px;">
+                        <strong style="color:var(--primary);">모범 답안:</strong> 
+                        <span style="color:#fff;">${q.answer}</span>
+                    </div>
+                    <p style="margin-top:0.8rem; color:var(--muted); white-space:pre-wrap">${qState.feedback}</p>
+                    <button class="btn-next" onclick="nextQuestion()" style="margin-top:1.5rem; width:100%">다음 문제 → (Ctrl+Enter)</button>
+                </div>
+            `;
+            fb.classList.remove('hidden');
+        }
+
+        // Restore Explanation Panel
+        if (qState.explanation) {
+            if (expContainer) {
+                expContainer.innerHTML = `
+                    <div id="exp-header" onclick="toggleExplanation()" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.2rem 0; margin-bottom: 0.8rem; user-select: none;">
+                        <strong style="color: #60a5fa; font-size: 1.05rem;">📖 상세 해설</strong>
+                        <span id="exp-toggle-icon" style="color: #60a5fa; font-size: 0.85rem; opacity: 0.7;">&#9650; 접기</span>
+                    </div>
+                    <div id="exp-body">
+                        <span style="color: #f8fafc; line-height: 1.6; white-space: pre-wrap;">${qState.explanation}</span>
+                    </div>
+                `;
+            }
+        }
+
+        if (!qState.scored) {
+            setTimeout(() => {
+                const f = container.querySelector('input, textarea');
+                if (f) f.focus();
+            }, 80);
+        }
     }
 }
 
@@ -667,6 +722,7 @@ async function submitAnswer() {
     }
 
     state.submitting = true;
+    state.userAnswers[state.index] = userAnswer; // Always save current answer
     const fb = document.getElementById('feedback-area');
     fb.innerHTML = '<span style="color:var(--primary)">채점 중... ⏳</span>';
     fb.classList.remove('hidden');
@@ -676,6 +732,13 @@ async function submitAnswer() {
             q.question, q.answer, userAnswer,
             q.points ?? TYPE_POINTS[q.type] ?? 0
         );
+
+        // Update question state for persistence
+        const qState = state.questionStates[state.index];
+        qState.scored = true;
+        qState.score = result.score;
+        qState.isCorrect = result.is_correct;
+        qState.feedback = result.feedback;
 
         // Save to sessions
         const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
@@ -898,6 +961,7 @@ async function requestExplanation(index) {
             (chunk) => {
                 accumulated += chunk;
                 expStream.textContent = accumulated;
+                state.questionStates[index].explanation = accumulated; // Persist
             },
             (status) => {
                 expStream.textContent = status;
