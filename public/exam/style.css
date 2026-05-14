@@ -271,3 +271,74 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
 #chat-send-btn { background: var(--primary); color: #0f172a; border: none; border-radius: 8px; padding: 0 1.2rem; font-weight: 800; cursor: pointer; transition: 0.2s; }
 #chat-send-btn:hover { background: #0ea5e9; }
 
+/* ─── Mobile Responsiveness ────────────────────────── */
+@media (max-width: 1024px) {
+    .quiz-layout-container { flex-direction: column; padding: 0 1.5rem; margin-top: 1.5rem; }
+    .quiz-layout-container .quiz-body { width: 100%; }
+    .quiz-side-panel, .quiz-memo-panel { 
+        min-width: 0; max-width: 100%; width: 100%; 
+        height: 60vh;
+    }
+    .floating-btn-group { top: auto; bottom: 20px; right: 20px; flex-direction: row; transform: none; }
+    .floating-btn { writing-mode: horizontal-tb; border-radius: 20px; padding: 0.8rem 1.2rem; border-right: 1px solid rgba(255,255,255,0.1); }
+}
+
+@media (max-width: 768px) {
+    #app { flex-direction: column; height: auto; min-height: 100vh; }
+    
+    aside#sidebar { 
+        width: 100%; height: auto; padding: 1rem 1.5rem; 
+        border-right: none; border-bottom: 1px solid var(--border);
+        flex-direction: row; align-items: center; justify-content: space-between;
+    }
+    .logo { margin-bottom: 0; font-size: 1.1rem; }
+    .nav-links { display: flex; gap: 0.5rem; flex: none; }
+    .nav-links li { margin-bottom: 0; padding: 0.5rem 0.8rem; font-size: 0.85rem; }
+    .sync-btn { display: none; }
+
+    .view { padding: 1.5rem; }
+    h1 { font-size: 1.6rem; margin-bottom: 1.5rem; }
+
+    .stats-grid { grid-template-columns: 1fr; }
+    .stat-card .value { font-size: 1.6rem; }
+
+    .mode-layout { gap: 1rem; }
+    .row-half { grid-template-columns: 1fr; gap: 1rem; }
+    .item-row { padding: 1.5rem; gap: 1rem; }
+    .item-row .icon { font-size: 2.2rem; }
+    .item-row .text strong { font-size: 1.2rem; }
+
+    .quiz-header { padding: 1rem 1.5rem; }
+    .timer { font-size: 1.2rem; }
+    .quiz-badge { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+    
+    .question-text { font-size: 1.2rem; margin-bottom: 2rem; }
+    .input-row { padding: 0.8rem 1.2rem; }
+    .ans-input { font-size: 1rem; }
+    .textarea-ans { min-height: 200px; font-size: 1rem; padding: 1.2rem; }
+    
+    .quiz-actions { flex-direction: column-reverse; }
+    .btn-prev { flex: none; width: 100%; }
+    .btn-next { flex: none; width: 100%; }
+
+    .feedback { padding: 1.2rem; margin-top: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+    .nav-links li { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+    .logo { display: none; } /* 모바일 아주 좁을 때 로고 숨김 */
+    .view { padding: 1.2rem; }
+}
+
+.dashboard-top-row {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 1100px) {
+    .dashboard-top-row {
+        grid-template-columns: 1fr;
+    }
+}

@@ -185,7 +185,7 @@ async function renderDashboard() {
             <div style="display: flex; flex-direction: column; gap: 2.5rem; animation: fadeIn 0.5s ease-out;">
                 
                 <!-- Top Row: Features (Left) + Shortcuts (Right) -->
-                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; align-items: start;">
+                <div class="dashboard-top-row">
                     
                     <!-- Left: Features -->
                     <div>
