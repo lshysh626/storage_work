@@ -106,10 +106,10 @@ async function renderDashboard() {
 
     // Feature and Shortcut Data for Exam Trainer
     const examFeatures = [
-        { icon: '🎯', title: '실전 모드', desc: '실제 시험처럼 모든 문제를 푼 뒤 한꺼번에 AI 채점을 받습니다.', color: '#0ea5e9' },
-        { icon: '⚡', title: '즉시 채점', desc: '문제를 풀 때마다 실시간으로 AI의 정밀 채점과 피드백을 확인합니다.', color: '#10b981' },
-        { icon: '📖', title: '학습 모드', desc: '정답을 미리 보며 해설과 함께 개념을 익히는 학습 중심 모드입니다.', color: '#f59e0b' },
-        { icon: '🧠', title: 'AI 튜터', desc: '모르는 부분은 언제든 AI에게 질문하고 상세한 해설을 스트리밍으로 받으세요.', color: '#8b5cf6' }
+        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`, title: '실전 모드', desc: '실제 시험처럼 모든 문제를 푼 뒤 한꺼번에 AI 채점을 받습니다.', color: '#0ea5e9' },
+        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`, title: '즉시 채점', desc: '문제를 풀 때마다 실시간으로 AI의 정밀 채점과 피드백을 확인합니다.', color: '#10b981' },
+        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>`, title: '학습 모드', desc: '정답을 미리 보며 해설과 함께 개념을 익히는 학습 중심 모드입니다.', color: '#f59e0b' },
+        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`, title: 'AI 튜터', desc: '모르는 부분은 언제든 AI에게 질문하고 상세한 해설을 스트리밍으로 받으세요.', color: '#8b5cf6' }
     ];
 
     const shortcuts = [
@@ -615,12 +615,13 @@ function renderQuestion() {
                     : '';
                 row.innerHTML = `
                     <span class="input-label">(${label})</span>
-                    <input class="ans-input" type="text" data-label="${label}" placeholder="답안 입력..." value="${currentVal}" ${qState.scored ? 'disabled' : ''}>
+                    <input class="ans-input" type="text" data-label="${label}" placeholder="답안 입력..." value="${currentVal}" ${qState.scored ? 'disabled' : ''} 
+                        oninput="saveAnswerRealtime()">
                 `;
                 container.appendChild(row);
             });
         } else {
-            container.innerHTML = `<textarea class="textarea-ans" placeholder="답안을 입력하세요..." ${qState.scored ? 'disabled' : ''}>${savedAns || ''}</textarea>`;
+            container.innerHTML = `<textarea class="textarea-ans" placeholder="답안을 입력하세요..." ${qState.scored ? 'disabled' : ''} oninput="saveAnswerRealtime()">${savedAns || ''}</textarea>`;
         }
         
         if (state.bulkScoring) {
@@ -634,7 +635,7 @@ function renderQuestion() {
         } else {
             if (qState.scored) {
                 nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
-                nextBtn.style.background = '';
+                nextBtn.style.background = 'linear-gradient(135deg, #374151, #1f2937)';
             } else {
                 nextBtn.textContent = '제출 (Ctrl+Enter)';
                 nextBtn.style.background = '';
@@ -642,10 +643,10 @@ function renderQuestion() {
         }
 
         // Restore Feedback if scored
+        const fb = document.getElementById('feedback-area');
         if (qState.scored) {
-            const fb = document.getElementById('feedback-area');
             fb.innerHTML = `
-                <div style="border-left: 4px solid ${qState.isCorrect ? 'var(--primary)' : '#f87171'}; padding-left: 1rem;">
+                <div style="border-left: 4px solid ${qState.isCorrect ? 'var(--primary)' : '#f87171'}; padding-left: 1rem; animation: fadeIn 0.3s ease;">
                     <strong>${qState.isCorrect ? '✅ 정답' : '⚠️ 오답/부분점수'} (${qState.score}점)</strong>
                     <div style="margin-top:0.8rem; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 6px;">
                         <strong style="color:var(--primary);">모범 답안:</strong> 
@@ -656,21 +657,33 @@ function renderQuestion() {
                 </div>
             `;
             fb.classList.remove('hidden');
+        } else {
+            fb.classList.add('hidden');
         }
 
-        // Restore Explanation Panel
-        if (qState.explanation) {
-            if (expContainer) {
-                expContainer.innerHTML = `
-                    <div id="exp-header" onclick="toggleExplanation()" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.2rem 0; margin-bottom: 0.8rem; user-select: none;">
-                        <strong style="color: #60a5fa; font-size: 1.05rem;">📖 상세 해설</strong>
-                        <span id="exp-toggle-icon" style="color: #60a5fa; font-size: 0.85rem; opacity: 0.7;">&#9650; 접기</span>
-                    </div>
-                    <div id="exp-body">
-                        <span style="color: #f8fafc; line-height: 1.6; white-space: pre-wrap;">${qState.explanation}</span>
-                    </div>
-                `;
-            }
+        // Restore Explanation Panel if exists
+        const expContainer = document.getElementById('explanation-container');
+        if (qState.explanation && expContainer) {
+            const headerHTML = `
+                <div id="exp-header" onclick="toggleExplanation()" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.2rem 0; margin-bottom: 0.8rem; user-select: none;">
+                    <strong style="color: #60a5fa; font-size: 1.05rem;">📖 상세 해설</strong>
+                    <span id="exp-toggle-icon" style="color: #60a5fa; font-size: 0.85rem; opacity: 0.7;">&#9650; 접기</span>
+                </div>
+                <div id="exp-body">
+            `;
+            expContainer.innerHTML = headerHTML +
+                `<span style="color: #f8fafc; line-height: 1.6; white-space: pre-wrap;">${qState.explanation}</span>` +
+                `</div>`;
+        } else if (expContainer) {
+            // Reset to default button
+            expContainer.innerHTML = `
+                <div style="padding: 1.5rem;">
+                    <button onclick="requestExplanation(${state.index})" id="explain-btn"
+                        style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.4); padding: 0.75rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.95rem; width: 100%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 700;">
+                        📖 상세 해설 열기 <span style="font-size:0.78rem; opacity:0.6; font-weight:400;">(Ctrl+Alt+T)</span>
+                    </button>
+                </div>
+            `;
         }
 
         if (!qState.scored) {
@@ -681,6 +694,20 @@ function renderQuestion() {
         }
     }
 }
+
+function saveAnswerRealtime() {
+    const inputs = document.querySelectorAll('.ans-input');
+    const textarea = document.querySelector('.textarea-ans');
+    let userAnswer = '';
+    if (inputs.length > 0) {
+        userAnswer = Array.from(inputs).map(i => `(${i.dataset.label}) ${i.value}`).join(' / ');
+    } else if (textarea) {
+        userAnswer = textarea.value;
+    }
+    state.userAnswers[state.index] = userAnswer;
+}
+window.saveAnswerRealtime = saveAnswerRealtime;
+
 
 // ─── Submit ───────────────────────────────────────────────
 async function submitAnswer() {
