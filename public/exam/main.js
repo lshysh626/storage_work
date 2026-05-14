@@ -1,4 +1,4 @@
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = ''; // No backend needed for static version
 // ─── State ───────────────────────────────────────────────
 let state = {
     view: 'dashboard',
@@ -79,29 +79,10 @@ function switchView(id) {
     state.view = id;
 }
 
-document.querySelectorAll('.nav-links li').forEach(li =>
-    li.addEventListener('click', () => {
-        // Reset sub-list when navigating away
-        document.getElementById('sub-list').classList.add('hidden');
-        state.subMode = null;
-        switchView(li.dataset.view);
-        if (li.dataset.view === 'dashboard') renderDashboard();
-        if (li.dataset.view === 'stats') renderStats();
-    }));
+// Navigation event listeners moved to the end of the file to avoid duplicates and errors
 
 // ─── Sync ─────────────────────────────────────────────────
-const syncBtn = document.getElementById('sync-btn');
-syncBtn.addEventListener('click', async () => {
-    syncBtn.textContent = '동기화 중...';
-    try {
-        await fetch('http://localhost:8000/api/sync', { method: 'POST' });
-        syncBtn.textContent = '✅ 완료';
-        setTimeout(() => syncBtn.textContent = '🔄 데이터 동기화', 2000);
-    } catch {
-        syncBtn.textContent = '❌ 오류';
-        setTimeout(() => syncBtn.textContent = '🔄 데이터 동기화', 2000);
-    }
-});
+// Sync button listener moved to the end of the file
 
 // ─── Dashboard ────────────────────────────────────────────
 async function renderDashboard() {
@@ -1017,43 +998,20 @@ window.renderDashboard = renderDashboard;
 
 async function syncData() {
     const btn = document.getElementById('sync-btn');
-    const key = localStorage.getItem('gemini_api_key');
     if (!btn) return;
 
-    if (!key) {
-        alert('API 키가 설정되어 있지 않습니다. 설정 메뉴에서 키를 먼저 입력해주세요.');
-        return;
-    }
-
     const origText = btn.innerHTML;
-    btn.innerHTML = '🔄 동기화 중...';
+    btn.innerHTML = '🔄 데이터 확인 중...';
     btn.style.pointerEvents = 'none';
     btn.style.opacity = '0.7';
 
-    try {
-        const res = await fetch(`${API_URL}/api/sync`, {
-            method: 'POST',
-            headers: {
-                'x-api-key': key
-            }
-        });
-        const data = await res.json();
-        if (data.errors && data.errors.length > 0) {
-            console.error('Sync errors:', data.errors);
-            alert(`동기화 완료 (일부 오류 발생): ${data.processed.length}개 세션 성공`);
-        } else {
-            alert(`동기화 완료: ${data.processed.length}개 세션 처리됨`);
-        }
-        loadSessions(); // 세션 목록 새로고침
-        renderDashboard(); // 대시보드 갱신
-    } catch (e) {
-        console.error(e);
-        alert('동기화 실패: 서버 연결 상태를 확인하세요.');
-    } finally {
+    setTimeout(() => {
+        alert('모든 기출 데이터가 최신 상태입니다.\n(정적 데이터 모드)');
         btn.innerHTML = origText;
         btn.style.pointerEvents = 'auto';
         btn.style.opacity = '1';
-    }
+        renderDashboard();
+    }, 800);
 }
 
 window.syncData = syncData;
