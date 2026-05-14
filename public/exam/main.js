@@ -103,47 +103,106 @@ async function renderDashboard() {
     const parsedDiv = document.getElementById('parsed-sessions');
     if (!parsedDiv) return;
 
+    // Feature and Shortcut Data for Exam Trainer
+    const examFeatures = [
+        { icon: '🎯', title: '실전 모드', desc: '실제 시험처럼 모든 문제를 푼 뒤 한꺼번에 AI 채점을 받습니다.', color: '#0ea5e9' },
+        { icon: '⚡', title: '즉시 채점', desc: '문제를 풀 때마다 실시간으로 AI의 정밀 채점과 피드백을 확인합니다.', color: '#10b981' },
+        { icon: '📖', title: '학습 모드', desc: '정답을 미리 보며 해설과 함께 개념을 익히는 학습 중심 모드입니다.', color: '#f59e0b' },
+        { icon: '🤖', title: 'AI 튜터', desc: '모르는 부분은 언제든 AI에게 질문하고 상세한 해설을 스트리밍으로 받으세요.', color: '#8b5cf6' }
+    ];
+
+    const shortcuts = [
+        { key: 'Ctrl + Enter', desc: '답안 제출 / 다음 문제' },
+        { key: 'Ctrl + [', desc: '이전 문제' },
+        { key: 'Ctrl + ]', desc: '다음 문제' },
+        { key: 'Ctrl + Alt + T', desc: 'AI 상세 해설 열기' }
+    ];
+
     try {
         const res = await fetch('./data/sessions.json');
         const sessions = await res.json();
 
+        let sessionContent = '';
         if (sessions.length === 0) {
-            parsedDiv.innerHTML = `
+            sessionContent = `
                 <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; text-align:center;">
                     <span style="font-size:2rem;">📂</span>
                     <p style="color:var(--muted); margin-top:0.8rem;">파싱된 기출 자료가 없습니다. <strong style="color:var(--primary); cursor:pointer;" onclick="document.getElementById('sync-btn').click()">데이터 동기화</strong>를 먼저 해주세요.</p>
                 </div>
             `;
-            return;
+        } else {
+            const totalQuestions = sessions.reduce((s, sess) => s + sess.count, 0);
+            const sessionCards = sessions.map(s => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(255,255,255,0.02); border-radius:12px; border:1px solid rgba(255,255,255,0.04); transition:0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
+                    <div style="display:flex; align-items:center; gap:1.2rem;">
+                        <span style="font-size:1.5rem;">📄</span>
+                        <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                            <span style="font-weight:700; font-size:1.05rem;">${s.name}</span>
+                            <span style="font-size:0.85rem; color:var(--muted);">ID: ${s.id}</span>
+                        </div>
+                    </div>
+                    <span style="background:rgba(56,189,248,0.1); color:var(--primary); padding:0.4rem 0.8rem; border-radius:20px; font-weight:800; font-size:0.9rem;">${s.count}문항</span>
+                </div>
+            `).join('');
+
+            sessionContent = `
+                <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:2rem; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                        <div style="display:flex; align-items:center; gap:0.8rem;">
+                            <span style="font-size:1.5rem;">📚</span>
+                            <h3 style="font-weight:800; font-size:1.3rem; margin:0;">파싱된 기출 자료</h3>
+                        </div>
+                        <div style="display:flex; gap:1rem; align-items:center;">
+                            <span style="color:var(--muted); font-size:0.9rem;">${sessions.length}개 회차</span>
+                            <span style="background:linear-gradient(135deg, #0ea5e9, #38bdf8); color:#fff; padding:0.4rem 1rem; border-radius:8px; font-weight:800; font-size:0.9rem; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);">총 ${totalQuestions}문항</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:1rem;">
+                        ${sessionCards}
+                    </div>
+                </div>
+            `;
         }
 
-        const totalQuestions = sessions.reduce((s, sess) => s + sess.count, 0);
+        const featureCards = examFeatures.map(f => `
+            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:1.5rem; display:flex; flex-direction:column; gap:0.8rem;">
+                <div style="font-size:1.8rem;">${f.icon}</div>
+                <div style="font-weight:800; font-size:1.1rem; color:${f.color};">${f.title}</div>
+                <div style="font-size:0.9rem; color:var(--muted); line-height:1.5;">${f.desc}</div>
+            </div>
+        `).join('');
 
-        const sessionCards = sessions.map(s => `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; background:rgba(255,255,255,0.02); border-radius:10px; border:1px solid rgba(255,255,255,0.04);">
-                <div style="display:flex; align-items:center; gap:1rem;">
-                    <span style="font-size:1.5rem;">📄</span>
-                    <span style="font-weight:700;">${s.name}</span>
-                </div>
-                <span style="color:var(--primary); font-weight:800; font-size:1.1rem;">${s.count}문항</span>
+        const shortcutRows = shortcuts.map(s => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:0.8rem 0; border-bottom:1px solid rgba(255,255,255,0.03);">
+                <code style="background:rgba(255,255,255,0.1); color:#fff; padding:0.3rem 0.6rem; border-radius:6px; font-size:0.85rem; font-family:monospace; border:1px solid rgba(255,255,255,0.1);">${s.key}</code>
+                <span style="color:var(--muted); font-size:0.9rem;">${s.desc}</span>
             </div>
         `).join('');
 
         parsedDiv.innerHTML = `
-            <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-                    <h3 style="font-weight:800; font-size:1.2rem;">📚 파싱된 기출 자료</h3>
-                    <div style="display:flex; gap:1rem; align-items:center;">
-                        <span style="color:var(--muted); font-size:0.9rem;">${sessions.length}개 회차</span>
-                        <span style="background:rgba(56,189,248,0.1); color:var(--primary); padding:0.3rem 0.8rem; border-radius:6px; font-weight:800; font-size:0.9rem; border:1px solid rgba(56,189,248,0.2);">총 ${totalQuestions}문항</span>
-                    </div>
+            <div style="display:flex; flex-direction:column; gap:2.5rem;">
+                <!-- Feature Guide -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem;">
+                    ${featureCards}
                 </div>
-                <div style="display:flex; flex-direction:column; gap:0.8rem;">
-                    ${sessionCards}
+
+                <!-- Session Data -->
+                ${sessionContent}
+
+                <!-- Shortcuts Guide -->
+                <div style="background:rgba(15,23,42,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:2rem;">
+                    <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1.5rem;">
+                        <span style="font-size:1.5rem;">⌨️</span>
+                        <h3 style="font-weight:800; font-size:1.3rem; margin:0;">기출돌려 단축키</h3>
+                    </div>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1rem 3rem;">
+                        ${shortcutRows}
+                    </div>
                 </div>
             </div>
         `;
     } catch (e) {
+
         console.error('RenderDashboard Error:', e);
         parsedDiv.innerHTML = `
             <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; text-align:center; color:var(--muted);">

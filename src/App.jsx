@@ -7,80 +7,66 @@ import { Book, FileText, Plus, Menu, X, Trash2, GraduationCap, Bold, Italic, Und
 function HomeScreen({ onCreateNote, onGoExam }) {
   const features = [
     {
-      icon: '📝',
-      title: '리치 텍스트 정리장',
-      desc: '글자 크기·색상 변경, 이미지 삽입, 굵기·기울기·밑줄, 정렬, 목록 등 다양한 서식을 지원하는 노트 작성',
+      icon: '✍️',
+      title: '강력한 리치 텍스트',
+      desc: '글자 크기, 색상, 배경색은 물론 굵기, 기울기, 밑줄 등 풍성한 서식을 지원합니다.',
       color: '#2383e2',
       bg: 'rgba(35,131,226,0.08)',
     },
     {
-      icon: '📚',
-      title: '기출돌려 (시험 훈련)',
-      desc: '정보보안기사 실기 기출문제를 즉시채점·실전모드·학습모드로 풀고, AI 튜터에게 해설을 받아보세요',
+      icon: '🖼️',
+      title: '이미지 삽입 지원',
+      desc: '드래그 앤 드롭이나 파일 선택으로 공부 자료 이미지를 노트에 바로 삽입하세요.',
+      color: '#9b59b6',
+      bg: 'rgba(155,89,182,0.08)',
+    },
+    {
+      icon: '☁️',
+      title: '실시간 클라우드 동기화',
+      desc: 'Firebase Firestore를 통해 작성 즉시 저장되며, 모든 기기에서 실시간으로 동기화됩니다.',
       color: '#e67e22',
       bg: 'rgba(230,126,34,0.08)',
     },
     {
-      icon: '🎲',
-      title: '랜덤 풀이',
-      desc: '전체 문제를 무작위로 섞어 풀기 — 기출돌려 메뉴에서 바로 시작',
-      color: '#27ae60',
-      bg: 'rgba(39,174,96,0.08)',
-    },
-    {
-      icon: '📅',
-      title: '회차별 풀기',
-      desc: '원하는 시험 회차를 선택해 해당 회차 문제만 집중적으로 연습',
-      color: '#8e44ad',
-      bg: 'rgba(142,68,173,0.08)',
+      icon: '📱',
+      title: '반응형 대시보드',
+      desc: 'PC와 모바일 어디서나 최적화된 화면으로 노트를 관리하고 검토할 수 있습니다.',
+      color: '#2ecc71',
+      bg: 'rgba(46,204,113,0.08)',
     },
     {
       icon: '📂',
-      title: '유형별 풀기',
-      desc: '단답형(3점) · 서술형(12점) · 실무형(16점) 유형별로 골라서 풀기',
-      color: '#c0392b',
-      bg: 'rgba(192,57,43,0.08)',
+      title: '노트 체계적 관리',
+      desc: '사이드바에서 모든 노트를 한눈에 보고, 삭제 및 수정을 자유롭게 수행하세요.',
+      color: '#34495e',
+      bg: 'rgba(52,73,94,0.08)',
     },
     {
-      icon: '📈',
-      title: '학습 통계',
-      desc: '풀이 기록, 평균 점수, 최고/최저점, 점수 추이 차트를 한눈에 확인',
-      color: '#16a085',
-      bg: 'rgba(22,160,133,0.08)',
-    },
-    {
-      icon: '🤖',
-      title: 'AI 튜터',
-      desc: '문제 풀이 중 Gemini AI에게 상세 해설을 요청하거나 궁금한 점을 질문 (API 키 설정 필요)',
-      color: '#2c3e50',
-      bg: 'rgba(44,62,80,0.08)',
-    },
-    {
-      icon: '☁️',
-      title: 'Firebase 실시간 동기화',
-      desc: '정리장 노트는 Firebase Firestore에 자동 저장되어 어느 기기에서나 불러올 수 있음',
-      color: '#e74c3c',
-      bg: 'rgba(231,76,60,0.08)',
+      icon: '🎓',
+      title: '학습 연동 시스템',
+      desc: '공부하다가 기출문제가 풀고 싶다면 상단 메뉴나 버튼을 통해 바로 기출돌려로 이동하세요.',
+      color: '#f1c40f',
+      bg: 'rgba(241,196,15,0.08)',
     },
   ];
 
   return (
     <div className="home-screen">
       <div className="home-hero">
-        <div className="home-hero-icon">📖</div>
-        <h1 className="home-title">나의 공부 공간</h1>
-        <p className="home-subtitle">정리장에서 노트를 작성하고, 기출돌려로 시험을 연습하세요</p>
+        <div className="home-hero-icon">🗒️</div>
+        <h1 className="home-title">나의 지식 저장소</h1>
+        <p className="home-subtitle">공부한 내용을 실시간으로 정리하고 영구적으로 보관하세요</p>
         <div className="home-cta-row">
           <button className="home-cta-btn primary" onClick={onCreateNote}>
-            <Plus size={18} /> 새 노트 작성하기
+            <Plus size={18} /> 새 노트 시작하기
           </button>
           <a className="home-cta-btn secondary" href="/storage_work/exam/" target="_blank" rel="noopener noreferrer">
-            <GraduationCap size={18} /> 기출돌려 열기
+            <GraduationCap size={18} /> 기출문제 풀러가기
           </a>
         </div>
       </div>
 
-      <div className="home-features-title">🗂️ 주요 기능 안내</div>
+      <div className="home-features-title">✨ 정리장 주요 기능</div>
       <div className="home-features-grid">
         {features.map((f, i) => (
           <div key={i} className="feature-card" style={{ borderLeftColor: f.color, background: f.bg }}>
@@ -94,13 +80,13 @@ function HomeScreen({ onCreateNote, onGoExam }) {
       </div>
 
       <div className="home-shortcut-section">
-        <div className="home-features-title">⌨️ 기출돌려 단축키</div>
+        <div className="home-features-title">⌨️ 편집기 단축키</div>
         <div className="shortcut-grid">
           {[
-            ['Ctrl + Enter', '답안 제출 / 다음 문제'],
-            ['Ctrl + [', '이전 문제'],
-            ['Ctrl + ]', '다음 문제'],
-            ['Ctrl + Alt + T', 'AI 해설 불러오기'],
+            ['Ctrl + B', '굵게 (Bold)'],
+            ['Ctrl + I', '기울임 (Italic)'],
+            ['Ctrl + U', '밑줄 (Underline)'],
+            ['Ctrl + Z', '실행 취소'],
           ].map(([key, desc]) => (
             <div key={key} className="shortcut-row">
               <kbd className="shortcut-key">{key}</kbd>
@@ -112,6 +98,7 @@ function HomeScreen({ onCreateNote, onGoExam }) {
     </div>
   );
 }
+
 
 // ── 리치 텍스트 에디터 툴바 ────────────────────────────────────
 function RichToolbar({ editorRef }) {
