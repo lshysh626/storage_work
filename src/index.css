@@ -10,7 +10,7 @@ body {
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   color: #37352f;
   background-color: #ffffff;
-  overflow: hidden; /* App container handles scroll */
+  overflow: hidden;
 }
 
 /* App Layout */
@@ -20,7 +20,7 @@ body {
   width: 100vw;
 }
 
-/* Sidebar */
+/* ── Sidebar ───────────────────────────────────────────────────── */
 .sidebar {
   width: 240px;
   background-color: #f7f7f5;
@@ -95,20 +95,21 @@ body {
   background-color: rgba(55, 53, 47, 0.08);
 }
 
-/* Main Content */
+/* ── Main Content ──────────────────────────────────────────────── */
 .main-content {
   flex: 1;
   overflow-y: auto;
   display: flex;
   justify-content: center;
-  padding: 60px 40px;
 }
 
+/* ── Editor Container ──────────────────────────────────────────── */
 .editor-container {
   width: 100%;
   max-width: 900px;
   display: flex;
   flex-direction: column;
+  padding: 60px 40px 40px;
 }
 
 .title-input {
@@ -119,7 +120,7 @@ body {
   border: none;
   outline: none;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   background: transparent;
 }
 
@@ -127,33 +128,309 @@ body {
   color: #d4d4d4;
 }
 
-.body-textarea {
+/* ── Rich Toolbar ──────────────────────────────────────────────── */
+.rich-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px 8px;
+  background: #f7f7f5;
+  border: 1px solid #ededeb;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.toolbar-sep {
+  width: 1px;
+  height: 18px;
+  background: #ededeb;
+  margin: 0 4px;
+}
+
+.toolbar-group {
+  position: relative;
+}
+
+.tb-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 7px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #37352f;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+
+.tb-btn:hover {
+  background: rgba(55, 53, 47, 0.1);
+}
+
+.tb-btn:active {
+  background: rgba(55, 53, 47, 0.18);
+}
+
+/* Dropdown */
+.tb-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #fff;
+  border: 1px solid #ededeb;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  z-index: 100;
+  min-width: 140px;
+  overflow: hidden;
+}
+
+.tb-dropdown-item {
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #37352f;
+  white-space: nowrap;
+  transition: background 0.1s;
+}
+
+.tb-dropdown-item:hover {
+  background: rgba(55, 53, 47, 0.06);
+}
+
+/* Color Picker */
+.color-picker-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #fff;
+  border: 1px solid #ededeb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  z-index: 100;
+  padding: 10px;
+  min-width: 160px;
+}
+
+.color-picker-label {
+  font-size: 11px;
+  color: #787774;
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.1s;
+}
+
+.color-swatch:hover {
+  transform: scale(1.2);
+}
+
+/* ── ContentEditable Editor ───────────────────────────────────── */
+.body-editor {
   font-family: inherit;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.7;
   color: #37352f;
   border: none;
   outline: none;
   width: 100%;
-  flex: 1;
-  resize: none;
+  min-height: calc(100vh - 280px);
   background: transparent;
+  word-break: break-word;
 }
 
-.body-textarea::placeholder {
+.body-editor:empty::before {
+  content: attr(data-placeholder);
   color: #d4d4d4;
+  pointer-events: none;
 }
 
-.empty-state {
+.body-editor img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+/* ── Home Screen ──────────────────────────────────────────────── */
+.home-screen {
+  width: 100%;
+  max-width: 860px;
+  padding: 48px 40px 60px;
+}
+
+.home-hero {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.home-hero-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.home-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #37352f;
+  margin-bottom: 10px;
+}
+
+.home-subtitle {
+  font-size: 16px;
+  color: #787774;
+  margin-bottom: 24px;
+}
+
+.home-cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.home-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.home-cta-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.home-cta-btn.primary {
+  background: #2383e2;
+  color: #fff;
+}
+
+.home-cta-btn.secondary {
+  background: rgba(35,131,226,0.1);
+  color: #2383e2;
+  border: 1px solid rgba(35,131,226,0.25);
+}
+
+.home-features-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #37352f;
+  margin-bottom: 16px;
+}
+
+.home-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.feature-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: 10px;
+  border-left: 3px solid transparent;
+  transition: box-shadow 0.15s;
+}
+
+.feature-card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.feature-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.feature-body {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: #787774;
-  gap: 16px;
+  gap: 4px;
 }
 
+.feature-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.feature-desc {
+  font-size: 13px;
+  color: #787774;
+  line-height: 1.5;
+}
+
+/* ── Shortcuts ────────────────────────────────────────────────── */
+.home-shortcut-section {
+  margin-top: 8px;
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f7f7f5;
+  border-radius: 8px;
+  border: 1px solid #ededeb;
+}
+
+.shortcut-key {
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-family: monospace;
+  color: #37352f;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.shortcut-desc {
+  font-size: 13px;
+  color: #787774;
+}
+
+/* ── Mobile Toggle ─────────────────────────────────────────────── */
 .mobile-toggle {
   display: none;
   position: absolute;
@@ -167,6 +444,7 @@ body {
   cursor: pointer;
 }
 
+/* ── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .sidebar {
     position: absolute;
@@ -181,6 +459,16 @@ body {
     display: block;
   }
   .main-content {
-    padding: 80px 20px 20px 20px;
+    padding-top: 60px;
+  }
+  .editor-container {
+    padding: 20px 16px;
+  }
+  .home-screen {
+    padding: 24px 16px 40px;
+  }
+  .home-features-grid,
+  .shortcut-grid {
+    grid-template-columns: 1fr;
   }
 }

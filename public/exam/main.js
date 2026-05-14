@@ -1,4 +1,4 @@
-﻿const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'http://127.0.0.1:8000';
 // ?�?�?� State ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
 let state = {
     view: 'dashboard',
@@ -76,29 +76,7 @@ function switchView(id) {
     state.view = id;
 }
 
-document.querySelectorAll('.nav-links li').forEach(li =>
-    li.addEventListener('click', () => {
-        // Reset sub-list when navigating away
-        document.getElementById('sub-list').classList.add('hidden');
-        state.subMode = null;
-        switchView(li.dataset.view);
-        if (li.dataset.view === 'dashboard') renderDashboard();
-        if (li.dataset.view === 'stats') renderStats();
-    }));
-
-// ?�?�?� Sync ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-const syncBtn = document.getElementById('sync-btn');
-syncBtn.addEventListener('click', async () => {
-    syncBtn.textContent = '?�기??�?..';
-    try {
-        // sync disabled in static mode
-        syncBtn.textContent = '???�료';
-        setTimeout(() => syncBtn.textContent = '?�� ?�이???�기??, 2000);
-    } catch {
-        syncBtn.textContent = '???�류';
-        setTimeout(() => syncBtn.textContent = '?�� ?�이???�기??, 2000);
-    }
-});
+// Nav links and sync button are initialized at the bottom of this file to avoid duplicate registration
 
 // ?�?�?� Dashboard ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
 async function renderDashboard() {
@@ -1055,8 +1033,31 @@ async function syncData() {
 window.syncData = syncData;
 
 
-// ?�?�?� Init ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-// ?�?�?� Settings ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
+// Init
+renderDashboard();
+loadSettings();
+
+// Register nav links click handler (single registration)
+document.querySelectorAll('.nav-links li').forEach(li => {
+    li.addEventListener('click', () => {
+        // Reset sub-list when navigating away
+        document.getElementById('sub-list').classList.add('hidden');
+        state.subMode = null;
+        const view = li.getAttribute('data-view');
+        if (view) {
+            document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
+            li.classList.add('active');
+            switchView(view);
+            if (view === 'dashboard') renderDashboard();
+            if (view === 'stats') renderStats();
+        }
+    });
+});
+
+// Register sync button (single registration)
+document.getElementById('sync-btn')?.addEventListener('click', syncData);
+
+
 function saveSettings() {
     const keyInput = document.getElementById('setting-api-key');
     const modelInput = document.getElementById('setting-model');
@@ -1084,22 +1085,4 @@ function loadSettings() {
 }
 
 window.saveSettings = saveSettings;
-
-// ?�?�?� Init ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�
-renderDashboard();
-loadSettings();
-
-// Event Listeners
-document.getElementById('sync-btn')?.addEventListener('click', syncData);
-document.querySelectorAll('.nav-links li').forEach(li => {
-    li.addEventListener('click', () => {
-        const view = li.getAttribute('data-view');
-        if (view) {
-            document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
-            li.classList.add('active');
-            switchView(view);
-        }
-    });
-});
-
 
