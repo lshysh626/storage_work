@@ -108,7 +108,7 @@ async function renderDashboard() {
         { icon: '🎯', title: '실전 모드', desc: '실제 시험처럼 모든 문제를 푼 뒤 한꺼번에 AI 채점을 받습니다.', color: '#0ea5e9' },
         { icon: '⚡', title: '즉시 채점', desc: '문제를 풀 때마다 실시간으로 AI의 정밀 채점과 피드백을 확인합니다.', color: '#10b981' },
         { icon: '📖', title: '학습 모드', desc: '정답을 미리 보며 해설과 함께 개념을 익히는 학습 중심 모드입니다.', color: '#f59e0b' },
-        { icon: '🤖', title: 'AI 튜터', desc: '모르는 부분은 언제든 AI에게 질문하고 상세한 해설을 스트리밍으로 받으세요.', color: '#8b5cf6' }
+        { icon: '🧠', title: 'AI 튜터', desc: '모르는 부분은 언제든 AI에게 질문하고 상세한 해설을 스트리밍으로 받으세요.', color: '#8b5cf6' }
     ];
 
     const shortcuts = [
