@@ -104,7 +104,7 @@ async function renderDashboard() {
     if (!parsedDiv) return;
 
     try {
-        const res = await fetch('http://localhost:8000/api/sessions');
+        const res = await fetch('./data/sessions.json');
         const sessions = await res.json();
 
         if (sessions.length === 0) {
@@ -363,7 +363,7 @@ async function toggleSessionSelection() {
     sub.classList.remove('hidden');
     sub.innerHTML = '<div style="color:var(--muted);padding:1rem">불러오는 중...</div>';
     try {
-        const res = await fetch('http://localhost:8000/api/sessions');
+        const res = await fetch('./data/sessions.json');
         const sessions = await res.json();
         if (sessions.length === 0) {
             sub.innerHTML = '<div style="color:var(--muted);padding:1rem">동기화 후 회차가 나타납니다.</div>';
@@ -380,14 +380,14 @@ async function toggleSessionSelection() {
 }
 
 async function startRandomQuiz() {
-    const res = await fetch('http://localhost:8000/api/questions/all');
+    const res = await fetch('./data/questions_all.json');
     const data = await res.json();
     const shuffled = [...data.questions].sort(() => Math.random() - 0.5);
     launchQuiz(shuffled, '🎲 랜덤 풀기');
 }
 
 async function startTypeQuiz(type) {
-    const res = await fetch(`http://localhost:8000/api/questions/type/${type}`);
+    const res = await fetch(`./data/questions_type_${type}.json`);
     const data = await res.json();
     let questions = data.questions;
     
@@ -412,7 +412,7 @@ async function startTypeQuiz(type) {
 }
 
 async function startSessionQuiz(sessionId) {
-    const res = await fetch(`http://localhost:8000/api/questions/${encodeURIComponent(sessionId)}`);
+    const res = await fetch(`./data/questions_${encodeURIComponent(sessionId)}.json`);
     const data = await res.json();
     launchQuiz(data.questions, `📅 ${data.session || sessionId}`);
 }
