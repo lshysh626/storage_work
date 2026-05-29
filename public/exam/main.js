@@ -307,7 +307,7 @@ function renderStats() {
 
         container.innerHTML = `
             <!-- Summary Cards -->
-            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.2rem; margin-bottom:2.5rem;">
+            <div class="stats-summary-grid">
                 <div class="stat-card">
                     <div class="label">총 풀이 횟수</div>
                     <div class="value">${total}</div>
@@ -329,8 +329,10 @@ function renderStats() {
             <!-- Score Chart -->
             <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; margin-bottom:2.5rem;">
                 <h3 style="margin-bottom:1.5rem; font-weight:800; font-size:1.2rem;">📈 최근 점수 추이 (최대 10회)</h3>
-                <div style="display:flex; align-items:flex-end; gap:0.5rem; height:200px; padding:0 0.5rem;">
-                    ${chartBars}
+                <div class="scrollable-chart-container">
+                    <div class="chart-scroll-wrapper">
+                        ${chartBars}
+                    </div>
                 </div>
                 <div style="text-align:center; margin-top:1rem; color:var(--muted); font-size:0.85rem;">60% 이상 <span style="color:#10b981;">●</span> · 40~59% <span style="color:#f59e0b;">●</span> · 40% 미만 <span style="color:#f87171;">●</span></div>
             </div>
@@ -352,9 +354,9 @@ function renderStats() {
             </div>
 
             <!-- History Table -->
-            <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; overflow:hidden; margin-bottom:2rem;">
+            <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; overflow:hidden; overflow-x:auto; margin-bottom:2rem;">
                 <h3 style="padding:1.5rem 2rem 1rem; font-weight:800; font-size:1.2rem;">📋 풀이 기록 (최근 20건)</h3>
-                <table style="width:100%; border-collapse:collapse;">
+                <table style="width:100%; min-width:550px; border-collapse:collapse;">
                     <thead>
                         <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
                             <th style="padding:0.8rem 1rem; text-align:left; color:var(--muted); font-size:0.85rem;">#</th>
