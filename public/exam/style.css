@@ -437,6 +437,18 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     transition: 0.2s;
 }
 
+/* Type Action Card styling */
+.type-action-card {
+    max-width: 420px;
+    margin: 0 auto;
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid var(--primary);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+    text-align: center;
+}
+
 /* Settings View Card */
 .settings-card {
     background: rgba(30, 41, 59, 0.4);
