@@ -70,6 +70,9 @@ async function callGemini(prompt) {
             lastErrorMsg = parsed.message;
 
             if (parsed.isRateLimit) {
+                if (key === GEMINI_DEFAULT_KEY) {
+                    throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
+                }
                 console.warn(`[${model}] Rate Limit hit. Waiting 4 seconds before fallback...`);
                 await sleep(4000);
                 break;
@@ -146,6 +149,9 @@ async function callGeminiStream(prompt, onChunk, onStatus) {
             lastErrorMsg = parsed.message;
 
             if (parsed.isRateLimit) {
+                if (key === GEMINI_DEFAULT_KEY) {
+                    throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
+                }
                 if (onStatus) onStatus(`[${model}] 한도 초과. 4초 대기 후 전환...`);
                 await sleep(4000);
                 break; // 대기 후 다음 모델로
