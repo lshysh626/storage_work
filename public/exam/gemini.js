@@ -43,11 +43,16 @@ async function callGemini(prompt, responseSchema = null) {
     const models = [preferredModel, ...GEMINI_MODEL_FALLBACKS.filter(m => m !== preferredModel)];
     let lastErrorMsg = '';
 
+    console.log("[Gemini API] callGemini Start. Key length:", key ? key.length : 0, "Preferred Model:", preferredModel);
+
     for (const model of models) {
         const url = `${GEMINI_BASE}/${model}:generateContent?key=${key}`;
+        console.log("[Gemini API] Attempting with model:", model);
+        
         let retries = 2;
-
         while (retries >= 0) {
+            retries--;
+            
             const bodyPayload = {
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: { 
@@ -59,32 +64,57 @@ async function callGemini(prompt, responseSchema = null) {
                 bodyPayload.generationConfig.responseSchema = responseSchema;
             }
 
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(bodyPayload)
-            });
+            console.log(`[Gemini API] Sending fetch request to ${model}... (Remaining retries: ${retries + 1})`);
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 12000); // 12초 타임아웃
 
-            if (res.ok) {
-                const data = await res.json();
-                return data.candidates[0].content.parts[0].text;
-            }
+            try {
+                const startTime = Date.now();
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyPayload),
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                
+                const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+                console.log(`[Gemini API] Response received in ${duration}s. Status:`, res.status);
 
-            const errBody = await res.json().catch(() => ({}));
-            const parsed = parseGeminiError(res.status, errBody);
-            lastErrorMsg = parsed.message;
-
-            if (parsed.isRateLimit) {
-                if (key === GEMINI_DEFAULT_KEY) {
-                    throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
+                if (res.ok) {
+                    const data = await res.json();
+                    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        console.log("[Gemini API] Call success!");
+                        return text;
+                    }
+                    throw new Error("API 응답 구조가 올바르지 않거나 안전 필터링에 의해 차단되었습니다.");
                 }
-                console.warn(`[${model}] Rate Limit hit. Waiting 4 seconds before fallback...`);
-                await sleep(4000);
+
+                const errBody = await res.json().catch(() => ({}));
+                const parsed = parseGeminiError(res.status, errBody);
+                lastErrorMsg = parsed.message;
+                console.warn(`[Gemini API] Error status ${res.status}:`, lastErrorMsg, errBody);
+
+                if (parsed.isRateLimit) {
+                    if (key === GEMINI_DEFAULT_KEY) {
+                        throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
+                    }
+                    console.warn(`[${model}] Rate Limit hit. Waiting 4 seconds before retry/fallback...`);
+                    await sleep(4000);
+                    break;
+                }
+
+                break;
+            } catch (fetchErr) {
+                clearTimeout(timeoutId);
+                console.error(`[Gemini API] Fetch exception on model ${model}:`, fetchErr);
+                lastErrorMsg = fetchErr.name === 'AbortError' 
+                    ? "API 요청 시간 초과 (12초) - 네트워크 연결이 원활하지 않거나 API 응답이 지연되고 있습니다." 
+                    : `네트워크 오류 (${fetchErr.message})`;
                 break;
             }
-
-            // 기타 오류 시에도 다음 모델 시도
-            break;
         }
     }
 
