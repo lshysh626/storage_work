@@ -78,6 +78,12 @@ function switchView(id) {
     if (id === 'quiz-view') sidebar.classList.add('hidden');
     else sidebar.classList.remove('hidden');
     state.view = id;
+
+    if (id === 'dashboard') {
+        renderDashboard();
+    } else if (id === 'stats') {
+        renderStats();
+    }
 }
 
 // Navigation event listeners moved to the end of the file to avoid duplicates and errors
@@ -87,18 +93,7 @@ function switchView(id) {
 
 // ─── Dashboard ────────────────────────────────────────────
 async function renderDashboard() {
-    const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
-    const total = history.length;
-    const avg = total > 0
-        ? Math.round(history.reduce((s, r) => s + (r.pct || 0), 0) / total)
-        : 0;
-    const last = total > 0 ? (history[history.length - 1].pct || 0) + '%' : '-';
-
-    document.getElementById('stats-grid').innerHTML = `
-        <div class="stat-card"><div class="label">총 풀이 횟수</div><div class="value">${total}</div></div>
-        <div class="stat-card"><div class="label">평균 점수</div><div class="value">${avg}%</div></div>
-        <div class="stat-card"><div class="label">최근 점수</div><div class="value">${last}</div></div>
-    `;
+    // Fetch parsed sessions
 
     // Fetch parsed sessions
     const parsedDiv = document.getElementById('parsed-sessions');
@@ -242,140 +237,155 @@ async function renderDashboard() {
 }
 
 function renderStats() {
-    const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
     const container = document.getElementById('stats-detail');
+    if (!container) return;
 
-    if (history.length === 0) {
+    try {
+        const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
+
+        if (history.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 4rem 2rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1.5rem;">📊</div>
+                    <h2 style="color: var(--muted); font-weight: 700; margin-bottom: 1rem;">아직 학습 기록이 없습니다</h2>
+                    <p style="color: var(--muted); font-size: 1.1rem;">기출 풀기에서 문제를 풀어보세요!</p>
+                </div>
+            `;
+            return;
+        }
+
+        const total = history.length;
+        const avgPct = Math.round(history.reduce((s, r) => s + (r.pct||0), 0) / total);
+        const best = Math.max(...history.map(h => h.pct||0));
+        const worst = Math.min(...history.map(h => h.pct||0));
+        const totalScore = history.reduce((s, r) => s + (r.totalScore||0), 0);
+        const totalMax = history.reduce((s, r) => s + (r.maxScore||0), 0);
+
+        // Recent 10 for chart
+        const recent = history.slice(-10);
+        const chartBars = recent.map((r, i) => {
+            const h = Math.max(r.pct||0, 5);
+            const color = (r.pct||0) >= 60 ? '#10b981' : (r.pct||0) >= 40 ? '#f59e0b' : '#f87171';
+            const date = r.date ? new Date(r.date) : null;
+            const label = date ? `${date.getMonth()+1}/${date.getDate()}` : `#${i+1}`;
+            return `
+                <div style="display:flex; flex-direction:column; align-items:center; flex:1; gap:0.4rem;">
+                    <span style="font-size:0.8rem; font-weight:700; color:${color};">${r.pct||0}%</span>
+                    <div style="width:100%; max-width:40px; height:${h * 1.5}px; background:${color}; border-radius:6px 6px 2px 2px; transition: height 0.5s ease;"></div>
+                    <span style="font-size:0.7rem; color:var(--muted);">${label}</span>
+                </div>
+            `;
+        }).join('');
+
+        // History table (most recent first)
+        const rows = [...history].reverse().slice(0, 20).map((r, i) => {
+            const date = r.date ? new Date(r.date).toLocaleString('ko-KR', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
+            const pctColor = (r.pct||0) >= 60 ? '#10b981' : (r.pct||0) >= 40 ? '#f59e0b' : '#f87171';
+            return `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'" onclick="document.getElementById('details-${r.id}').style.display = document.getElementById('details-${r.id}').style.display === 'none' ? 'table-row' : 'none'">
+                    <td style="padding:1rem; color:var(--muted);">${history.length - i}</td>
+                    <td style="padding:1rem;"><strong>${r.title}</strong><br><span style="font-size:0.85rem; color:var(--muted);">${date}</span></td>
+                    <td style="padding:1rem; text-align:center;">${r.totalScore ?? 0} / ${r.maxScore ?? 0}점</td>
+                    <td style="padding:1rem; text-align:center; font-weight:800; color:${pctColor};">${r.pct||0}%</td>
+                </tr>
+                <tr id="details-${r.id}" style="display:none; background: rgba(0,0,0,0.2);">
+                    <td colspan="4" style="padding: 1.5rem;">
+                        <div style="display:flex; flex-direction:column; gap:0.8rem; max-height:400px; overflow-y:auto; padding-right:0.5rem;">
+                            ${(r.details || []).map((d, idx) => `
+                                <div style="background:rgba(255,255,255,0.03); padding:1rem; border-radius:8px; border-left:4px solid ${d.is_correct ? '#10b981' : '#f87171'}">
+                                    <div style="font-weight:bold; margin-bottom:0.6rem; line-height:1.4;">Q${idx+1}. ${d.question}</div>
+                                    <div style="font-size:0.95rem; margin-bottom:0.4rem; color:#e2e8f0;"><span style="color:var(--muted); margin-right:0.4rem;">내 답변:</span> ${d.user_answer}</div>
+                                    <div style="font-size:0.95rem; margin-bottom:0.6rem; color:#e2e8f0;"><span style="color:#38bdf8; margin-right:0.4rem;">모범 답안:</span> ${d.correct_answer}</div>
+                                    <div style="font-size:0.9rem; color:${d.is_correct ? '#10b981' : '#f87171'}; font-weight:bold;">[${d.score}/${d.points}점] ${d.feedback}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
         container.innerHTML = `
-            <div style="text-align: center; padding: 4rem 2rem;">
-                <div style="font-size: 4rem; margin-bottom: 1.5rem;">📊</div>
-                <h2 style="color: var(--muted); font-weight: 700; margin-bottom: 1rem;">아직 학습 기록이 없습니다</h2>
-                <p style="color: var(--muted); font-size: 1.1rem;">기출 풀기에서 문제를 풀어보세요!</p>
+            <!-- Summary Cards -->
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.2rem; margin-bottom:2.5rem;">
+                <div class="stat-card">
+                    <div class="label">총 풀이 횟수</div>
+                    <div class="value">${total}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">평균 점수</div>
+                    <div class="value" style="color:${avgPct >= 60 ? '#10b981' : '#f59e0b'};">${avgPct}%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">최고 점수</div>
+                    <div class="value" style="color:#10b981;">${best}%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">최저 점수</div>
+                    <div class="value" style="color:#f87171;">${worst}%</div>
+                </div>
             </div>
-        `;
-        return;
-    }
 
-    const total = history.length;
-    const avgPct = Math.round(history.reduce((s, r) => s + (r.pct||0), 0) / total);
-    const best = Math.max(...history.map(h => h.pct||0));
-    const worst = Math.min(...history.map(h => h.pct||0));
-    const totalScore = history.reduce((s, r) => s + (r.totalScore||0), 0);
-    const totalMax = history.reduce((s, r) => s + (r.maxScore||0), 0);
+            <!-- Score Chart -->
+            <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; margin-bottom:2.5rem;">
+                <h3 style="margin-bottom:1.5rem; font-weight:800; font-size:1.2rem;">📈 최근 점수 추이 (최대 10회)</h3>
+                <div style="display:flex; align-items:flex-end; gap:0.5rem; height:200px; padding:0 0.5rem;">
+                    ${chartBars}
+                </div>
+                <div style="text-align:center; margin-top:1rem; color:var(--muted); font-size:0.85rem;">60% 이상 <span style="color:#10b981;">●</span> · 40~59% <span style="color:#f59e0b;">●</span> · 40% 미만 <span style="color:#f87171;">●</span></div>
+            </div>
 
-    // Recent 10 for chart
-    const recent = history.slice(-10);
-    const chartBars = recent.map((r, i) => {
-        const h = Math.max(r.pct||0, 5);
-        const color = (r.pct||0) >= 60 ? '#10b981' : (r.pct||0) >= 40 ? '#f59e0b' : '#f87171';
-        const date = r.date ? new Date(r.date) : null;
-        const label = date ? `${date.getMonth()+1}/${date.getDate()}` : `#${i+1}`;
-        return `
-            <div style="display:flex; flex-direction:column; align-items:center; flex:1; gap:0.4rem;">
-                <span style="font-size:0.8rem; font-weight:700; color:${color};">${r.pct||0}%</span>
-                <div style="width:100%; max-width:40px; height:${h * 1.5}px; background:${color}; border-radius:6px 6px 2px 2px; transition: height 0.5s ease;"></div>
-                <span style="font-size:0.7rem; color:var(--muted);">${label}</span>
-            </div>
-        `;
-    }).join('');
-
-    // History table (most recent first)
-    const rows = [...history].reverse().slice(0, 20).map((r, i) => {
-        const date = r.date ? new Date(r.date).toLocaleString('ko-KR', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
-        const pctColor = (r.pct||0) >= 60 ? '#10b981' : (r.pct||0) >= 40 ? '#f59e0b' : '#f87171';
-        return `
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'" onclick="document.getElementById('details-${r.id}').style.display = document.getElementById('details-${r.id}').style.display === 'none' ? 'table-row' : 'none'">
-                <td style="padding:1rem; color:var(--muted);">${history.length - i}</td>
-                <td style="padding:1rem;"><strong>${r.title}</strong><br><span style="font-size:0.85rem; color:var(--muted);">${date}</span></td>
-                <td style="padding:1rem; text-align:center;">${r.totalScore ?? 0} / ${r.maxScore ?? 0}점</td>
-                <td style="padding:1rem; text-align:center; font-weight:800; color:${pctColor};">${r.pct||0}%</td>
-            </tr>
-            <tr id="details-${r.id}" style="display:none; background: rgba(0,0,0,0.2);">
-                <td colspan="4" style="padding: 1.5rem;">
-                    <div style="display:flex; flex-direction:column; gap:0.8rem; max-height:400px; overflow-y:auto; padding-right:0.5rem;">
-                        ${(r.details || []).map((d, idx) => `
-                            <div style="background:rgba(255,255,255,0.03); padding:1rem; border-radius:8px; border-left:4px solid ${d.is_correct ? '#10b981' : '#f87171'}">
-                                <div style="font-weight:bold; margin-bottom:0.6rem; line-height:1.4;">Q${idx+1}. ${d.question}</div>
-                                <div style="font-size:0.95rem; margin-bottom:0.4rem; color:#e2e8f0;"><span style="color:var(--muted); margin-right:0.4rem;">내 답변:</span> ${d.user_answer}</div>
-                                <div style="font-size:0.95rem; margin-bottom:0.6rem; color:#e2e8f0;"><span style="color:#38bdf8; margin-right:0.4rem;">모범 답안:</span> ${d.correct_answer}</div>
-                                <div style="font-size:0.9rem; color:${d.is_correct ? '#10b981' : '#f87171'}; font-weight:bold;">[${d.score}/${d.points}점] ${d.feedback}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join('');
-
-    container.innerHTML = `
-        <!-- Summary Cards -->
-        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1.2rem; margin-bottom:2.5rem;">
-            <div class="stat-card">
-                <div class="label">총 풀이 횟수</div>
-                <div class="value">${total}</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">평균 점수</div>
-                <div class="value" style="color:${avgPct >= 60 ? '#10b981' : '#f59e0b'};">${avgPct}%</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">최고 점수</div>
-                <div class="value" style="color:#10b981;">${best}%</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">최저 점수</div>
-                <div class="value" style="color:#f87171;">${worst}%</div>
-            </div>
-        </div>
-
-        <!-- Score Chart -->
-        <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; margin-bottom:2.5rem;">
-            <h3 style="margin-bottom:1.5rem; font-weight:800; font-size:1.2rem;">📈 최근 점수 추이 (최대 10회)</h3>
-            <div style="display:flex; align-items:flex-end; gap:0.5rem; height:200px; padding:0 0.5rem;">
-                ${chartBars}
-            </div>
-            <div style="text-align:center; margin-top:1rem; color:var(--muted); font-size:0.85rem;">60% 이상 <span style="color:#10b981;">●</span> · 40~59% <span style="color:#f59e0b;">●</span> · 40% 미만 <span style="color:#f87171;">●</span></div>
-        </div>
-
-        <!-- Cumulative -->
-        <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; margin-bottom:2.5rem;">
-            <h3 style="margin-bottom:1.2rem; font-weight:800; font-size:1.2rem;">🏆 누적 성적</h3>
-            <div style="display:flex; align-items:center; gap:2rem;">
-                <div style="flex:1;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-                        <span style="color:var(--muted);">누적 획득</span>
-                        <span style="font-weight:800;">${totalScore} / ${totalMax}점</span>
-                    </div>
-                    <div style="height:12px; background:rgba(0,0,0,0.3); border-radius:6px; overflow:hidden;">
-                        <div style="height:100%; width:${totalMax > 0 ? Math.round(totalScore/totalMax*100) : 0}%; background:linear-gradient(90deg, #0ea5e9, #10b981); border-radius:6px; transition:width 0.6s;"></div>
+            <!-- Cumulative -->
+            <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:2rem; margin-bottom:2.5rem;">
+                <h3 style="margin-bottom:1.2rem; font-weight:800; font-size:1.2rem;">🏆 누적 성적</h3>
+                <div style="display:flex; align-items:center; gap:2rem;">
+                    <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                            <span style="color:var(--muted);">누적 획득</span>
+                            <span style="font-weight:800;">${totalScore} / ${totalMax}점</span>
+                        </div>
+                        <div style="height:12px; background:rgba(0,0,0,0.3); border-radius:6px; overflow:hidden;">
+                            <div style="height:100%; width:${totalMax > 0 ? Math.round(totalScore/totalMax*100) : 0}%; background:linear-gradient(90deg, #0ea5e9, #10b981); border-radius:6px; transition:width 0.6s;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- History Table -->
-        <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; overflow:hidden; margin-bottom:2rem;">
-            <h3 style="padding:1.5rem 2rem 1rem; font-weight:800; font-size:1.2rem;">📋 풀이 기록 (최근 20건)</h3>
-            <table style="width:100%; border-collapse:collapse;">
-                <thead>
-                    <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
-                        <th style="padding:0.8rem 1rem; text-align:left; color:var(--muted); font-size:0.85rem;">#</th>
-                        <th style="padding:0.8rem 1rem; text-align:left; color:var(--muted); font-size:0.85rem;">날짜</th>
-                        <th style="padding:0.8rem 1rem; text-align:center; color:var(--muted); font-size:0.85rem;">점수</th>
-                        <th style="padding:0.8rem 1rem; text-align:center; color:var(--muted); font-size:0.85rem;">정답률</th>
-                    </tr>
-                </thead>
-                <tbody>${rows}</tbody>
-            </table>
-        </div>
+            <!-- History Table -->
+            <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:16px; overflow:hidden; margin-bottom:2rem;">
+                <h3 style="padding:1.5rem 2rem 1rem; font-weight:800; font-size:1.2rem;">📋 풀이 기록 (최근 20건)</h3>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+                            <th style="padding:0.8rem 1rem; text-align:left; color:var(--muted); font-size:0.85rem;">#</th>
+                            <th style="padding:0.8rem 1rem; text-align:left; color:var(--muted); font-size:0.85rem;">날짜</th>
+                            <th style="padding:0.8rem 1rem; text-align:center; color:var(--muted); font-size:0.85rem;">점수</th>
+                            <th style="padding:0.8rem 1rem; text-align:center; color:var(--muted); font-size:0.85rem;">정답률</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
 
-        <!-- Clear Button -->
-        <div style="text-align:center; padding:1rem;">
-            <button onclick="if(confirm('학습 기록을 모두 삭제하시겠습니까?')){localStorage.removeItem('quiz_sessions');renderStats();renderDashboard();}" style="background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.3); padding:0.8rem 2rem; border-radius:8px; cursor:pointer; font-weight:700; transition:0.2s;" onmouseover="this.style.background='rgba(248,113,113,0.2)'" onmouseout="this.style.background='rgba(248,113,113,0.1)'">
-                🗑️ 학습 기록 초기화
-            </button>
-        </div>
-    `;
+            <!-- Clear Button -->
+            <div style="text-align:center; padding:1rem;">
+                <button onclick="if(confirm('학습 기록을 모두 삭제하시겠습니까?')){localStorage.removeItem('quiz_sessions');renderStats();renderDashboard();}" style="background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.3); padding:0.8rem 2rem; border-radius:8px; cursor:pointer; font-weight:700; transition:0.2s;" onmouseover="this.style.background='rgba(248,113,113,0.2)'" onmouseout="this.style.background='rgba(248,113,113,0.1)'">
+                    🗑️ 학습 기록 초기화
+                </button>
+            </div>
+        `;
+    } catch (e) {
+        console.error('RenderStats Error:', e);
+        container.innerHTML = `
+            <div style="background:rgba(248,113,113,0.1); border:1px solid rgba(248,113,113,0.3); border-radius:16px; padding:2rem; text-align:center; color:#f87171;">
+                <strong>⚠️ 학습 통계를 불러오는 중 오류가 발생했습니다.</strong><br>
+                <span style="font-size:0.9rem; color:var(--muted);">${e.message}</span>
+                <button onclick="localStorage.removeItem('quiz_sessions'); renderStats();" style="display:block; margin: 1rem auto 0; background: rgba(248,113,113,0.2); color:#f87171; border: 1px solid rgba(248,113,113,0.4); padding:0.5rem 1rem; border-radius:6px; cursor:pointer; font-size:0.85rem;">
+                    기록 초기화 후 재시도
+                </button>
+            </div>
+        `;
+    }
 }
 
 // ─── Quiz Selection ───────────────────────────────────────
@@ -1114,7 +1124,6 @@ document.getElementById('exit-quiz').addEventListener('click', () => {
     if (confirm('퀴즈를 종료하시겠습니까?')) {
         clearInterval(state.timerInt);
         switchView('dashboard');
-        renderDashboard();
     }
 });
 window.addEventListener('keydown', e => {
