@@ -452,6 +452,94 @@ function selectType(type, defaultCount, typeName) {
 }
 window.selectType = selectType;
 
+function toggleRandomSelection() {
+    const sub = document.getElementById('sub-list');
+    if (state.subMode === 'random') {
+        sub.classList.add('hidden');
+        state.subMode = null;
+        return;
+    }
+    state.subMode = 'random';
+    sub.style.display = 'block'; // Block display for custom layouts
+    sub.classList.remove('hidden');
+    sub.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div class="item-row" style="cursor: pointer; padding: 1.8rem;" onclick="startTotalRandomQuiz()">
+                <span class="icon" style="font-size: 2.2rem; margin-right: 1rem;">🎲</span>
+                <div class="text">
+                    <strong>전체 랜덤 풀기</strong>
+                    <span>전체 문항 중 무작위 30문항 풀기</span>
+                </div>
+            </div>
+            <div class="item-row" style="cursor: pointer; padding: 1.8rem;" onclick="startMockExamQuiz()">
+                <span class="icon" style="font-size: 2.2rem; margin-right: 1rem;">📋</span>
+                <div class="text">
+                    <strong>실전 모의고사 풀기</strong>
+                    <span>단답 12, 서술 4, 실무 2 (총 100점 만점)</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+window.toggleRandomSelection = toggleRandomSelection;
+
+async function startTotalRandomQuiz() {
+    try {
+        const res = await fetch('./data/questions_all.json');
+        const data = await res.json();
+        const shuffled = [...data.questions].sort(() => Math.random() - 0.5);
+        
+        // Select 30 questions for a reasonable random test session
+        const count = Math.min(shuffled.length, 30);
+        const selected = shuffled.slice(0, count);
+        
+        state.isMockExam = false;
+        launchQuiz(selected, `🎲 전체 랜덤 풀기 (${count}문항)`);
+    } catch (e) {
+        console.error('Failed to create random quiz:', e);
+        alert('랜덤 문제를 불러오는 중 오류가 발생했습니다.');
+    }
+}
+window.startTotalRandomQuiz = startTotalRandomQuiz;
+
+async function startMockExamQuiz() {
+    try {
+        const res = await fetch('./data/questions_all.json');
+        const data = await res.json();
+        const allQuestions = data.questions;
+        
+        // Group by type
+        const shortList = allQuestions.filter(q => q.type === 'short');
+        const essayList = allQuestions.filter(q => q.type === 'essay');
+        const practicalList = allQuestions.filter(q => q.type === 'practical');
+        
+        if (shortList.length < 12 || essayList.length < 4 || practicalList.length < 2) {
+            alert('모의고사를 생성하기 위한 충분한 문제가 없습니다. 문항 데이터를 확인해 주세요.');
+            return;
+        }
+        
+        // Randomly select items
+        const selectedShort = [...shortList].sort(() => Math.random() - 0.5).slice(0, 12);
+        const selectedEssay = [...essayList].sort(() => Math.random() - 0.5).slice(0, 4);
+        const selectedPractical = [...practicalList].sort(() => Math.random() - 0.5).slice(0, 2);
+        
+        // Override points according to mock exam specification
+        selectedShort.forEach(q => q.points = 3);
+        selectedEssay.forEach(q => q.points = 12);
+        selectedPractical.forEach(q => q.points = 16);
+        
+        // Merge into final array
+        const mockQuestions = [...selectedShort, ...selectedEssay, ...selectedPractical];
+        
+        state.isMockExam = true;
+        launchQuiz(mockQuestions, '📋 실전 모의고사 (100점 만점)');
+    } catch (e) {
+        console.error('Failed to create mock exam:', e);
+        alert('모의고사를 생성하는 중 오류가 발생했습니다.');
+    }
+}
+window.startMockExamQuiz = startMockExamQuiz;
+
 async function toggleSessionSelection() {
     const sub = document.getElementById('sub-list');
     sub.style.display = ''; // CSS grid 복구
@@ -567,7 +655,11 @@ function renderQuestion() {
     document.getElementById('q-number').textContent = `Q${state.index + 1}`;
     document.getElementById('q-type').textContent = TYPE_LABEL[q.type] || q.type;
     document.getElementById('q-points').textContent = `${q.points ?? TYPE_POINTS[q.type] ?? 0}점`;
-    document.getElementById('q-text').textContent = q.question;
+    let questionText = q.question;
+    if (state.isMockExam && q.type === 'practical') {
+        questionText = `[실무형 선택 문제 - 2문항 중 택 1]\n* 안내: Q17과 Q18 중 풀이할 1문항만 선택해서 작성해 주세요. (두 문항 모두 작성하는 경우 더 높은 점수를 획득한 문항만 최종 성적에 합산됩니다.)\n\n` + q.question;
+    }
+    document.getElementById('q-text').textContent = questionText;
 
     // Progress
     const pct = ((state.index + 1) / state.questions.length) * 100;
@@ -771,6 +863,42 @@ function saveAnswerRealtime() {
 }
 window.saveAnswerRealtime = saveAnswerRealtime;
 
+function recalculateSessionScores(session) {
+    if (state.isMockExam) {
+        let coreScore = 0;
+        let p1Score = 0;
+        let p2Score = 0;
+        
+        session.details.forEach(d => {
+            if (d.qIndex < 16) {
+                coreScore += d.score;
+            } else if (d.qIndex === 16) {
+                p1Score = d.score;
+            } else if (d.qIndex === 17) {
+                p2Score = d.score;
+            }
+        });
+        
+        session.totalScore = coreScore + Math.max(p1Score, p2Score);
+        
+        const uniqueIndices = new Set(session.details.map(d => d.qIndex));
+        let maxScore = 0;
+        for (let idx = 0; idx < 16; idx++) {
+            if (uniqueIndices.has(idx)) {
+                maxScore += (idx < 12 ? 3 : 12);
+            }
+        }
+        if (uniqueIndices.has(16) || uniqueIndices.has(17)) {
+            maxScore += 16;
+        }
+        session.maxScore = maxScore;
+    } else {
+        session.totalScore = session.details.reduce((sum, d) => sum + d.score, 0);
+        session.maxScore = session.details.reduce((sum, d) => sum + d.points, 0);
+    }
+    session.pct = session.maxScore > 0 ? Math.round((session.totalScore / session.maxScore) * 100) : 0;
+}
+
 
 // ─── Submit ───────────────────────────────────────────────
 async function submitAnswer() {
@@ -847,6 +975,7 @@ async function submitAnswer() {
         
         const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
         session.details.push({
+            qIndex: state.index,
             question: q.question,
             correct_answer: q.answer,
             user_answer: userAnswer,
@@ -856,10 +985,7 @@ async function submitAnswer() {
             feedback: result.feedback
         });
         
-        session.totalScore += result.score;
-        session.maxScore += pts;
-        session.pct = session.maxScore > 0 ? Math.round((session.totalScore / session.maxScore) * 100) : 0;
-        
+        recalculateSessionScores(session);
         localStorage.setItem('quiz_sessions', JSON.stringify(history));
 
         fb.innerHTML = `
@@ -994,9 +1120,8 @@ async function submitBulkAnswers() {
             const q = state.questions[i];
             const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
             
-            session.totalScore += res.score;
-            session.maxScore += pts;
             session.details.push({
+                qIndex: i,
                 question: q.question,
                 correct_answer: q.answer,
                 user_answer: state.userAnswers[i],
@@ -1007,7 +1132,7 @@ async function submitBulkAnswers() {
             });
         });
             
-        session.pct = session.maxScore > 0 ? Math.round((session.totalScore / session.maxScore) * 100) : 0;
+        recalculateSessionScores(session);
         
         // Save to sessions
         const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
