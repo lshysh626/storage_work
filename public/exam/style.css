@@ -182,6 +182,14 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     transition: all 0.3s ease;
 }
 .textarea-ans:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); background: rgba(15, 23, 42, 0.8); }
+.textarea-ans-sub {
+    transition: all 0.3s ease;
+}
+.textarea-ans-sub:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15) !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+}
 
 /* Action buttons */
 .quiz-actions { display: flex; gap: 1rem; margin-top: 3rem; }

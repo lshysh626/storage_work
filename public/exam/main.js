@@ -630,17 +630,36 @@ function renderQuestion() {
         }
 
         if (blanks.length > 0) {
+            // Sort blanks in dictionary order (e.g. 1, 2, 3 or 가, 나, 다 or ①, ②, ③)
+            blanks.sort((a, b) => a.localeCompare(b, 'ko', { numeric: true }));
+
             blanks.forEach(label => {
                 const row = document.createElement('div');
-                row.className = 'input-row';
+                const isDescriptive = q.type === 'essay' || q.type === 'practical';
+
                 const currentVal = (savedAns && savedAns.includes(`(${label})`)) 
                     ? savedAns.split(`(${label})`)[1].split(' / ')[0].trim() 
                     : '';
-                row.innerHTML = `
-                    <span class="input-label">(${label})</span>
-                    <input class="ans-input" type="text" data-label="${label}" placeholder="답안 입력..." value="${currentVal}" ${qState.scored ? 'disabled' : ''} 
-                        oninput="saveAnswerRealtime()">
-                `;
+
+                if (isDescriptive) {
+                    row.className = 'textarea-row';
+                    row.style.display = 'flex';
+                    row.style.flexDirection = 'column';
+                    row.style.gap = '0.5rem';
+                    row.style.marginBottom = '1.5rem';
+                    row.innerHTML = `
+                        <span class="input-label" style="margin-bottom: 0.2rem; font-weight: 800; color: var(--primary);">(${label})</span>
+                        <textarea class="ans-input textarea-ans-sub" data-label="${label}" placeholder="답안을 서술하세요..." style="width: 100%; min-height: 100px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; color: #fff; font-size: 1.1rem; line-height: 1.6; outline: none; resize: vertical; font-family: inherit;" ${qState.scored ? 'disabled' : ''} 
+                            oninput="saveAnswerRealtime()">${currentVal}</textarea>
+                    `;
+                } else {
+                    row.className = 'input-row';
+                    row.innerHTML = `
+                        <span class="input-label">(${label})</span>
+                        <input class="ans-input" type="text" data-label="${label}" placeholder="답안 입력..." value="${currentVal}" ${qState.scored ? 'disabled' : ''} 
+                            oninput="saveAnswerRealtime()">
+                    `;
+                }
                 container.appendChild(row);
             });
         } else {
