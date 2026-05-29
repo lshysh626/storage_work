@@ -614,8 +614,8 @@ function renderQuestion() {
         nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
         nextBtn.style.background = '';
     } else {
-        const matchText1 = q.question.match(/\(\s*[A-Za-z가-힣ㄱ-ㅎ]\s*\)/g) || [];
-        const matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩]/g) || [];
+        const matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+        const matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
         const blanks = [...new Set([...matchText1, ...matchText2].map(m => m.replace(/[\(\)\s]/g, '')))];
 
         if (blanks.length > 0) {
