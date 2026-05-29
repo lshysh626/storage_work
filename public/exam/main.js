@@ -905,7 +905,7 @@ function showSessionResult() {
     
     if (!session || !session.details || session.details.length === 0) {
         alert('저장된 결과가 없습니다.');
-        switchView('dashboard');
+        switchView('quiz-selection');
         return;
     }
     
@@ -1123,7 +1123,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 document.getElementById('exit-quiz').addEventListener('click', () => {
     if (confirm('퀴즈를 종료하시겠습니까?')) {
         clearInterval(state.timerInt);
-        switchView('dashboard');
+        switchView('quiz-selection');
     }
 });
 window.addEventListener('keydown', e => {
