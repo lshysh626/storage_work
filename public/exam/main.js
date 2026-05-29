@@ -1081,18 +1081,23 @@ async function submitBulkAnswers() {
                 });
             } catch (bulkError) {
                 console.error("[Bulk Grading] Error during bulk API grading, starting sequential fallback:", bulkError);
+                const errMsg = bulkError.message || "알 수 없는 오류";
                 for (let k = 0; k < questionsToGrade.length; k++) {
                     const item = questionsToGrade[k];
                     container.innerHTML = `
                         <div style="text-align:center; padding: 4rem;">
                             <div style="font-size: 1.4rem; color: #f87171; margin-bottom: 1rem; font-weight: 800;">
-                                일괄 채점 재시도 중 (순차)...
+                                일괄 채점 실패로 인해 순차 채점 중... ⚠️
+                            </div>
+                            <div style="font-size: 0.95rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; max-width: 500px; margin-left: auto; margin-right: auto; background: rgba(248,113,113,0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(248,113,113,0.2);">
+                                <strong>오류 원인:</strong> <span style="font-family: monospace; color: #fda4af;">${errMsg}</span>
+                                <br><small style="color: var(--muted); margin-top: 0.5rem; display: block;">* 개인 API 키 권한, 네트워크 연결 혹은 429 한도 초과 오류인지 확인해 보세요.</small>
                             </div>
                             <div style="font-size: 1.1rem; color: var(--primary); margin-bottom: 1.5rem;">
                                 채점 중... (${k + 1} / ${questionsToGrade.length})
                             </div>
                             <div style="height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; max-width: 300px; margin: 0 auto;">
-                                <div style="height: 100%; width: ${Math.round((k/questionsToGrade.length)*100)}%; background: linear-gradient(90deg, #f87171, #f87171); border-radius: 3px; transition: width 0.3s;"></div>
+                                <div style="height: 100%; width: ${Math.round((k/questionsToGrade.length)*100)}%; background: linear-gradient(90deg, #f87171, var(--primary)); border-radius: 3px; transition: width 0.3s;"></div>
                             </div>
                         </div>
                     `;
