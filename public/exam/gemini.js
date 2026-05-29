@@ -251,12 +251,18 @@ JSON 응답 형식 예시:
   {"index": 2, "score": 0, "feedback": "피드백 문장", "is_correct": false}
 ]`;
 
+    console.log("[Gemini API] Requesting bulk score for", questionsToGrade.length, "questions...");
     const text = await callGemini(prompt);
+    console.log("[Gemini API] Received bulk response:", text);
     const match = text.match(/\[[\s\S]*?\]/);
     if (match) {
-        const parsed = JSON.parse(match[0]);
-        if (Array.isArray(parsed)) {
-            return parsed;
+        try {
+            const parsed = JSON.parse(match[0]);
+            if (Array.isArray(parsed)) {
+                return parsed;
+            }
+        } catch (e) {
+            console.error("[Gemini API] JSON Parse Error in bulk score:", e);
         }
     }
     throw new Error('일괄 채점 응답 파싱 실패');

@@ -943,7 +943,9 @@ async function submitBulkAnswers() {
             `;
 
             try {
+                console.log("[Bulk Grading] Sending questions to bulk API:", questionsToGrade);
                 const bulkResults = await geminiScoreBulk(questionsToGrade);
+                console.log("[Bulk Grading] Bulk results received:", bulkResults);
                 bulkResults.forEach(r => {
                     resultsMap.set(r.index, {
                         score: r.score,
@@ -952,7 +954,7 @@ async function submitBulkAnswers() {
                     });
                 });
             } catch (bulkError) {
-                console.warn("Bulk grading failed, falling back to sequential...", bulkError);
+                console.error("[Bulk Grading] Error during bulk API grading, starting sequential fallback:", bulkError);
                 for (let k = 0; k < questionsToGrade.length; k++) {
                     const item = questionsToGrade[k];
                     container.innerHTML = `
