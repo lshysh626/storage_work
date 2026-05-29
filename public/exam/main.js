@@ -888,26 +888,95 @@ async function submitBulkAnswers() {
     try {
         const results = [];
         const total = state.questions.length;
-        
+        const questionsToGrade = [];
+        const resultsMap = new Map();
+
         for (let i = 0; i < total; i++) {
             const q = state.questions[i];
+            const uAns = state.userAnswers[i];
+            const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
+
+            // Check for empty answer (Fast fail)
+            if (!uAns || uAns === '미입력' || String(uAns).trim() === '') {
+                resultsMap.set(i, {
+                    score: 0,
+                    is_correct: false,
+                    feedback: "답안을 작성하지 않았습니다."
+                });
+            } else {
+                // Check for perfect string match (Fast pass)
+                const cleanU = String(uAns).replace(/\s+/g, '').toLowerCase();
+                const cleanC = String(q.answer).replace(/\s+/g, '').toLowerCase();
+                if (cleanU === cleanC || (cleanC.length > 2 && cleanU.includes(cleanC))) {
+                    resultsMap.set(i, {
+                        score: pts,
+                        is_correct: true,
+                        feedback: "정답과 완벽하게 일치합니다. (초고속 자동 채점)"
+                    });
+                } else {
+                    // Need AI grading
+                    questionsToGrade.push({
+                        index: i,
+                        question: q.question,
+                        correct_answer: q.answer,
+                        user_answer: uAns,
+                        points: pts
+                    });
+                }
+            }
+        }
+
+        if (questionsToGrade.length > 0) {
             container.innerHTML = `
                 <div style="text-align:center; padding: 4rem;">
-                    <div style="font-size: 1.5rem; color: var(--primary); margin-bottom: 1rem;">
-                        채점 중... (${i + 1} / ${total})
+                    <div style="font-size: 1.5rem; color: var(--primary); margin-bottom: 1.0rem; font-weight: 800;">
+                        AI 초고속 일괄 채점 중... 🤖
                     </div>
-                    <div style="height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; max-width: 300px; margin: 0 auto;">
-                        <div style="height: 100%; width: ${Math.round((i/total)*100)}%; background: linear-gradient(90deg, #0ea5e9, #38bdf8); border-radius: 3px; transition: width 0.3s;"></div>
+                    <div style="font-size: 0.95rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.6;">
+                        ${questionsToGrade.length}개 문항을 한 번에 채점하여 대기 시간을 대폭 줄이고 있습니다.
                     </div>
+                    <div class="loader" style="margin: 0 auto; border: 4px solid rgba(56,189,248,0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;"></div>
                 </div>
+                <style>
+                    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                </style>
             `;
-            const res = await geminiScore(
-                q.question, q.answer, state.userAnswers[i],
-                q.points ?? TYPE_POINTS[q.type] ?? 0
-            );
-            results.push(res);
-            // 연속 요청 방지 딥 (무료티어 15 RPM 기준 1요청당 4초 필요)
-            if (i < total - 1) await new Promise(r => setTimeout(r, 4200));
+
+            try {
+                const bulkResults = await geminiScoreBulk(questionsToGrade);
+                bulkResults.forEach(r => {
+                    resultsMap.set(r.index, {
+                        score: r.score,
+                        is_correct: r.is_correct,
+                        feedback: r.feedback
+                    });
+                });
+            } catch (bulkError) {
+                console.warn("Bulk grading failed, falling back to sequential...", bulkError);
+                for (let k = 0; k < questionsToGrade.length; k++) {
+                    const item = questionsToGrade[k];
+                    container.innerHTML = `
+                        <div style="text-align:center; padding: 4rem;">
+                            <div style="font-size: 1.4rem; color: #f87171; margin-bottom: 1rem; font-weight: 800;">
+                                일괄 채점 재시도 중 (순차)...
+                            </div>
+                            <div style="font-size: 1.1rem; color: var(--primary); margin-bottom: 1.5rem;">
+                                채점 중... (${k + 1} / ${questionsToGrade.length})
+                            </div>
+                            <div style="height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; max-width: 300px; margin: 0 auto;">
+                                <div style="height: 100%; width: ${Math.round((k/questionsToGrade.length)*100)}%; background: linear-gradient(90deg, #f87171, #f87171); border-radius: 3px; transition: width 0.3s;"></div>
+                            </div>
+                        </div>
+                    `;
+                    const res = await geminiScore(item.question, item.correct_answer, item.user_answer, item.points);
+                    resultsMap.set(item.index, res);
+                    if (k < questionsToGrade.length - 1) await new Promise(r => setTimeout(r, 4200));
+                }
+            }
+        }
+
+        for (let i = 0; i < total; i++) {
+            results.push(resultsMap.get(i));
         }
         let session = {
             id: state.currentSessionId,

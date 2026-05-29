@@ -237,11 +237,38 @@ async function geminiChatStream(question, answer, explanation, message, onChunk,
     await callGeminiStream(prompt, onChunk, onStatus);
 }
 
+// ─── 일괄 채점 ──────────────────────────────────────────────────
+async function geminiScoreBulk(questionsToGrade) {
+    const prompt = `정보보안기사 실기 시험 답안 일괄 채점기입니다. 다음 여러 문제들의 답안을 정밀 채점해 주세요.
+
+채점할 문제 목록:
+${JSON.stringify(questionsToGrade, null, 2)}
+
+반드시 각 문제의 채점 결과를 담은 JSON 배열 형태로만 정확하게 응답해 주세요. 순서(index)는 원래 목록의 index 값과 일치해야 합니다.
+JSON 응답 형식 예시:
+[
+  {"index": 0, "score": 3, "feedback": "피드백 문장", "is_correct": true},
+  {"index": 2, "score": 0, "feedback": "피드백 문장", "is_correct": false}
+]`;
+
+    const text = await callGemini(prompt);
+    const match = text.match(/\[[\s\S]*?\]/);
+    if (match) {
+        const parsed = JSON.parse(match[0]);
+        if (Array.isArray(parsed)) {
+            return parsed;
+        }
+    }
+    throw new Error('일괄 채점 응답 파싱 실패');
+}
+
 // 전역 노출
 window.callGemini = callGemini;
 window.callGeminiStream = callGeminiStream;
 window.geminiScore = geminiScore;
+window.geminiScoreBulk = geminiScoreBulk;
 window.geminiExplainStream = geminiExplainStream;
 window.geminiChatStream = geminiChatStream;
 window.getGeminiKey = getGeminiKey;
 window.getGeminiModel = getGeminiModel;
+
