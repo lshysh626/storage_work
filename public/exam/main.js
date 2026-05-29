@@ -614,9 +614,20 @@ function renderQuestion() {
         nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
         nextBtn.style.background = '';
     } else {
-        const matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
-        const matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
-        const blanks = [...new Set([...matchText1, ...matchText2].map(m => m.replace(/[\(\)\s]/g, '')))];
+        let matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+        let matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
+        let blanks = [...new Set([...matchText1, ...matchText2].map(m => m.replace(/[\(\)\s]/g, '')))];
+
+        // If no explicit blank labels are found, check if it asks to list N items (N > 1)
+        if (blanks.length === 0) {
+            const numMatches = q.question.match(/(\d+)\s*(가지|개)[^.\n]*(기술|서술|쓰시오|작성|답하시오)/);
+            if (numMatches) {
+                const num = parseInt(numMatches[1], 10);
+                if (num > 1 && num <= 10) {
+                    blanks = Array.from({ length: num }, (_, i) => String(i + 1));
+                }
+            }
+        }
 
         if (blanks.length > 0) {
             blanks.forEach(label => {
