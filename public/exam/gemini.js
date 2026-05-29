@@ -250,11 +250,14 @@ async function geminiScore(question, correct_answer, user_answer, points) {
         required: ["score", "feedback", "is_correct"]
     };
 
+    let text = '';
     try {
-        const text = await callGemini(prompt, schema);
-        return JSON.parse(text);
+        text = await callGemini(prompt, schema);
+        const match = text.match(/\{[\s\S]*?\}/);
+        const jsonText = match ? match[0] : text;
+        return JSON.parse(jsonText);
     } catch (err) {
-        console.error("[Gemini API] Single score error:", err);
+        console.error("[Gemini API] Single score error:", err, "Raw text was:", text);
         return {
             score: 0,
             is_correct: false,
@@ -329,15 +332,18 @@ ${JSON.stringify(questionsToGrade, null, 2)}`;
     };
 
     console.log("[Gemini API] Requesting bulk score for", questionsToGrade.length, "questions with structured schema...");
+    let text = '';
     try {
-        const text = await callGemini(prompt, schema);
+        text = await callGemini(prompt, schema);
         console.log("[Gemini API] Received bulk response:", text);
-        const parsed = JSON.parse(text);
+        const match = text.match(/\[[\s\S]*?\]/);
+        const jsonText = match ? match[0] : text;
+        const parsed = JSON.parse(jsonText);
         if (Array.isArray(parsed)) {
             return parsed;
         }
     } catch (e) {
-        console.error("[Gemini API] JSON Parse Error in bulk score:", e);
+        console.error("[Gemini API] JSON Parse Error in bulk score:", e, "Raw text was:", text);
     }
     throw new Error('일괄 채점 응답 파싱 실패');
 }
