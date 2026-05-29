@@ -129,7 +129,7 @@ async function renderDashboard() {
         } else {
             const totalQuestions = sessions.reduce((s, sess) => s + sess.count, 0);
             const sessionCards = sessions.map(s => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; background:rgba(255,255,255,0.02); border-radius:12px; border:1px solid rgba(255,255,255,0.04); transition:0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
+                <div class="dashboard-session-card" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
                     <div style="display:flex; align-items:center; gap:1.2rem;">
                         <span style="font-size:1.5rem;">📄</span>
                         <div style="display:flex; flex-direction:column; gap:0.2rem;">
@@ -137,12 +137,12 @@ async function renderDashboard() {
                             <span style="font-size:0.85rem; color:var(--muted);">ID: ${s.id}</span>
                         </div>
                     </div>
-                    <span style="background:rgba(56,189,248,0.1); color:var(--primary); padding:0.4rem 0.8rem; border-radius:20px; font-weight:800; font-size:0.9rem;">${s.count}문항</span>
+                    <span class="session-badge-count" style="background:rgba(56,189,248,0.1); color:var(--primary); padding:0.4rem 0.8rem; border-radius:20px; font-weight:800; font-size:0.9rem;">${s.count}문항</span>
                 </div>
             `).join('');
 
             sessionContent = `
-                <div style="background:rgba(30,41,59,0.4); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:2rem; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);">
+                <div class="dashboard-session-container">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
                         <div style="display:flex; align-items:center; gap:0.8rem;">
                             <span style="font-size:1.5rem;">📚</span>
@@ -161,7 +161,7 @@ async function renderDashboard() {
         }
 
         const featureCards = examFeatures.map(f => `
-            <div style="background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; gap: 1rem; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='${f.color}44'" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.06)'">
+            <div class="dashboard-feature-card" style="background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; gap: 1rem; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='${f.color}44'" onmouseout="this.style.transform='none'; this.style.borderColor='rgba(255,255,255,0.06)'">
                 <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">${f.icon}</div>
                 <div style="font-weight: 900; font-size: 1.2rem; color: #fff; letter-spacing: -0.02em;">${f.title}</div>
                 <div style="font-size: 0.92rem; color: #94a3b8; line-height: 1.6; word-break: keep-all;">${f.desc}</div>
@@ -187,7 +187,7 @@ async function renderDashboard() {
                         <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff;">
                             <span style="color: var(--primary);">✨</span> 핵심 기능
                         </h3>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                        <div class="dashboard-features-grid">
                             ${featureCards}
                         </div>
                     </div>
@@ -197,7 +197,7 @@ async function renderDashboard() {
                         <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff;">
                             <span style="font-size: 1.4rem;">⌨️</span> 단축키 가이드
                         </h3>
-                        <div style="background: rgba(15, 23, 42, 0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; height: calc(100% - 2.5rem);">
+                        <div class="dashboard-shortcuts-container">
                             ${shortcutRows}
                         </div>
                     </div>
@@ -416,7 +416,7 @@ function toggleTypeSelection() {
         
         <!-- 하단 통합 입력 영역 (예쁘게 중앙 정렬 및 크기 제한) -->
         <div id="type-action-area" style="display: none; margin-top: 1.5rem; animation: fadeIn 0.3s ease;">
-            <div style="max-width: 420px; margin: 0 auto; background: rgba(30, 41, 59, 0.9); border: 1px solid var(--primary); padding: 1.5rem 2rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15); text-align: center;">
+            <div class="type-action-card">
                 <div style="margin-bottom: 1.5rem; color: #fff; font-size: 1.15rem;">
                     <strong id="selected-type-name" style="color: var(--primary); font-size: 1.3rem;">유형</strong>
                     <span style="color: #cbd5e1; font-weight: 500;"> 몇 문제를 푸시겠습니까?</span>
