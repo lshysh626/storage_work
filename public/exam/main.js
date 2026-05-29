@@ -939,32 +939,49 @@ async function submitAnswer() {
         return;
     }
 
-    state.submitting = true;
-    state.userAnswers[state.index] = userAnswer; // Always save current answer
+    state.submitting = false;
+    state.userAnswers[state.index] = userAnswer;
     const fb = document.getElementById('feedback-area');
-    fb.innerHTML = '<span style="color:var(--primary)">채점 중... ⏳</span>';
     fb.classList.remove('hidden');
 
-    try {
-        const result = await geminiScore(
-            q.question, q.answer, userAnswer,
-            q.points ?? TYPE_POINTS[q.type] ?? 0
-        );
+    const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
 
-        // Update question state for persistence
-        const qState = state.questionStates[state.index];
-        qState.scored = true;
-        qState.score = result.score;
-        qState.isCorrect = result.is_correct;
-        qState.feedback = result.feedback;
+    // 즉시 결과 노출 (모범 답안과 다음 문제 버튼 노출 - 체감 대기시간 0초)
+    fb.innerHTML = `
+        <div style="border-left: 4px solid var(--muted); padding-left: 1rem; transition: border-color 0.3s;" id="local-feedback-container">
+            <div id="ai-status-area" style="margin-bottom: 0.8rem; font-weight: 800; color: var(--primary);">
+                AI 채점 중... ⏳ <span style="font-size: 0.8rem; font-weight: normal; color: var(--muted);">(기다리지 않고 다음 문제로 바로 넘어가셔도 됩니다)</span>
+            </div>
+            <div style="margin-top:0.8rem; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 6px;">
+                <strong style="color:var(--primary);">모범 답안:</strong> 
+                <span style="color:#fff;">${q.answer}</span>
+            </div>
+            <button class="btn-next" onclick="nextQuestion()" style="margin-top:1.5rem; width:100%">다음 문제 → (Ctrl+Enter)</button>
+        </div>
+    `;
 
-        // Save to sessions
+    // 백그라운드 비동기 AI 채점 시작
+    const savedIndex = state.index;
+    const savedSessionId = state.currentSessionId;
+    const savedTitle = document.getElementById('quiz-title').textContent;
+
+    geminiScore(q.question, q.answer, userAnswer, pts).then(result => {
+        // 1. 문제 상태 영구 저장
+        const qState = state.questionStates[savedIndex];
+        if (qState) {
+            qState.scored = true;
+            qState.score = result.score;
+            qState.isCorrect = result.is_correct;
+            qState.feedback = result.feedback;
+        }
+
+        // 2. 세션 히스토리 저장
         const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
-        let session = history.find(h => h.id === state.currentSessionId);
+        let session = history.find(h => h.id === savedSessionId);
         if (!session) {
             session = {
-                id: state.currentSessionId,
-                title: document.getElementById('quiz-title').textContent,
+                id: savedSessionId,
+                title: savedTitle,
                 date: new Date().toISOString(),
                 totalScore: 0,
                 maxScore: 0,
@@ -973,36 +990,48 @@ async function submitAnswer() {
             history.push(session);
         }
         
-        const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
-        session.details.push({
-            qIndex: state.index,
-            question: q.question,
-            correct_answer: q.answer,
-            user_answer: userAnswer,
-            score: result.score,
-            points: pts,
-            is_correct: result.is_correct,
-            feedback: result.feedback
-        });
-        
+        const existingDetail = session.details.find(d => d.qIndex === savedIndex);
+        if (!existingDetail) {
+            session.details.push({
+                qIndex: savedIndex,
+                question: q.question,
+                correct_answer: q.answer,
+                user_answer: userAnswer,
+                score: result.score,
+                points: pts,
+                is_correct: result.is_correct,
+                feedback: result.feedback
+            });
+        } else {
+            existingDetail.score = result.score;
+            existingDetail.is_correct = result.is_correct;
+            existingDetail.feedback = result.feedback;
+        }
+
         recalculateSessionScores(session);
         localStorage.setItem('quiz_sessions', JSON.stringify(history));
 
-        fb.innerHTML = `
-            <div style="border-left: 4px solid ${result.is_correct ? 'var(--primary)' : '#f87171'}; padding-left: 1rem;">
-                <strong>${result.is_correct ? '✅ 정답' : '⚠️ 오답/부분점수'} (${result.score}점)</strong>
-                <div style="margin-top:0.8rem; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 6px;">
-                    <strong style="color:var(--primary);">모범 답안:</strong> 
-                    <span style="color:#fff;">${q.answer}</span>
-                </div>
-                <p style="margin-top:0.8rem; color:var(--muted); white-space:pre-wrap">${result.feedback}</p>
-                <button class="btn-next" onclick="nextQuestion()" style="margin-top:1.5rem; width:100%">다음 문제 → (Ctrl+Enter)</button>
-            </div>
-        `;
-    } catch (err) {
-        fb.innerHTML = `<span style="color:#f87171">오류: ${err.message}</span>`;
-        state.submitting = false;
-    }
+        // 3. 현재 보고 있는 문제가 완료된 문제라면 실시간 UI 업데이트
+        if (state.index === savedIndex) {
+            const container = document.getElementById('local-feedback-container');
+            const aiArea = document.getElementById('ai-status-area');
+            if (container && aiArea) {
+                container.style.borderColor = result.is_correct ? 'var(--primary)' : '#f87171';
+                aiArea.innerHTML = `
+                    <strong style="color: ${result.is_correct ? 'var(--primary)' : '#f87171'}">${result.is_correct ? '✅ 정답' : '⚠️ 오답/부분점수'} (${result.score}점)</strong>
+                    <p style="margin-top:0.6rem; color:var(--muted); font-weight: normal; font-size: 0.95rem; white-space:pre-wrap; line-height: 1.5;">${result.feedback}</p>
+                `;
+            }
+        }
+    }).catch(err => {
+        console.error("[Background Grading] Failed for index", savedIndex, err);
+        if (state.index === savedIndex) {
+            const aiArea = document.getElementById('ai-status-area');
+            if (aiArea) {
+                aiArea.innerHTML = `<span style="color:#f87171">AI 채점 실패 (오답 보류)</span>`;
+            }
+        }
+    });
 }
 
 async function submitBulkAnswers() {

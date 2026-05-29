@@ -57,7 +57,8 @@ async function callGemini(prompt, responseSchema = null) {
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: { 
                     temperature: 0.1,
-                    responseMimeType: 'application/json'
+                    responseMimeType: 'application/json',
+                    maxOutputTokens: 150
                 }
             };
             if (responseSchema) {
