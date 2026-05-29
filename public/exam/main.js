@@ -618,20 +618,41 @@ function renderQuestion() {
         let matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
         let blanks = [...new Set([...matchText1, ...matchText2].map(m => m.replace(/[\(\)\s]/g, '')))];
 
+        let isCustomLabels = false;
         // If no explicit blank labels are found, check if it asks to list N items (N > 1)
         if (blanks.length === 0) {
             const numMatches = q.question.match(/(\d+)\s*(가지|개)[^.\n]*(기술|서술|쓰시오|작성|답하시오)/);
             if (numMatches) {
                 const num = parseInt(numMatches[1], 10);
                 if (num > 1 && num <= 10) {
-                    blanks = Array.from({ length: num }, (_, i) => String(i + 1));
+                    // Try to find a parenthesized list of items that matches the count
+                    let foundItems = null;
+                    const parenMatches = q.question.match(/\(([^)]+)\)/g);
+                    if (parenMatches) {
+                        for (const pm of parenMatches) {
+                            const inner = pm.slice(1, -1); // strip ( and )
+                            const splitItems = inner.split(/[\/,·|;]/).map(i => i.trim()).filter(Boolean);
+                            if (splitItems.length === num) {
+                                foundItems = splitItems;
+                                break;
+                            }
+                        }
+                    }
+                    if (foundItems) {
+                        blanks = foundItems;
+                        isCustomLabels = true;
+                    } else {
+                        blanks = Array.from({ length: num }, (_, i) => String(i + 1));
+                    }
                 }
             }
         }
 
         if (blanks.length > 0) {
-            // Sort blanks in dictionary order (e.g. 1, 2, 3 or 가, 나, 다 or ①, ②, ③)
-            blanks.sort((a, b) => a.localeCompare(b, 'ko', { numeric: true }));
+            // Sort blanks in dictionary order only if they are not custom list labels (e.g. 1, 2, 3 or 가, 나, 다 or ①, ②, ③)
+            if (!isCustomLabels) {
+                blanks.sort((a, b) => a.localeCompare(b, 'ko', { numeric: true }));
+            }
 
             blanks.forEach(label => {
                 const row = document.createElement('div');
