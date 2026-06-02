@@ -41,11 +41,32 @@ function formatModelAnswer(answer, question = '') {
         return formatted;
     }
 
-    // 2. If the question has multiple blanks, and the answer is comma or semicolon separated
+    // 2. If the question has multiple blanks, and the answer has separators
     if (blanks && blanks.length > 1) {
-        let parts = formatted.split(/[,;\/]+/).map(p => p.trim()).filter(Boolean);
+        // Try splitting by comma or semicolon first (which is the most common)
+        let parts = formatted.split(/[,;]+/).map(p => p.trim()).filter(Boolean);
+        
+        // If that doesn't match, check if we can split by " / " (slash with spaces) or newlines
+        if (parts.length !== blanks.length) {
+            if (formatted.includes('\n')) {
+                parts = formatted.split('\n').map(p => p.trim()).filter(Boolean);
+            }
+        }
+        if (parts.length !== blanks.length) {
+            // Split by slash with spaces (e.g. "lastlog / sulog / acct") to avoid splitting "acct/pacct"
+            parts = formatted.split(/\s+\/\s+/).map(p => p.trim()).filter(Boolean);
+        }
+        
         if (parts.length === blanks.length) {
-            return blanks.map((label, idx) => `(${label}) ${parts[idx]}`).join('\n');
+            return blanks.map((label, idx) => {
+                const part = parts[idx];
+                const cleanLabel = label.trim();
+                const startsWithLabel = new RegExp(`^\\(?[\\s#]*${cleanLabel}[\\s\\)#]*`, 'i');
+                if (startsWithLabel.test(part)) {
+                    return part;
+                }
+                return `(${cleanLabel}) ${part}`;
+            }).join('\n');
         }
     }
 
