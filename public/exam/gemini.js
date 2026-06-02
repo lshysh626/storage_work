@@ -297,14 +297,14 @@ function parseScoringResponse(text, defaultPoints) {
         
         // Extract score
         let score = 0;
-        const scoreMatch = trimmed.match(/(?:score|점수|점)\s*:\s*(\d+)/i) || trimmed.match(/(\d+)\s*(?:점|points)/i);
+        const scoreMatch = trimmed.match(/"?(?:score|점수|점)"?\s*:\s*(\d+)/i) || trimmed.match(/(\d+)\s*(?:점|points)/i);
         if (scoreMatch) {
             score = parseInt(scoreMatch[1], 10);
         }
         
         // Extract is_correct
         let isCorrect = false;
-        const correctMatch = trimmed.match(/(?:is_correct|correct|정답여부|정답)\s*:\s*(true|false|yes|no|y|n|일치|불일치|O|X)/i);
+        const correctMatch = trimmed.match(/"?(?:is_correct|correct|정답여부|정답)"?\s*:\s*(true|false|yes|no|y|n|일치|불일치|O|X)/i);
         if (correctMatch) {
             const val = correctMatch[1].toLowerCase();
             isCorrect = (val === 'true' || val === 'yes' || val === 'y' || val === '일치' || val === 'o');
@@ -321,7 +321,7 @@ function parseScoringResponse(text, defaultPoints) {
         if (jsonFeedbackMatch) {
             feedback = jsonFeedbackMatch[1].replace(/\\"/g, '"').replace(/\\\\/g, '\\').trim();
         } else {
-            const feedbackMatch = trimmed.match(/(?:feedback|피드백|설명)\s*:\s*([^\n]+)/i);
+            const feedbackMatch = trimmed.match(/"?(?:feedback|피드백|설명)"?\s*:\s*([^\n]+)/i);
             if (feedbackMatch) {
                 feedback = feedbackMatch[1].trim().replace(/^["']|["']$/g, '');
             } else {
