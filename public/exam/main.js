@@ -2764,7 +2764,17 @@ ${rawText}
             throw new Error("파싱된 문항이 없습니다. 입력 텍스트를 확인해 주세요.");
         }
         
-        parsedQuestionsBuffer = parsed.questions;
+        const appendMode = document.getElementById('admin-append-mode')?.checked;
+        if (appendMode) {
+            const startId = parsedQuestionsBuffer.length;
+            parsed.questions.forEach((q, idx) => {
+                q.id = startId + idx + 1; // Re-index sequentially
+                parsedQuestionsBuffer.push(q);
+            });
+        } else {
+            parsedQuestionsBuffer = parsed.questions;
+        }
+        
         parsedSessionName = examName;
         
         // Render preview table
@@ -2915,12 +2925,14 @@ function resetExamForm() {
     const textInput = document.getElementById('admin-exam-raw-text');
     const fileInput = document.getElementById('admin-exam-file');
     const fileStatus = document.getElementById('admin-file-status');
+    const appendCheckbox = document.getElementById('admin-append-mode');
     const previewContainer = document.getElementById('admin-parse-preview-container');
     const previewList = document.getElementById('admin-parse-preview-list');
     
     if (nameInput) nameInput.value = '';
     if (textInput) textInput.value = '';
     if (fileInput) fileInput.value = '';
+    if (appendCheckbox) appendCheckbox.checked = false;
     if (fileStatus) {
         fileStatus.textContent = '';
         fileStatus.classList.add('hidden');
