@@ -369,6 +369,23 @@ function parseScoringResponse(text, defaultPoints) {
     // Post-processing cleanup for feedback
     if (result && typeof result.feedback === 'string') {
         let fb = result.feedback.trim();
+        
+        // Check if the feedback itself contains a nested JSON block (e.g. from instruction-conflict)
+        const innerJsonMatch = fb.match(/\{[\s\S]*\}/);
+        if (innerJsonMatch) {
+            try {
+                const innerResult = JSON.parse(innerJsonMatch[0]);
+                if (innerResult && typeof innerResult.score === 'number') {
+                    console.log("[Gemini API] Extracted nested JSON from feedback:", innerResult);
+                    result.score = innerResult.score;
+                    result.is_correct = innerResult.is_correct !== undefined ? innerResult.is_correct : result.is_correct;
+                    fb = innerResult.feedback || '';
+                }
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        }
+        
         // Remove trailing/leading quotes if they were returned as literal string escapes or leftovers
         if (fb === '"' || fb === '""' || fb === '\\"' || fb === '\\"\\"') {
             fb = '';
@@ -404,14 +421,28 @@ async function geminiScore(question, correct_answer, user_answer, points) {
     }
 
     // 2. AI 정밀 채점
-    const prompt = `정보보안기사 실기 채점.
-문제: ${question}
-정답: ${correct_answer}
-사용자 답변: ${user_answer}
-배점: ${points}점
+    const prompt = `정보보안기사 실기 시험 채점관입니다. 제시된 문제, 정답, 사용자 답변을 바탕으로 채점을 진행해 주세요.
 
-반드시 다른 설명 없이 아래 형태의 JSON 데이터만 응답하세요:
-{"score": 숫자, "feedback": "오답/부분점수 시 1문장 피드백 (정답 시 빈 문자열 \\"\\")", "is_correct": true/false}`;
+[문제]
+${question}
+
+[정답]
+${correct_answer}
+
+[사용자 답변]
+${user_answer}
+
+[배점]
+${points}점
+
+[채점 기준 및 가이드라인]
+1. 문제에서 여러 개의 빈칸(A, B, C 등)이나 항목을 물어보는 경우, 각 항목의 개수만큼 배점을 균등하게 나누어 부분 점수를 부여하세요. (예: 3점 문제에서 3개 중 2개 맞으면 2점)
+2. 동의어, 영문 약어/풀네임 혼용, 사소한 띄어쓰기 차이 등은 모범 답안과 의미가 상통한다면 정답으로 인정해 주세요.
+3. 완전히 틀린 경우 또는 미작성인 경우는 0점 처리합니다.
+4. 아래의 각 스키마 필드에 알맞은 값을 작성해 주세요:
+   - score: 채점한 점수 (정수, 최대 ${points}점)
+   - is_correct: 사용자의 답변이 만점(모든 항목 완벽 정답)인 경우에만 true, 부분 점수나 오답인 경우는 false
+   - feedback: 오답이거나 부분점수인 경우, 어떤 부분이 틀렸고 어떤 부분이 맞았는지 한국어로 1문장의 친절한 피드백을 작성해 주세요. (만점인 경우는 빈 문자열 ""을 입력하세요.)`;
 
     let text = '';
     try {
@@ -472,17 +503,16 @@ async function geminiChatStream(question, answer, explanation, message, onChunk,
 
 // ─── 일괄 채점 ──────────────────────────────────────────────────
 async function geminiScoreBulk(questionsToGrade) {
-    const prompt = `정보보안기사 실기 시험 답안 일괄 채점기입니다. 다음 여러 문제들의 답안을 정밀 채점해 주세요.
+    const prompt = `정보보안기사 실기 시험 일괄 채점관입니다. 여러 문제들의 사용자 답안을 일괄적으로 채점해 주세요.
 
-채점할 문제 목록:
+[채점 대상 문제 목록]
 ${JSON.stringify(questionsToGrade, null, 2)}
 
-반드시 각 문제의 채점 결과를 담은 JSON 배열 형태로만 정확하게 응답해 주세요. 순서(index)는 원래 목록의 index 값과 일치해야 합니다.
-JSON 응답 형식 예시:
-[
-  {"index": 0, "score": 3, "feedback": "피드백 문장", "is_correct": true},
-  {"index": 2, "score": 0, "feedback": "피드백 문장", "is_correct": false}
-]`;
+[채점 기준 및 가이드라인]
+1. 각 문제의 배점(points)을 확인하고, 여러 개의 정답이 필요한 단답형 등은 균등하게 나누어 부분 점수를 부여하세요.
+2. 의미가 통하는 동의어, 사소한 오탈자, 영문 대소문자나 띄어쓰기 차이는 유연하게 정답으로 간주해 부분점수 또는 만점을 부여하세요.
+3. 제공된 스키마 배열의 각 항목에 대해 index(원래 문제 index)와 함께 score, is_correct, feedback을 명확히 채워주세요.
+4. feedback에는 오답 또는 부분점수 시 틀린 이유에 대한 1문장의 친절한 피드백을 입력하고, 만점 시에는 빈 문자열 ""을 입력하세요.`;
 
     console.log("[Gemini API] Requesting bulk score for", questionsToGrade.length, "questions...");
     let text = '';
