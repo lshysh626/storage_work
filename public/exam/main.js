@@ -1565,7 +1565,7 @@ async function runConnectionTest() {
     
     panel.classList.remove('hidden');
     panel.style.color = '#38bdf8';
-    panel.textContent = '⏳ 구글 Gemini API 연결 테스트 중...';
+    panel.textContent = '⏳ 구글 Gemini API 연결 테스트 및 모델 목록 조회 중...';
     
     if (!key) {
         panel.style.color = '#f87171';
@@ -1573,8 +1573,7 @@ async function runConnectionTest() {
         return;
     }
     
-    const preferredModel = localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${preferredModel}?key=${key}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${key}`;
     
     try {
         const startTime = Date.now();
@@ -1589,9 +1588,17 @@ async function runConnectionTest() {
         
         try {
             const json = JSON.parse(text);
-            detail += JSON.stringify(json, null, 2);
+            if (json.models && Array.isArray(json.models)) {
+                detail += `사용 가능한 모델 목록 (generateContent 지원):\n`;
+                const printableModels = json.models
+                    .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
+                    .map(m => ` - ${m.name.replace('models/', '')} (${m.displayName})`);
+                detail += printableModels.join('\n');
+            } else {
+                detail += JSON.stringify(json, null, 2);
+            }
         } catch (e) {
-            detail += `[주의: JSON이 아닌 응답 본문이 반환되었습니다. 프록시/방화벽 혹은 외부 요인일 수 있습니다]\n\n`;
+            detail += `[주의: JSON이 아닌 응답 본문이 반환되었습니다]\n\n`;
             detail += text.slice(0, 500) + (text.length > 500 ? '\n... (이하 생략)' : '');
         }
         

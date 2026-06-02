@@ -286,11 +286,11 @@ async function geminiScore(question, correct_answer, user_answer, points) {
     let text = '';
     try {
         const schema = {
-            type: 'object',
+            type: 'OBJECT',
             properties: {
-                score: { type: 'number' },
-                feedback: { type: 'string' },
-                is_correct: { type: 'boolean' }
+                score: { type: 'NUMBER' },
+                feedback: { type: 'STRING' },
+                is_correct: { type: 'BOOLEAN' }
             },
             required: ['score', 'feedback', 'is_correct']
         };
@@ -361,14 +361,14 @@ JSON 응답 형식 예시:
     let text = '';
     try {
         const schema = {
-            type: 'array',
+            type: 'ARRAY',
             items: {
-                type: 'object',
+                type: 'OBJECT',
                 properties: {
-                    index: { type: 'integer' },
-                    score: { type: 'number' },
-                    feedback: { type: 'string' },
-                    is_correct: { type: 'boolean' }
+                    index: { type: 'INTEGER' },
+                    score: { type: 'NUMBER' },
+                    feedback: { type: 'STRING' },
+                    is_correct: { type: 'BOOLEAN' }
                 },
                 required: ['index', 'score', 'feedback', 'is_correct']
             }
