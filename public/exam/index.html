@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.5.1">
+    <link rel="stylesheet" href="style.css?v=1.5.2">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
@@ -238,36 +238,95 @@
 
         <!-- Admin Panel View -->
         <section id="admin-panel" class="view">
-            <h1 style="margin-bottom: 2rem;">🔑 회원 관리</h1>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
-                <p style="color: var(--muted); font-size: 1rem; line-height: 1.6; margin: 0;">
-                    정보보안기사 기출 사이트에 가입된 회원 목록을 조회하고 관리할 수 있습니다.
-                </p>
-                <div style="background: rgba(56, 189, 248, 0.1); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 800; border: 1px solid rgba(56,189,248,0.2);" id="admin-user-count">
-                    총 회원 수: 0명
+            <h1 style="margin-bottom: 2rem;">🔑 관리자 콘솔</h1>
+            
+            <!-- Tab Navigation -->
+            <div class="admin-tabs" style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 2rem; padding-bottom: 0.5rem;">
+                <button class="admin-tab-btn active" id="tab-users-btn" onclick="switchAdminTab('users')" style="background: none; border: none; color: #fff; font-size: 1.1rem; font-weight: 700; padding: 0.5rem 1rem; cursor: pointer; border-bottom: 2px solid var(--primary); transition: all 0.2s; outline: none;">👥 회원 관리</button>
+                <button class="admin-tab-btn" id="tab-exams-btn" onclick="switchAdminTab('exams')" style="background: none; border: none; color: var(--muted); font-size: 1.1rem; font-weight: 700; padding: 0.5rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; outline: none;">📄 기출 자료 관리</button>
+            </div>
+
+            <!-- Content Area 1: User Management -->
+            <div id="admin-users-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
+                    <p style="color: var(--muted); font-size: 1rem; line-height: 1.6; margin: 0;">
+                        정보보안기사 기출 사이트에 가입된 회원 목록을 조회하고 관리할 수 있습니다.
+                    </p>
+                    <div style="background: rgba(56, 189, 248, 0.1); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 800; border: 1px solid rgba(56,189,248,0.2);" id="admin-user-count">
+                        총 회원 수: 0명
+                    </div>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>아이디</th>
+                                <th>구분</th>
+                                <th>가입 일시</th>
+                                <th>이용 현황</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-list">
+                            <!-- 사용자 정보 렌더링 영역 -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="admin-table-container">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>아이디</th>
-                            <th>구분</th>
-                            <th>가입 일시</th>
-                            <th>이용 현황</th>
-                            <th>작업</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-users-list">
-                        <!-- 사용자 정보 렌더링 영역 -->
-                    </tbody>
-                </table>
+
+            <!-- Content Area 2: Exam Upload -->
+            <div id="admin-exams-section" class="hidden">
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <p style="color: var(--muted); font-size: 1rem; line-height: 1.6; margin: 0;">
+                        PDF 등 기출 자료 원문 텍스트를 붙여넣어 AI로 파싱한 후 Firestore에 실시간 등록할 수 있습니다.
+                    </p>
+                    
+                    <div class="settings-card" style="padding: 1.5rem; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">📅 회차 이름</label>
+                            <input type="text" id="admin-exam-name" placeholder="예: 정보보안기사 실기 - 31회" style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.8rem; color: #fff; outline: none;">
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">📝 기출 텍스트 원문 (PDF 등에서 복사)</label>
+                            <textarea id="admin-exam-raw-text" placeholder="여기에 기출문제 원본 텍스트를 그대로 붙여넣으세요. 문제 번호, 질문, 답안 내용이 포함되어야 합니다." style="width: 100%; height: 250px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; color: #fff; line-height: 1.6; outline: none; resize: vertical; font-family: inherit;"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="button" onclick="runAIParsing()" id="admin-parse-btn" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #60a5fa); color: #fff; font-weight: 700; border: none; border-radius: 8px; padding: 0.9rem; cursor: pointer; transition: 0.2s;">⚡ AI 자동 파싱 시작</button>
+                            <button type="button" onclick="resetExamForm()" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); font-weight: 700; border-radius: 8px; padding: 0.9rem 1.5rem; cursor: pointer; transition: 0.2s;">초기화</button>
+                        </div>
+                    </div>
+
+                    <!-- AI Parsing Preview Section -->
+                    <div id="admin-parse-preview-container" class="hidden" style="margin-top: 1rem;">
+                        <h3 style="color: #fff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">🔍 AI 파싱 결과 미리보기 <span id="admin-preview-count" style="font-size: 0.85rem; background: rgba(56, 189, 248, 0.15); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 800;">0문항</span></h3>
+                        
+                        <div class="admin-table-container" style="max-height: 400px; overflow-y: auto; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.1);">
+                            <table class="admin-table" style="font-size: 0.9rem;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">번호</th>
+                                        <th style="width: 100px;">유형</th>
+                                        <th>질문</th>
+                                        <th>모범답안</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-parse-preview-list">
+                                    <!-- AI 파싱된 질문 목록 미리보기 영역 -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button onclick="saveParsedExam()" id="admin-save-exam-btn" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800; font-size: 1.15rem; border: none; border-radius: 10px; padding: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">💾 데이터베이스(Firestore)에 최종 업로드</button>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 </div>
-<script src="gemini.js?v=1.5.1"></script>
-<script src="main.js?v=1.5.1"></script>
+<script src="gemini.js?v=1.5.2"></script>
+<script src="main.js?v=1.5.2"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();

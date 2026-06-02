@@ -227,6 +227,36 @@ function switchView(id) {
 // ─── Sync ─────────────────────────────────────────────────
 // Sync button listener moved to the end of the file
 
+// Helper to get combined static and custom Firestore sessions
+async function getCombinedSessions() {
+    try {
+        const res = await fetch('./data/sessions.json');
+        const sessions = await res.json();
+        if (db) {
+            try {
+                const customSnap = await db.collection('custom_sessions').orderBy('createdAt', 'desc').get();
+                customSnap.forEach(doc => {
+                    const data = doc.data();
+                    if (!sessions.some(s => s.id === data.id)) {
+                        sessions.push({
+                            id: data.id,
+                            name: data.name,
+                            count: data.count,
+                            isCustom: true
+                        });
+                    }
+                });
+            } catch (e) {
+                console.error('[Sync] Error loading custom sessions from Firestore:', e);
+            }
+        }
+        return sessions;
+    } catch (e) {
+        console.error('Failed to get combined sessions:', e);
+        return [];
+    }
+}
+
 // ─── Dashboard ────────────────────────────────────────────
 async function renderDashboard() {
     // Fetch parsed sessions
@@ -251,8 +281,7 @@ async function renderDashboard() {
     ];
 
     try {
-        const res = await fetch('./data/sessions.json');
-        const sessions = await res.json();
+        const sessions = await getCombinedSessions();
 
         let sessionContent = '';
         if (sessions.length === 0) {
@@ -707,8 +736,7 @@ async function toggleSessionSelection() {
     sub.classList.remove('hidden');
     sub.innerHTML = '<div style="color:var(--muted);padding:1rem">불러오는 중...</div>';
     try {
-        const res = await fetch('./data/sessions.json');
-        const sessions = await res.json();
+        const sessions = await getCombinedSessions();
         if (sessions.length === 0) {
             sub.innerHTML = '<div style="color:var(--muted);padding:1rem">동기화 후 회차가 나타납니다.</div>';
             return;
@@ -724,16 +752,62 @@ async function toggleSessionSelection() {
 }
 
 async function startRandomQuiz() {
-    const res = await fetch('./data/questions_all.json');
-    const data = await res.json();
-    const shuffled = [...data.questions].sort(() => Math.random() - 0.5);
+    let questions = [];
+    try {
+        const res = await fetch('./data/questions_all.json');
+        const data = await res.json();
+        questions = [...(data.questions || [])];
+    } catch (e) {
+        console.error('Failed to load static questions for random quiz:', e);
+    }
+    
+    if (db) {
+        try {
+            const customSnap = await db.collection('custom_questions').get();
+            customSnap.forEach(doc => {
+                const data = doc.data();
+                if (data.questions) {
+                    questions.push(...data.questions);
+                }
+            });
+        } catch (e) {
+            console.error('[Sync] Failed to load custom questions for random quiz:', e);
+        }
+    }
+    
+    if (questions.length === 0) {
+        alert('문제가 없습니다. 동기화를 먼저 해주세요.');
+        return;
+    }
+    
+    const shuffled = questions.sort(() => Math.random() - 0.5);
     launchQuiz(shuffled, '🎲 랜덤 풀기');
 }
 
 async function startTypeQuiz(type) {
-    const res = await fetch(`./data/questions_type_${type}.json`);
-    const data = await res.json();
-    let questions = data.questions;
+    let questions = [];
+    try {
+        const res = await fetch(`./data/questions_type_${type}.json`);
+        const data = await res.json();
+        questions = [...(data.questions || [])];
+    } catch (e) {
+        console.error('Failed to load static type questions:', e);
+    }
+    
+    if (db) {
+        try {
+            const customSnap = await db.collection('custom_questions').get();
+            customSnap.forEach(doc => {
+                const data = doc.data();
+                if (data.questions) {
+                    const filtered = data.questions.filter(q => q.type === type);
+                    questions.push(...filtered);
+                }
+            });
+        } catch (e) {
+            console.error('[Sync] Failed to load custom questions for type quiz:', e);
+        }
+    }
     
     if (!questions || questions.length === 0) {
         alert('해당 유형의 문제가 없습니다.');
@@ -756,9 +830,49 @@ async function startTypeQuiz(type) {
 }
 
 async function startSessionQuiz(sessionId) {
-    const res = await fetch(`./data/questions_${encodeURIComponent(sessionId)}.json`);
-    const data = await res.json();
-    launchQuiz(data.questions, `📅 ${data.session || sessionId}`);
+    let questions = [];
+    let title = sessionId;
+    
+    // Check if it's a custom session (timestamp length > 10)
+    if (sessionId.startsWith('session_') && sessionId.length > 10) {
+        if (!db) {
+            alert('데이터베이스 연결이 비활성화되어 커스텀 기출을 불러올 수 없습니다.');
+            return;
+        }
+        try {
+            const doc = await db.collection('custom_questions').doc(sessionId).get();
+            if (doc.exists) {
+                const data = doc.data();
+                questions = data.questions || [];
+                
+                // Fetch the session name from custom_sessions metadata
+                const metaDoc = await db.collection('custom_sessions').doc(sessionId).get();
+                if (metaDoc.exists) {
+                    title = metaDoc.data().name || sessionId;
+                }
+            } else {
+                throw new Error("문서를 찾을 수 없습니다.");
+            }
+        } catch (e) {
+            console.error('[Sync] Failed to load custom questions:', e);
+            alert('커스텀 기출문제를 불러오지 못했습니다: ' + e.message);
+            return;
+        }
+    } else {
+        // Static local JSON
+        try {
+            const res = await fetch(`./data/questions_${encodeURIComponent(sessionId)}.json`);
+            const data = await res.json();
+            questions = data.questions;
+            title = data.session || sessionId;
+        } catch (e) {
+            console.error('Failed to load static session:', e);
+            alert('기출문제를 불러오지 못했습니다.');
+            return;
+        }
+    }
+    
+    launchQuiz(questions, `📅 ${title}`);
 }
 
 function launchQuiz(questions, title) {
@@ -2488,6 +2602,262 @@ async function initApp() {
     restoreQuizStateIfAvailable();
 }
 
+// ─── Custom Past Exam AI Parsing & Upload Logic ────────────────
+let parsedQuestionsBuffer = [];
+let parsedSessionName = '';
+
+// Dedicated fetch to Gemini with large maxOutputTokens for parsing text
+async function callGeminiForParsing(prompt, schema) {
+    const key = window.getGeminiKey();
+    if (!key) {
+        throw new Error("Gemini API 키가 등록되지 않았습니다.");
+    }
+    const model = window.getGeminiModel() || 'gemini-2.0-flash';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+    
+    const bodyPayload = {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { 
+            temperature: 0.1,
+            responseMimeType: 'application/json',
+            maxOutputTokens: 8192
+        }
+    };
+    
+    if (schema) {
+        bodyPayload.generationConfig.responseSchema = schema;
+    }
+    
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bodyPayload)
+    });
+    
+    if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        const errMsg = errData.error?.message || `HTTP ${res.status}`;
+        throw new Error(`Gemini API Error: ${errMsg}`);
+    }
+    
+    const data = await res.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+        throw new Error("올바른 응답을 받지 못했습니다. 안전 필터에 의해 차단되었을 수 있습니다.");
+    }
+    return text;
+}
+
+function switchAdminTab(tabName) {
+    const usersBtn = document.getElementById('tab-users-btn');
+    const examsBtn = document.getElementById('tab-exams-btn');
+    const usersSection = document.getElementById('admin-users-section');
+    const examsSection = document.getElementById('admin-exams-section');
+    
+    if (!usersBtn || !examsBtn || !usersSection || !examsSection) return;
+    
+    if (tabName === 'users') {
+        usersBtn.classList.add('active');
+        usersBtn.style.color = '#fff';
+        usersBtn.style.borderBottom = '2px solid var(--primary)';
+        examsBtn.classList.remove('active');
+        examsBtn.style.color = 'var(--muted)';
+        examsBtn.style.borderBottom = '2px solid transparent';
+        usersSection.classList.remove('hidden');
+        examsSection.classList.add('hidden');
+    } else {
+        examsBtn.classList.add('active');
+        examsBtn.style.color = '#fff';
+        examsBtn.style.borderBottom = '2px solid var(--primary)';
+        usersBtn.classList.remove('active');
+        usersBtn.style.color = 'var(--muted)';
+        usersBtn.style.borderBottom = '2px solid transparent';
+        examsSection.classList.remove('hidden');
+        usersSection.classList.add('hidden');
+    }
+}
+
+async function runAIParsing() {
+    const nameInput = document.getElementById('admin-exam-name');
+    const textInput = document.getElementById('admin-exam-raw-text');
+    const parseBtn = document.getElementById('admin-parse-btn');
+    const previewContainer = document.getElementById('admin-parse-preview-container');
+    const previewList = document.getElementById('admin-parse-preview-list');
+    const previewCount = document.getElementById('admin-preview-count');
+    
+    if (!nameInput || !textInput || !parseBtn || !previewContainer || !previewList || !previewCount) return;
+    
+    const examName = nameInput.value.trim();
+    const rawText = textInput.value.trim();
+    
+    if (!examName) {
+        alert('회차 이름을 입력해 주세요.');
+        return;
+    }
+    if (!rawText) {
+        alert('기출문제 텍스트 원문을 입력해 주세요.');
+        return;
+    }
+    
+    const apiKey = window.getGeminiKey();
+    if (!apiKey) {
+        alert('Gemini API 키가 설정에 등록되어 있지 않습니다. 설정 탭에서 API 키를 먼저 입력해 주세요.');
+        switchView('settings');
+        return;
+    }
+    
+    parseBtn.textContent = '🔄 AI 분석 및 파싱 중... (최대 1~2분 소요)';
+    parseBtn.disabled = true;
+    parseBtn.style.opacity = '0.7';
+    
+    const prompt = `
+당신은 정보보안기사 실기 기출문제를 분석하여 서비스용 JSON 포맷으로 구조화하는 전문 데이터 파서입니다.
+아래 제공된 [기출 원본 텍스트]를 꼼꼼히 분석하여 규칙에 맞는 JSON 형태로 변환해 주세요.
+
+[규칙]
+1. 각 문항을 추출하여 questions 배열에 담습니다.
+2. 각 문항은 다음 필드를 가져야 합니다:
+   - "id": 1부터 시작하는 순차적인 문제 번호 (integer)
+   - "type": 문제 유형으로 다음 세 가지 중 하나만 지정해야 합니다:
+     - "short": 단답형 (주로 괄호 채우기, 간단한 단어 입력형, 3점 배점)
+     - "essay": 서술형 (문제를 설명하거나 2~4개 서브 문항으로 기술하라는 형태, 12점 배점)
+     - "practical": 실무형 (설정 파일의 설정이나 명령어를 작성하라는 형태, 리눅스/윈도우 등의 명령어 문제, 16점 배점)
+   - "question": 지문 텍스트. 줄바꿈을 유지하여 가독성 있게 작성하세요.
+   - "answer": 모범 답안 텍스트. 지문에 빈칸 (A), (B) 또는 1), 2) 등이 있다면 답안에도 그에 맞춰 작성해 주세요. (예: "(A) 인증, (B) 인가" 또는 "1) /etc/securetty, 2) 600")
+   - "explanation": 해당 문제에 대한 간단한 개념 해설 또는 설명 (없거나 불확실하면 빈 문자열 ""로 지정)
+3. 출력은 오직 순수한 JSON 데이터여야 합니다.
+
+[기출 원본 텍스트]:
+${rawText}
+`;
+
+    const parsingSchema = {
+        type: "OBJECT",
+        properties: {
+            session: { type: "STRING" },
+            questions: {
+                type: "ARRAY",
+                items: {
+                    type: "OBJECT",
+                    properties: {
+                        id: { type: "INTEGER" },
+                        type: { 
+                            type: "STRING", 
+                            enum: ["short", "essay", "practical"] 
+                        },
+                        question: { type: "STRING" },
+                        answer: { type: "STRING" },
+                        explanation: { type: "STRING" }
+                    },
+                    required: ["id", "type", "question", "answer"]
+                }
+            }
+        },
+        required: ["session", "questions"]
+    };
+
+    try {
+        const resultText = await callGeminiForParsing(prompt, parsingSchema);
+        const parsed = JSON.parse(resultText);
+        
+        if (!parsed.questions || parsed.questions.length === 0) {
+            throw new Error("파싱된 문항이 없습니다. 입력 텍스트를 확인해 주세요.");
+        }
+        
+        parsedQuestionsBuffer = parsed.questions;
+        parsedSessionName = examName;
+        
+        // Render preview table
+        previewList.innerHTML = '';
+        parsedQuestionsBuffer.forEach(q => {
+            const tr = document.createElement('tr');
+            const typeLabels = { short: '단답형', essay: '서술형', practical: '실무형' };
+            const typeLabel = typeLabels[q.type] || q.type;
+            
+            tr.innerHTML = `
+                <td><strong>${q.id}</strong></td>
+                <td><span class="badge-${q.type === 'short' ? 'num' : (q.type === 'essay' ? 'type' : 'pts')}" style="padding:0.2rem 0.5rem; font-size:0.8rem; border-radius:4px;">${typeLabel}</span></td>
+                <td><div style="white-space:pre-wrap; text-align:left; max-width:400px; font-size:0.85rem; line-height:1.4;">${q.question}</div></td>
+                <td><div style="white-space:pre-wrap; text-align:left; max-width:300px; font-size:0.85rem; line-height:1.4; color:var(--primary); font-weight:700;">${q.answer}</div></td>
+            `;
+            previewList.appendChild(tr);
+        });
+        
+        previewCount.textContent = `${parsedQuestionsBuffer.length}문항`;
+        previewContainer.classList.remove('hidden');
+        
+        alert(`파싱 성공! 총 ${parsedQuestionsBuffer.length}문항을 추출했습니다. 아래 미리보기를 확인하고 파싱 결과가 괜찮다면 최종 업로드 버튼을 눌러주세요.`);
+    } catch (e) {
+        console.error('[Admin] Parsing failed:', e);
+        alert(`파싱 실패: ${e.message}\n텍스트가 너무 길거나 AI 호출 도중 시간 초과가 발생했을 수 있습니다. 다시 시도하거나 텍스트 양을 줄여보세요.`);
+    } finally {
+        parseBtn.textContent = '⚡ AI 자동 파싱 시작';
+        parseBtn.disabled = false;
+        parseBtn.style.opacity = '1';
+    }
+}
+
+async function saveParsedExam() {
+    if (parsedQuestionsBuffer.length === 0 || !parsedSessionName) {
+        alert('저장할 파싱 데이터가 없습니다. 먼저 파싱을 완료해 주세요.');
+        return;
+    }
+    
+    if (!db) {
+        alert('데이터베이스(Firestore)가 초기화되지 않았습니다. 네트워크 연결이나 설정을 확인해 주세요.');
+        return;
+    }
+    
+    const saveBtn = document.getElementById('admin-save-exam-btn');
+    if (!saveBtn) return;
+    const origText = saveBtn.textContent;
+    saveBtn.textContent = '💾 업로드 중...';
+    saveBtn.disabled = true;
+    
+    const sessionId = `session_${Date.now()}`;
+    
+    try {
+        // 1. Save metadata to custom_sessions
+        await db.collection('custom_sessions').doc(sessionId).set({
+            id: sessionId,
+            name: parsedSessionName,
+            count: parsedQuestionsBuffer.length,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // 2. Save questions array to custom_questions
+        await db.collection('custom_questions').doc(sessionId).set({
+            questions: parsedQuestionsBuffer
+        });
+        
+        alert('기출 시험지가 성공적으로 Firestore에 등록되었습니다!\n모든 사용자가 대시보드 및 기출 풀기에서 즉시 학습할 수 있습니다.');
+        
+        resetExamForm();
+        renderDashboard();
+    } catch (e) {
+        console.error('[Admin] Upload failed:', e);
+        alert(`업로드 실패: ${e.message}\nFirestore 보안 규칙이나 네트워크 상태를 점검해 주세요.`);
+    } finally {
+        saveBtn.textContent = origText;
+        saveBtn.disabled = false;
+    }
+}
+
+function resetExamForm() {
+    const nameInput = document.getElementById('admin-exam-name');
+    const textInput = document.getElementById('admin-exam-raw-text');
+    const previewContainer = document.getElementById('admin-parse-preview-container');
+    const previewList = document.getElementById('admin-parse-preview-list');
+    
+    if (nameInput) nameInput.value = '';
+    if (textInput) textInput.value = '';
+    if (previewContainer) previewContainer.classList.add('hidden');
+    if (previewList) previewList.innerHTML = '';
+    
+    parsedQuestionsBuffer = [];
+    parsedSessionName = '';
+}
+
 // Expose globals for inline event handlers
 window.handleLoginSubmit = handleLoginSubmit;
 window.toggleLoginSignup = toggleLoginSignup;
@@ -2500,6 +2870,12 @@ window.renderAdminPanel = renderAdminPanel;
 window.toggleUserUsageDetails = toggleUserUsageDetails;
 window.formatModelAnswer = formatModelAnswer;
 window.formatUserAnswer = formatUserAnswer;
+
+// Expose new Admin Parser tools
+window.switchAdminTab = switchAdminTab;
+window.runAIParsing = runAIParsing;
+window.saveParsedExam = saveParsedExam;
+window.resetExamForm = resetExamForm;
 
 // Setup Event Listeners
 document.getElementById('sync-btn')?.addEventListener('click', syncData);
