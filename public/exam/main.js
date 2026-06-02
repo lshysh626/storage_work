@@ -70,6 +70,16 @@ function saveQuickApiKey(retryCall) {
 
 // ─── View Switching ───────────────────────────────────────
 function switchView(id) {
+    if (id === 'admin-panel') {
+        if (!loggedInUser || !loggedInUser.isAdmin) {
+            alert('관리자 권한이 필요합니다.');
+            // Guard against infinite loop if dashboard also fails (which shouldn't happen)
+            if (id !== 'dashboard') {
+                switchView('dashboard');
+            }
+            return;
+        }
+    }
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('.nav-links li').forEach(li =>
@@ -1880,7 +1890,7 @@ async function renderAdminPanel() {
     const userCountDiv = document.getElementById('admin-user-count');
     if (!userListTbody) return;
 
-    userListTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--muted);">불러오는 중...</td></tr>';
+    userListTbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--muted);">불러오는 중...</td></tr>';
 
     try {
         const querySnapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
@@ -1892,6 +1902,10 @@ async function renderAdminPanel() {
             const isAdmin = !!data.isAdmin;
             const dateStr = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('ko-KR') : '-';
             
+            const usageBtn = isAdmin 
+                ? `<span style="color: var(--muted); font-size: 0.85rem;">기록 없음</span>` 
+                : `<button class="usage-btn" id="usage-btn-${username}" onclick="toggleUserUsageDetails('${username}')">이용 현황 보기</button>`;
+
             const deleteBtn = isAdmin 
                 ? `<span class="admin-badge">기본 계정</span>` 
                 : `<button class="delete-user-btn" onclick="handleDeleteUser('${username}')">계정 삭제</button>`;
@@ -1901,16 +1915,111 @@ async function renderAdminPanel() {
                     <td><strong>${username}</strong></td>
                     <td>${isAdmin ? '<span style="color: var(--primary); font-weight: bold;">관리자</span>' : '일반 회원'}</td>
                     <td>${dateStr}</td>
+                    <td>${usageBtn}</td>
                     <td>${deleteBtn}</td>
+                </tr>
+                <tr id="user-details-${username}" style="display:none;">
+                    <td colspan="5" id="user-details-td-${username}" style="padding: 0.5rem 1.5rem 1.5rem 1.5rem; background: rgba(10, 14, 23, 0.35);"></td>
                 </tr>
             `;
             count++;
         });
-        userListTbody.innerHTML = content || '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--muted);">가입된 회원이 없습니다.</td></tr>';
+        userListTbody.innerHTML = content || '<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--muted);">가입된 회원이 없습니다.</td></tr>';
         if (userCountDiv) userCountDiv.textContent = `총 회원 수: ${count}명`;
     } catch (e) {
         console.error('[Admin] Error rendering admin panel:', e);
-        userListTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: #f87171;">데이터를 불러오는 중 오류가 발생했습니다: ${e.message}</td></tr>`;
+        userListTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: #f87171;">데이터를 불러오는 중 오류가 발생했습니다: ${e.message}</td></tr>`;
+    }
+}
+
+// Toggle User Usage Details in Admin Panel
+async function toggleUserUsageDetails(username) {
+    const detailRow = document.getElementById(`user-details-${username}`);
+    const detailTd = document.getElementById(`user-details-td-${username}`);
+    const btn = document.getElementById(`usage-btn-${username}`);
+    if (!detailRow || !detailTd) return;
+
+    if (detailRow.style.display !== 'none') {
+        detailRow.style.display = 'none';
+        if (btn) btn.textContent = '이용 현황 보기';
+        return;
+    }
+
+    detailRow.style.display = '';
+    if (btn) btn.textContent = '이용 현황 닫기';
+    detailTd.innerHTML = '<div style="text-align: center; padding: 1rem; color: var(--muted);">이용 현황 불러오는 중... ⏳</div>';
+
+    try {
+        const querySnapshot = await db.collection('users').doc(username).collection('sessions').orderBy('date', 'desc').get();
+        if (querySnapshot.empty) {
+            detailTd.innerHTML = '<div style="text-align: center; padding: 1.5rem; color: var(--muted); background: rgba(0,0,0,0.15); border-radius: 8px;">최근 기출 훈련 이용 내역이 없습니다.</div>';
+            return;
+        }
+
+        let totalSessionsCount = 0;
+        let totalScoreSum = 0;
+        let maxScoreSum = 0;
+        let rowHtml = '';
+
+        querySnapshot.forEach(doc => {
+            const session = doc.data();
+            const dateStr = session.date ? new Date(session.date).toLocaleString('ko-KR') : '-';
+            const title = session.title || '알 수 없는 회차';
+            const solvedCount = session.details ? session.details.length : 0;
+            
+            let correctCount = 0;
+            if (session.details) {
+                correctCount = session.details.filter(d => d.is_correct).length;
+            }
+
+            const pct = session.pct !== undefined ? session.pct : 0;
+            const scoreStr = session.totalScore !== undefined ? `${session.totalScore} / ${session.maxScore}점` : '';
+            
+            totalSessionsCount++;
+            if (session.totalScore !== undefined) totalScoreSum += session.totalScore;
+            if (session.maxScore !== undefined) maxScoreSum += session.maxScore;
+
+            rowHtml += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                    <td style="padding: 0.8rem 1rem; color: #fff; text-align: left;"><strong>${title}</strong></td>
+                    <td style="padding: 0.8rem 1rem; color: var(--muted); font-size: 0.85rem; text-align: left;">${dateStr}</td>
+                    <td style="padding: 0.8rem 1rem; text-align: center; color: #fff;">
+                        ${correctCount} / ${solvedCount} ${scoreStr ? `(${scoreStr})` : ''}
+                    </td>
+                    <td style="padding: 0.8rem 1rem; text-align: right; font-weight: bold; color: ${pct >= 60 ? '#10b981' : '#f87171'}">${pct}%</td>
+                </tr>
+            `;
+        });
+
+        const overallPct = maxScoreSum > 0 ? Math.round((totalScoreSum / maxScoreSum) * 100) : 0;
+
+        detailTd.innerHTML = `
+            <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px; margin: 0.5rem 0;">
+                <h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--primary); font-size: 1.05rem; font-weight: 800;">📊 '${username}' 회원 학습 통계 로그</h4>
+                <div style="max-height: 250px; overflow-y: auto; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; background: rgba(10, 14, 23, 0.5);">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.3);">
+                                <th style="padding: 0.8rem 1rem; text-align: left; color: var(--muted); font-weight: 700;">기출 회차</th>
+                                <th style="padding: 0.8rem 1rem; text-align: left; color: var(--muted); font-weight: 700;">풀이 완료 시간</th>
+                                <th style="padding: 0.8rem 1rem; text-align: center; color: var(--muted); font-weight: 700;">정답률 (획득 점수)</th>
+                                <th style="padding: 0.8rem 1rem; text-align: right; color: var(--muted); font-weight: 700;">성취율</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowHtml}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--muted); flex-wrap: wrap; gap: 0.8rem;">
+                    <span>총 풀이 세션: <strong style="color: #fff;">${totalSessionsCount}회</strong></span>
+                    <span>누적 점수: <strong style="color: #fff;">${totalScoreSum} / ${maxScoreSum}점</strong> (평균 성취도: <strong style="color: ${overallPct >= 60 ? '#10b981' : '#f87171'}; font-size: 1rem; font-weight: 800;">${overallPct}%</strong>)</span>
+                </div>
+            </div>
+        `;
+    } catch (e) {
+        console.error('[Admin] Error fetching usage details:', e);
+        detailTd.innerHTML = `<div style="text-align: center; padding: 1.5rem; color: #f87171; background: rgba(248,113,113,0.05); border-radius: 8px; border: 1px solid rgba(248,113,113,0.15);">이용 현황을 불러오는데 실패했습니다: ${e.message}</div>`;
     }
 }
 
@@ -1968,6 +2077,7 @@ window.resetStatsAndRetry = resetStatsAndRetry;
 window.handleDeleteUser = handleDeleteUser;
 window.saveQuizSessionToStorage = saveQuizSessionToStorage;
 window.renderAdminPanel = renderAdminPanel;
+window.toggleUserUsageDetails = toggleUserUsageDetails;
 
 // Setup Event Listeners
 document.getElementById('sync-btn')?.addEventListener('click', syncData);

@@ -796,4 +796,22 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     font-size: 0.75rem;
     font-weight: 700;
 }
+.usage-btn {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--primary);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    outline: none;
+}
+.usage-btn:hover {
+    background: rgba(56, 189, 248, 0.25);
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+}
+
 
