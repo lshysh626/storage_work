@@ -420,6 +420,10 @@ async function geminiScore(question, correct_answer, user_answer, points) {
         }
     }
 
+    const formattedCorrect = (typeof window.formatModelAnswer === 'function')
+        ? window.formatModelAnswer(correct_answer, question)
+        : correct_answer;
+
     // 2. AI 정밀 채점
     const prompt = `정보보안기사 실기 시험 채점관입니다. 제시된 문제, 정답, 사용자 답변을 바탕으로 채점을 진행해 주세요.
 
@@ -427,7 +431,7 @@ async function geminiScore(question, correct_answer, user_answer, points) {
 ${question}
 
 [정답]
-${correct_answer}
+${formattedCorrect}
 
 [사용자 답변]
 ${user_answer}
@@ -436,8 +440,8 @@ ${user_answer}
 ${points}점
 
 [채점 기준 및 가이드라인]
-1. 문제에서 여러 개의 빈칸(A, B, C 등)이나 항목을 물어보는 경우, 각 항목의 개수만큼 배점을 균등하게 나누어 부분 점수를 부여하세요. (예: 3점 문제에서 3개 중 2개 맞으면 2점)
-2. 동의어, 영문 약어/풀네임 혼용, 사소한 띄어쓰기 차이 등은 모범 답안과 의미가 상통한다면 정답으로 인정해 주세요.
+1. 문제에서 여러 개의 빈칸(A, B, C 등)이나 항목을 요구하는 경우, 사용자 답변과 정답의 각 빈칸별 항목들을 1대1로 정확히 비교하여 채점해 주세요. 각 항목의 배점은 전체 배점을 균등하게 나누어 부여해야 합니다. (예: 3점짜리 3개 항목 중 2개를 맞춘 경우 반드시 2점을 부여하세요. 절대 0점을 주어서는 안 됩니다.)
+2. 동의어, 영문 약어/풀네임 혼용, 사소한 띄어쓰기 차이 등은 의미가 상통한다면 정답으로 인정해 주세요. (주의: '위협'과 '위험'은 정보보안 분야에서 서로 다른 전문 용어이므로 명확하게 구분하여 채점해야 합니다. '위협'이 정답인 칸에 '위험'을 적었다면 오답입니다.)
 3. 완전히 틀린 경우 또는 미작성인 경우는 0점 처리합니다.
 4. 아래의 각 스키마 필드에 알맞은 값을 작성해 주세요:
    - score: 채점한 점수 (정수, 최대 ${points}점)

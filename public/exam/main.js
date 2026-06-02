@@ -2326,6 +2326,8 @@ window.handleDeleteUser = handleDeleteUser;
 window.saveQuizSessionToStorage = saveQuizSessionToStorage;
 window.renderAdminPanel = renderAdminPanel;
 window.toggleUserUsageDetails = toggleUserUsageDetails;
+window.formatModelAnswer = formatModelAnswer;
+window.formatUserAnswer = formatUserAnswer;
 
 // Setup Event Listeners
 document.getElementById('sync-btn')?.addEventListener('click', syncData);
