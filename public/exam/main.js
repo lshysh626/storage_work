@@ -1615,8 +1615,8 @@ async function handleSignup(username, password) {
     if (cleanUsername.length < 3) {
         throw new Error('아이디는 3자 이상이어야 합니다.');
     }
-    if (password.length < 4) {
-        throw new Error('비밀번호는 4자 이상이어야 합니다.');
+    if (!password || String(password).trim() === '') {
+        throw new Error('비밀번호를 입력해 주세요.');
     }
     if (cleanUsername === 'admin') {
         throw new Error('admin 계정은 신규 등록할 수 없습니다.');
