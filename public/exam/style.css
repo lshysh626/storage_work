@@ -549,17 +549,43 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     align-items: center;
     justify-content: center;
     z-index: 9999;
+    overflow-y: auto;
+    padding: 2rem 1rem;
 }
 .login-screen.hidden {
     display: none !important;
+}
+.login-container {
+    display: flex;
+    gap: 2.5rem;
+    align-items: stretch;
+    max-width: 960px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.login-guide-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 3rem;
+    flex: 1.2;
+    min-width: 320px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(16px);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
 }
 .login-card {
     background: rgba(30, 41, 59, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 3rem;
-    width: 420px;
-    max-width: 90%;
+    flex: 0.8;
+    min-width: 320px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(16px);
     text-align: center;
@@ -573,10 +599,24 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     color: var(--primary);
     letter-spacing: -0.03em;
 }
-.login-card h2 {
+.login-card h2, .login-guide-card h2 {
     font-size: 1.4rem;
     font-weight: 800;
     color: #fff;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .login-guide-card, .login-card {
+        width: 100%;
+        max-width: 450px;
+        padding: 2rem;
+        flex: none;
+    }
 }
 .login-card form {
     display: flex;
