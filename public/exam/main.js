@@ -29,11 +29,16 @@ function formatModelAnswer(answer, question = '') {
     if (question) {
         let matchText1 = question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
         let matchText2 = question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
-        blanks = [...new Set([...matchText1, ...matchText2].map(m => m.replace(/[\(\)\s]/g, '')))];
+        let matchText3 = question.match(/(?:^|[\s\n])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
+        blanks = [...new Set([
+            ...matchText1.map(m => m.replace(/[\(\)\s]/g, '')),
+            ...matchText2,
+            ...matchText3.map(m => m.replace(/[\)\s\n]/g, ''))
+        ])];
     }
 
     // 1. If it already contains markers like (A), (B), [A], ①, etc., split them into new lines
-    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳])/g;
+    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳]|\b\d{1,2}\))/g;
     if (markerRegex.test(formatted)) {
         formatted = formatted.replace(markerRegex, (match, sep, marker, index) => {
             return index === 0 ? marker : '\n' + marker;
@@ -830,7 +835,12 @@ function renderQuestion() {
     } else {
         let matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
         let matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
-        let blanks = [...new Set([...matchText1, ...matchText2].map(m => m.replace(/[\(\)\s]/g, '')))];
+        let matchText3 = q.question.match(/(?:^|[\s\n])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
+        let blanks = [...new Set([
+            ...matchText1.map(m => m.replace(/[\(\)\s]/g, '')),
+            ...matchText2,
+            ...matchText3.map(m => m.replace(/[\)\s\n]/g, ''))
+        ])];
 
         let isCustomLabels = false;
         // If no explicit blank labels are found, check if it asks to list N items (N > 1)
