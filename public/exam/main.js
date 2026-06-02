@@ -156,6 +156,8 @@ function switchView(id) {
         renderDashboard();
     } else if (id === 'stats') {
         renderStats();
+    } else if (id === 'settings') {
+        loadSettings();
     } else if (id === 'admin-panel') {
         renderAdminPanel();
     }
@@ -1692,7 +1694,11 @@ function saveSettings() {
 
 function loadSettings() {
     const key = localStorage.getItem('gemini_api_key');
-    const model = localStorage.getItem('gemini_model');
+    let model = localStorage.getItem('gemini_model');
+    if (model && model.includes('1.5')) {
+        model = 'gemini-2.0-flash';
+        localStorage.setItem('gemini_model', model);
+    }
     const keyInput = document.getElementById('setting-api-key');
     const modelInput = document.getElementById('setting-model');
     if (key && keyInput) keyInput.value = key;
@@ -1715,7 +1721,7 @@ async function runConnectionTest() {
         return;
     }
     
-    const preferredModel = localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
+    const preferredModel = (typeof getGeminiModel === 'function' ? getGeminiModel() : null) || localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
     const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/${preferredModel}:generateContent?key=${key}`;
     
     const bodyPayload = {
