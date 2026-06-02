@@ -71,7 +71,7 @@ async function callGemini(prompt, schema = null) {
                 generationConfig: { 
                     temperature: 0.1,
                     responseMimeType: 'application/json',
-                    maxOutputTokens: 300
+                    maxOutputTokens: 1000
                 }
             };
 
@@ -456,7 +456,12 @@ ${points}점
 4. 아래의 각 스키마 필드에 알맞은 값을 작성해 주세요:
    - score: 채점한 점수 (정수, 최대 ${points}점)
    - is_correct: 사용자의 답변이 만점(모든 항목 완벽 정답)인 경우에만 true, 부분 점수나 오답인 경우는 false
-   - feedback: 오답이거나 부분점수인 경우, 어떤 부분이 틀렸고 어떤 부분이 맞았는지 한국어로 1문장의 친절한 피드백을 작성해 주세요. (만점인 경우는 빈 문자열 ""을 입력하세요.)`;
+   - feedback: 오답이거나 부분점수인 경우, 어떤 부분이 틀렸고 어떤 부분이 맞았는지 한국어로 1문장의 친절한 피드백을 작성해 주세요. (만점인 경우는 빈 문자열 ""을 입력하세요.)
+
+[출력 형식 주의사항]
+반드시 지정된 JSON 스키마 형식으로만 응답해야 합니다.
+어떠한 대화형 텍스트(예: "Here is the JSON requested:"), 마크다운 블록(\`\`\`json 등), 또는 중첩된 JSON 구조를 feedback 필드나 다른 필드에 절대 포함하지 마십시오.
+feedback 필드에는 오직 순수한 한국어 피드백 문자열만 작성해야 합니다. 절대 추가적인 JSON이나 마크다운을 문자열 내부에 넣지 마십시오.`;
 
     let text = '';
     try {
@@ -526,7 +531,12 @@ ${JSON.stringify(questionsToGrade, null, 2)}
 1. 각 문제의 배점(points)을 확인하고, 여러 개의 정답이 필요한 단답형 등은 균등하게 나누어 부분 점수를 부여하세요.
 2. 의미가 통하는 동의어, 사소한 오탈자, 영문 대소문자나 띄어쓰기 차이는 유연하게 정답으로 간주해 부분점수 또는 만점을 부여하세요.
 3. 제공된 스키마 배열의 각 항목에 대해 index(원래 문제 index)와 함께 score, is_correct, feedback을 명확히 채워주세요.
-4. feedback에는 오답 또는 부분점수 시 틀린 이유에 대한 1문장의 친절한 피드백을 입력하고, 만점 시에는 빈 문자열 ""을 입력하세요.`;
+4. feedback에는 오답 또는 부분점수 시 틀린 이유에 대한 1문장의 친절한 피드백을 입력하고, 만점 시에는 빈 문자열 ""을 입력하세요.
+
+[출력 형식 주의사항]
+반드시 지정된 JSON 스키마 형식으로만 응답해야 합니다.
+어떠한 대화형 텍스트(예: "Here is the JSON requested:"), 마크다운 블록(\`\`\`json 등), 또는 중첩된 JSON 구조를 feedback 필드나 다른 필드에 절대 포함하지 마십시오.
+feedback 필드에는 오직 순수한 한국어 피드백 문자열만 작성해야 합니다. 절대 추가적인 JSON이나 마크다운을 문자열 내부에 넣지 마십시오.`;
 
     console.log("[Gemini API] Requesting bulk score for", questionsToGrade.length, "questions...");
     let text = '';
