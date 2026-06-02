@@ -83,6 +83,8 @@ function switchView(id) {
         renderDashboard();
     } else if (id === 'stats') {
         renderStats();
+    } else if (id === 'admin-panel') {
+        renderAdminPanel();
     }
 }
 
@@ -176,9 +178,28 @@ async function renderDashboard() {
             </div>
         `).join('');
 
+        const hasApiKey = !!localStorage.getItem('gemini_api_key');
+        let warningBanner = '';
+        if (!hasApiKey) {
+            warningBanner = `
+                <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; animation: fadeIn 0.5s ease-out; margin-bottom: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; text-align: left;">
+                        <span style="font-size: 2rem;">🔑</span>
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            <strong style="color: #f59e0b; font-size: 1.1rem;">AI API Key가 설정되지 않았습니다.</strong>
+                            <span style="color: #cbd5e1; font-size: 0.9rem;">학습 채점 및 AI 해설/AI 튜터 기능을 사용하려면 본인의 Gemini API 키를 등록해야 합니다.</span>
+                        </div>
+                    </div>
+                    <button onclick="switchView('settings')" style="background: #f59e0b; color: #0f172a; font-weight: 800; font-size: 0.95rem; border: none; border-radius: 8px; padding: 0.7rem 1.2rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                        설정으로 이동
+                    </button>
+                </div>
+            `;
+        }
+
         parsedDiv.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 2.5rem; animation: fadeIn 0.5s ease-out;">
-                
+                ${warningBanner}
                 <!-- Top Row: Features (Left) + Shortcuts (Right) -->
                 <div class="dashboard-top-row">
                     
@@ -371,7 +392,7 @@ function renderStats() {
 
             <!-- Clear Button -->
             <div style="text-align:center; padding:1rem;">
-                <button onclick="if(confirm('학습 기록을 모두 삭제하시겠습니까?')){localStorage.removeItem('quiz_sessions');renderStats();renderDashboard();}" style="background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.3); padding:0.8rem 2rem; border-radius:8px; cursor:pointer; font-weight:700; transition:0.2s;" onmouseover="this.style.background='rgba(248,113,113,0.2)'" onmouseout="this.style.background='rgba(248,113,113,0.1)'">
+                <button onclick="clearLearningHistory()" style="background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.3); padding:0.8rem 2rem; border-radius:8px; cursor:pointer; font-weight:700; transition:0.2s;" onmouseover="this.style.background='rgba(248,113,113,0.2)'" onmouseout="this.style.background='rgba(248,113,113,0.1)'">
                     🗑️ 학습 기록 초기화
                 </button>
             </div>
@@ -382,7 +403,7 @@ function renderStats() {
             <div style="background:rgba(248,113,113,0.1); border:1px solid rgba(248,113,113,0.3); border-radius:16px; padding:2rem; text-align:center; color:#f87171;">
                 <strong>⚠️ 학습 통계를 불러오는 중 오류가 발생했습니다.</strong><br>
                 <span style="font-size:0.9rem; color:var(--muted);">${e.message}</span>
-                <button onclick="localStorage.removeItem('quiz_sessions'); renderStats();" style="display:block; margin: 1rem auto 0; background: rgba(248,113,113,0.2); color:#f87171; border: 1px solid rgba(248,113,113,0.4); padding:0.5rem 1rem; border-radius:6px; cursor:pointer; font-size:0.85rem;">
+                <button onclick="resetStatsAndRetry()" style="display:block; margin: 1rem auto 0; background: rgba(248,113,113,0.2); color:#f87171; border: 1px solid rgba(248,113,113,0.4); padding:0.5rem 1rem; border-radius:6px; cursor:pointer; font-size:0.85rem;">
                     기록 초기화 후 재시도
                 </button>
             </div>
@@ -1009,7 +1030,7 @@ async function submitAnswer() {
         }
 
         recalculateSessionScores(session);
-        localStorage.setItem('quiz_sessions', JSON.stringify(history));
+        saveQuizSessionToStorage(session);
 
         // 3. 현재 보고 있는 문제가 완료된 문제라면 실시간 UI 업데이트
         if (state.index === savedIndex) {
@@ -1169,9 +1190,7 @@ async function submitBulkAnswers() {
         recalculateSessionScores(session);
         
         // Save to sessions
-        const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
-        history.push(session);
-        localStorage.setItem('quiz_sessions', JSON.stringify(history));
+        saveQuizSessionToStorage(session);
         
         showSessionResult();
         
@@ -1499,6 +1518,18 @@ function saveSettings() {
     else localStorage.removeItem('gemini_api_key');
     if (model) localStorage.setItem('gemini_model', model);
 
+    // Sync API key and preferred model to Firestore per-user
+    if (db && loggedInUser && loggedInUser.username) {
+        db.collection('users').doc(loggedInUser.username).update({
+            geminiApiKey: key || '',
+            geminiModel: model || ''
+        }).then(() => {
+            console.log(`[Sync] API settings successfully saved to Firestore for ${loggedInUser.username}`);
+        }).catch(e => {
+            console.error('[Sync] Error saving API settings to Firestore:', e);
+        });
+    }
+
     const btn = document.querySelector('button[onclick="saveSettings()"]');
     if (btn) {
         const orig = btn.textContent;
@@ -1518,11 +1549,427 @@ function loadSettings() {
 
 window.saveSettings = saveSettings;
 
-// ─── Init ─────────────────────────────────────────────────
-renderDashboard();
-loadSettings();
+// ─── Firebase Initialization ──────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyAQkS9cAd8_ouVlfjjkiz5bQmGlhasd22g",
+  authDomain: "archive-song.firebaseapp.com",
+  projectId: "archive-song",
+  storageBucket: "archive-song.firebasestorage.app",
+  messagingSenderId: "579627045180",
+  appId: "1:579627045180:web:54506f4a011d21f6398e39",
+  measurementId: "G-5PECXSHNNE"
+};
 
-// Event Listeners
+let db = null;
+try {
+    if (window.firebase) {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.firestore();
+    }
+} catch (e) {
+    console.error('Firebase initialization failed:', e);
+}
+
+let loggedInUser = null;
+
+// Hashing Helper
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Auto-initialize Admin account in Firestore if not exists
+async function initAdminAccount() {
+    if (!db) return;
+    try {
+        const adminDocRef = db.collection('users').doc('admin');
+        const docSnap = await adminDocRef.get();
+        if (!docSnap.exists) {
+            const adminHash = await sha256('2wsxXSW@');
+            await adminDocRef.set({
+                username: 'admin',
+                passwordHash: adminHash,
+                isAdmin: true,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log('[Auth] Admin account pre-configured in Firestore.');
+        }
+    } catch (e) {
+        console.error('[Auth] Failed to initialize admin account:', e);
+    }
+}
+
+// User Registration
+async function handleSignup(username, password) {
+    if (!db) {
+        throw new Error('데이터베이스 연결에 실패했습니다.');
+    }
+    const cleanUsername = username.trim().toLowerCase();
+    if (!cleanUsername) {
+        throw new Error('아이디를 입력해 주세요.');
+    }
+    if (cleanUsername.length < 3) {
+        throw new Error('아이디는 3자 이상이어야 합니다.');
+    }
+    if (password.length < 4) {
+        throw new Error('비밀번호는 4자 이상이어야 합니다.');
+    }
+    if (cleanUsername === 'admin') {
+        throw new Error('admin 계정은 신규 등록할 수 없습니다.');
+    }
+
+    const userDocRef = db.collection('users').doc(cleanUsername);
+    const docSnap = await userDocRef.get();
+    if (docSnap.exists) {
+        throw new Error('이미 존재하는 아이디입니다.');
+    }
+
+    const hash = await sha256(password);
+    await userDocRef.set({
+        username: cleanUsername,
+        passwordHash: hash,
+        isAdmin: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+}
+
+// User Login
+async function handleLogin(username, password) {
+    if (!db) {
+        throw new Error('데이터베이스 연결에 실패했습니다.');
+    }
+    const cleanUsername = username.trim().toLowerCase();
+    const hash = await sha256(password);
+
+    const userDocRef = db.collection('users').doc(cleanUsername);
+    const docSnap = await userDocRef.get();
+    if (!docSnap.exists) {
+        throw new Error('존재하지 않는 아이디입니다.');
+    }
+
+    const userData = docSnap.data();
+    if (userData.passwordHash !== hash) {
+        throw new Error('비밀번호가 일치하지 않습니다.');
+    }
+
+    // Save session in memory & localStorage
+    const userSession = {
+        username: userData.username,
+        isAdmin: !!userData.isAdmin
+    };
+    localStorage.setItem('is_logged_in_user', JSON.stringify(userSession));
+    loggedInUser = userSession;
+
+    // Load API configuration specific to the logged-in user
+    if (userData.geminiApiKey) {
+        localStorage.setItem('gemini_api_key', userData.geminiApiKey);
+    } else {
+        localStorage.removeItem('gemini_api_key');
+    }
+    if (userData.geminiModel) {
+        localStorage.setItem('gemini_model', userData.geminiModel);
+    } else {
+        localStorage.removeItem('gemini_model');
+    }
+
+    // Sync statistics history
+    await syncStatsFromFirestore(userData.username);
+
+    // Apply login UI state
+    applyLoginState();
+}
+
+// Logout
+function handleLogout() {
+    localStorage.removeItem('is_logged_in_user');
+    localStorage.removeItem('quiz_sessions');
+    localStorage.removeItem('gemini_api_key');
+    localStorage.removeItem('gemini_model');
+    loggedInUser = null;
+    applyLoginState();
+}
+
+// Fetch stats history from Firestore
+async function syncStatsFromFirestore(username) {
+    if (!db) return;
+    try {
+        const querySnapshot = await db.collection('users').doc(username).collection('sessions').orderBy('date', 'asc').get();
+        const firestoreSessions = [];
+        querySnapshot.forEach(doc => {
+            firestoreSessions.push({ id: doc.id, ...doc.data() });
+        });
+        localStorage.setItem('quiz_sessions', JSON.stringify(firestoreSessions));
+        console.log(`[Sync] Synced ${firestoreSessions.length} session entries from Firestore.`);
+    } catch (e) {
+        console.error('[Sync] Error fetching sessions from Firestore:', e);
+    }
+}
+
+// Save quiz session to both LocalStorage and Firestore
+function saveQuizSessionToStorage(session) {
+    // 1. Save to LocalStorage
+    const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
+    const idx = history.findIndex(h => h.id === session.id);
+    if (idx !== -1) {
+        history[idx] = session;
+    } else {
+        history.push(session);
+    }
+    localStorage.setItem('quiz_sessions', JSON.stringify(history));
+
+    // 2. Save to Firestore
+    if (db && loggedInUser && loggedInUser.username) {
+        db.collection('users')
+          .doc(loggedInUser.username)
+          .collection('sessions')
+          .doc(session.id)
+          .set(session)
+          .then(() => {
+              console.log(`[Sync] Session ${session.id} synced to Firestore.`);
+          })
+          .catch(e => {
+              console.error('[Sync] Error saving session to Firestore:', e);
+          });
+    }
+}
+
+// Clear history from LocalStorage and Firestore
+async function clearLearningHistory() {
+    if (!confirm('학습 기록을 모두 삭제하시겠습니까?')) return;
+    
+    localStorage.removeItem('quiz_sessions');
+    
+    if (db && loggedInUser && loggedInUser.username) {
+        try {
+            const sessionsSnapshot = await db.collection('users').doc(loggedInUser.username).collection('sessions').get();
+            const batch = db.batch();
+            sessionsSnapshot.forEach(doc => {
+                batch.delete(doc.ref);
+            });
+            await batch.commit();
+            console.log('[Sync] All session records deleted in Firestore.');
+        } catch (e) {
+            console.error('[Sync] Error clearing Firestore history:', e);
+        }
+    }
+    renderStats();
+    renderDashboard();
+}
+
+async function resetStatsAndRetry() {
+    localStorage.removeItem('quiz_sessions');
+    if (db && loggedInUser && loggedInUser.username) {
+        try {
+            const sessionsSnapshot = await db.collection('users').doc(loggedInUser.username).collection('sessions').get();
+            const batch = db.batch();
+            sessionsSnapshot.forEach(doc => {
+                batch.delete(doc.ref);
+            });
+            await batch.commit();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    renderStats();
+}
+
+// Toggle Login / Signup UI Mode
+let isSignupMode = false;
+function toggleLoginSignup() {
+    isSignupMode = !isSignupMode;
+    const title = document.getElementById('login-title');
+    const submitBtn = document.getElementById('login-submit-btn');
+    const switchText = document.getElementById('switch-text');
+    const switchBtn = document.getElementById('switch-btn');
+    const msgEl = document.getElementById('login-message');
+    
+    if (msgEl) msgEl.classList.add('hidden');
+
+    if (isSignupMode) {
+        title.textContent = '회원가입';
+        submitBtn.textContent = '가입하기';
+        switchText.textContent = '이미 계정이 있으신가요?';
+        switchBtn.textContent = '로그인';
+    } else {
+        title.textContent = '로그인';
+        submitBtn.textContent = '로그인';
+        switchText.textContent = '계정이 없으신가요?';
+        switchBtn.textContent = '회원가입';
+    }
+}
+
+// Form Submission Handler
+async function handleLoginSubmit(e) {
+    e.preventDefault();
+    const usernameEl = document.getElementById('login-username');
+    const passwordEl = document.getElementById('login-password');
+    const msgEl = document.getElementById('login-message');
+    const submitBtn = document.getElementById('login-submit-btn');
+
+    if (!usernameEl || !passwordEl || !msgEl) return;
+
+    const username = usernameEl.value.trim();
+    const password = passwordEl.value;
+
+    msgEl.classList.add('hidden');
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
+
+    try {
+        if (isSignupMode) {
+            await handleSignup(username, password);
+            msgEl.className = 'login-message success';
+            msgEl.textContent = '회원가입이 완료되었습니다! 로그인 창에서 로그인해 주세요.';
+            msgEl.classList.remove('hidden');
+            toggleLoginSignup();
+        } else {
+            await handleLogin(username, password);
+        }
+    } catch (err) {
+        msgEl.className = 'login-message error';
+        msgEl.textContent = err.message || '요청을 처리하는 데 실패했습니다.';
+        msgEl.classList.remove('hidden');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+    }
+}
+
+// Apply logged in/logged out screen state
+function applyLoginState() {
+    const loginScreen = document.getElementById('login-screen');
+    const appEl = document.getElementById('app');
+    const userDisplayName = document.getElementById('user-display-name');
+    const navAdmin = document.getElementById('nav-admin');
+
+    const isLoggedIn = loggedInUser && typeof loggedInUser === 'object' && loggedInUser.username;
+
+    if (isLoggedIn) {
+        if (loginScreen) loginScreen.classList.add('hidden');
+        if (appEl) appEl.classList.remove('hidden');
+        if (userDisplayName) userDisplayName.textContent = loggedInUser.username;
+        
+        if (loggedInUser.isAdmin) {
+            if (navAdmin) navAdmin.classList.remove('hidden');
+        } else {
+            if (navAdmin) navAdmin.classList.add('hidden');
+        }
+        switchView('dashboard');
+    } else {
+        if (loginScreen) loginScreen.classList.remove('hidden');
+        if (appEl) appEl.classList.add('hidden');
+        if (navAdmin) navAdmin.classList.add('hidden');
+        
+        const usernameInput = document.getElementById('login-username');
+        const passwordInput = document.getElementById('login-password');
+        if (usernameInput) usernameInput.value = '';
+        if (passwordInput) passwordInput.value = '';
+        const msgEl = document.getElementById('login-message');
+        if (msgEl) msgEl.classList.add('hidden');
+    }
+}
+
+// Admin Panel Renders
+async function renderAdminPanel() {
+    if (!db || !loggedInUser || !loggedInUser.isAdmin) return;
+    const userListTbody = document.getElementById('admin-users-list');
+    const userCountDiv = document.getElementById('admin-user-count');
+    if (!userListTbody) return;
+
+    userListTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--muted);">불러오는 중...</td></tr>';
+
+    try {
+        const querySnapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
+        let content = '';
+        let count = 0;
+        querySnapshot.forEach(doc => {
+            const data = doc.data();
+            const username = data.username;
+            const isAdmin = !!data.isAdmin;
+            const dateStr = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('ko-KR') : '-';
+            
+            const deleteBtn = isAdmin 
+                ? `<span class="admin-badge">기본 계정</span>` 
+                : `<button class="delete-user-btn" onclick="handleDeleteUser('${username}')">계정 삭제</button>`;
+
+            content += `
+                <tr>
+                    <td><strong>${username}</strong></td>
+                    <td>${isAdmin ? '<span style="color: var(--primary); font-weight: bold;">관리자</span>' : '일반 회원'}</td>
+                    <td>${dateStr}</td>
+                    <td>${deleteBtn}</td>
+                </tr>
+            `;
+            count++;
+        });
+        userListTbody.innerHTML = content || '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--muted);">가입된 회원이 없습니다.</td></tr>';
+        if (userCountDiv) userCountDiv.textContent = `총 회원 수: ${count}명`;
+    } catch (e) {
+        console.error('[Admin] Error rendering admin panel:', e);
+        userListTbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: #f87171;">데이터를 불러오는 중 오류가 발생했습니다: ${e.message}</td></tr>`;
+    }
+}
+
+// Admin Account Deletion
+async function handleDeleteUser(username) {
+    if (!confirm(`정말로 '${username}' 사용자의 계정 및 모든 학습 통계 데이터를 완전히 삭제하시겠습니까?`)) {
+        return;
+    }
+    try {
+        // 1. Delete user stats sessions subcollection
+        const sessionsSnapshot = await db.collection('users').doc(username).collection('sessions').get();
+        const batch = db.batch();
+        sessionsSnapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        await batch.commit();
+        
+        // 2. Delete user account document
+        await db.collection('users').doc(username).delete();
+        alert(`'${username}' 계정이 완전히 삭제되었습니다.`);
+        renderAdminPanel();
+    } catch (e) {
+        console.error('[Admin] Error deleting user:', e);
+        alert(`사용자 삭제 실패: ${e.message}`);
+    }
+}
+
+// ─── Init App ─────────────────────────────────────────────
+async function initApp() {
+    await initAdminAccount();
+    
+    // Auto load session
+    const savedUser = localStorage.getItem('is_logged_in_user');
+    if (savedUser) {
+        try {
+            loggedInUser = JSON.parse(savedUser);
+            if (loggedInUser && loggedInUser.username) {
+                await syncStatsFromFirestore(loggedInUser.username);
+            }
+        } catch (e) {
+            console.error('Failed to parse saved login user session:', e);
+            loggedInUser = null;
+        }
+    }
+    applyLoginState();
+    loadSettings();
+}
+
+// Expose globals for inline event handlers
+window.handleLoginSubmit = handleLoginSubmit;
+window.toggleLoginSignup = toggleLoginSignup;
+window.handleLogout = handleLogout;
+window.clearLearningHistory = clearLearningHistory;
+window.resetStatsAndRetry = resetStatsAndRetry;
+window.handleDeleteUser = handleDeleteUser;
+window.saveQuizSessionToStorage = saveQuizSessionToStorage;
+window.renderAdminPanel = renderAdminPanel;
+
+// Setup Event Listeners
 document.getElementById('sync-btn')?.addEventListener('click', syncData);
 document.querySelectorAll('.nav-links li').forEach(li => {
     li.addEventListener('click', () => {
@@ -1534,3 +1981,5 @@ document.querySelectorAll('.nav-links li').forEach(li => {
         }
     });
 });
+
+initApp();

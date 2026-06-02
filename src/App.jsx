@@ -60,7 +60,7 @@ function HomeScreen({ onCreateNote, onGoExam }) {
           <button className="home-cta-btn primary" onClick={onCreateNote}>
             <Plus size={18} /> 새 노트 시작하기
           </button>
-          <a className="home-cta-btn secondary" href="/storage_work/exam/" target="_blank" rel="noopener noreferrer">
+          <a className="home-cta-btn secondary" href="/storage_work/exam/index.html" target="_blank" rel="noopener noreferrer">
             <GraduationCap size={18} /> 기출문제 풀러가기
           </a>
         </div>
@@ -328,7 +328,7 @@ function App() {
         </div>
 
         <a
-          href="/storage_work/exam/"
+          href="/storage_work/exam/index.html"
           target="_blank"
           rel="noopener noreferrer"
           style={{
@@ -375,7 +375,7 @@ function App() {
             />
           </div>
         ) : (
-          <HomeScreen onCreateNote={createNote} onGoExam={() => window.open('/storage_work/exam/', '_blank')} />
+          <HomeScreen onCreateNote={createNote} onGoExam={() => window.open('/storage_work/exam/index.html', '_blank')} />
         )}
       </div>
     </div>

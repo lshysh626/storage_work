@@ -4,12 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.1.6">
+    <link rel="stylesheet" href="style.css?v=1.2.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-<div id="app">
+<!-- Login/Signup Screen -->
+<div id="login-screen" class="login-screen">
+    <div class="login-card">
+        <div class="login-logo">IS MASTER</div>
+        <h2 id="login-title">로그인</h2>
+        <form id="login-form" onsubmit="handleLoginSubmit(event)">
+            <div class="input-group">
+                <label for="login-username">아이디</label>
+                <input type="text" id="login-username" required placeholder="아이디 입력" autocomplete="username">
+            </div>
+            <div class="input-group">
+                <label for="login-password">비밀번호</label>
+                <input type="password" id="login-password" required placeholder="비밀번호 입력" autocomplete="current-password">
+            </div>
+            <button type="submit" id="login-submit-btn" class="login-btn">로그인</button>
+        </form>
+        <div class="login-switch">
+            <span id="switch-text">계정이 없으신가요?</span>
+            <button id="switch-btn" onclick="toggleLoginSignup()">회원가입</button>
+        </div>
+        <div id="login-message" class="login-message error hidden"></div>
+    </div>
+</div>
+
+<!-- Main App (Hidden by default) -->
+<div id="app" class="hidden">
     <aside id="sidebar">
         <div class="logo">IS MASTER</div>
         <ul class="nav-links">
@@ -17,7 +45,18 @@
             <li data-view="quiz-selection">📝 기출 풀기</li>
             <li data-view="stats">📈 학습 통계</li>
             <li data-view="settings">⚙️ 설정</li>
+            <li data-view="admin-panel" id="nav-admin" class="hidden">🔑 회원 관리</li>
         </ul>
+        
+        <!-- User Profile Card -->
+        <div id="user-profile-section" class="user-profile">
+            <div class="user-info">
+                <span class="user-icon">👤</span>
+                <span id="user-display-name">Guest</span>
+            </div>
+            <button onclick="handleLogout()" class="logout-btn">로그아웃</button>
+        </div>
+
         <div id="sync-btn" class="sync-btn">🔄 데이터 동기화</div>
     </aside>
 
@@ -145,7 +184,15 @@
                 <div style="margin-bottom: 2rem;">
                     <label style="display: block; color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.8rem;">🔑 AI API Key (Gemini)</label>
                     <input type="password" id="setting-api-key" placeholder="AIzaSy..." style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.2rem; color: #fff; font-size: 1.1rem; outline: none;">
-                    <p style="color: var(--muted); font-size: 0.85rem; margin-top: 0.6rem;">* 비워두면 시스템 기본 키가 사용됩니다.</p>
+                    <div style="color: var(--muted); font-size: 0.85rem; margin-top: 0.8rem; line-height: 1.6; background: rgba(15,23,42,0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                        <p style="margin-bottom: 0.5rem; color: #fff; font-weight: 700;">💡 API 키 설정 가이드</p>
+                        1. 이 사이트는 서버 없이 브라우저에서 직접 Gemini AI를 호출합니다.<br>
+                        2. AI 채점 및 AI 튜터 기능을 이용하려면 <strong>본인의 Gemini API 키</strong>가 필요합니다.<br>
+                        3. <a href="https://aistudio.google.com/apikey" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: 700;">Google AI Studio API 키 발급 사이트</a>에 접속합니다. (Google 계정 필요, 무료)<br>
+                        4. <strong>"Create API key"</strong> 버튼을 클릭하여 새 키를 생성하고 복사합니다.<br>
+                        5. 복사한 키를 위 입력란에 붙여넣고 <strong>설정 저장</strong>을 눌러주세요.<br>
+                        <p style="margin-top: 0.5rem; color: #f87171; font-weight: 700;">* 입력하신 API 키는 암호화나 외부 노출 없이 브라우저 로컬 저장소(localStorage)에 안전하게 보관됩니다.</p>
+                    </div>
                 </div>
                 <div style="margin-bottom: 2.5rem;">
                     <label style="display: block; color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.8rem;">🧠 AI 모델 선택</label>
@@ -158,10 +205,38 @@
                 <button onclick="saveSettings()" style="width: 100%; background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: #fff; font-weight: 800; font-size: 1.2rem; border: none; border-radius: 10px; padding: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);">설정 저장</button>
             </div>
         </section>
+
+        <!-- Admin Panel View -->
+        <section id="admin-panel" class="view">
+            <h1 style="margin-bottom: 2rem;">🔑 회원 관리</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
+                <p style="color: var(--muted); font-size: 1rem; line-height: 1.6; margin: 0;">
+                    정보보안기사 기출 사이트에 가입된 회원 목록을 조회하고 관리할 수 있습니다.
+                </p>
+                <div style="background: rgba(56, 189, 248, 0.1); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 800; border: 1px solid rgba(56,189,248,0.2);" id="admin-user-count">
+                    총 회원 수: 0명
+                </div>
+            </div>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>아이디</th>
+                            <th>구분</th>
+                            <th>가입 일시</th>
+                            <th>작업</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-list">
+                        <!-- 사용자 정보 렌더링 영역 -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 </div>
-<script src="gemini.js?v=1.1.10"></script>
-<script src="main.js?v=1.1.10"></script>
+<script src="gemini.js?v=1.2.0"></script>
+<script src="main.js?v=1.2.0"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();

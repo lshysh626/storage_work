@@ -1,7 +1,7 @@
 // ─── Gemini Direct API ────────────────────────────────────────
 // 백엔드를 거치지 않고 Gemini API를 브라우저에서 직접 호출합니다.
 
-const GEMINI_DEFAULT_KEY = 'AIzaSyCZiT-lW8pNscz62zTs9yjS_gWP3bNr_FU';
+const GEMINI_DEFAULT_KEY = '';
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // 모델 후보 (순서대로 시도)
@@ -37,8 +37,11 @@ function parseGeminiError(status, errBody) {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // ─── 일반 호출 (재시도 + 모델 폴백) ─────────────────────────
-async function callGemini(prompt, responseSchema = null) {
+async function callGemini(prompt) {
     const key = getGeminiKey();
+    if (!key) {
+        throw new Error("API 키가 등록되지 않았습니다. 설정(⚙️) 탭에서 개인 Gemini API 키를 입력해 주세요.");
+    }
     const preferredModel = getGeminiModel();
     const models = [preferredModel, ...GEMINI_MODEL_FALLBACKS.filter(m => m !== preferredModel)];
     let lastErrorMsg = '';
@@ -61,9 +64,6 @@ async function callGemini(prompt, responseSchema = null) {
                     maxOutputTokens: 150
                 }
             };
-            if (responseSchema) {
-                bodyPayload.generationConfig.responseSchema = responseSchema;
-            }
 
             console.log(`[Gemini API] Sending fetch request to ${model}... (Remaining retries: ${retries + 1})`);
             
@@ -125,6 +125,9 @@ async function callGemini(prompt, responseSchema = null) {
 // ─── 스트리밍 호출 (재시도 + 모델 폴백) ─────────────────────
 async function callGeminiStream(prompt, onChunk, onStatus) {
     const key = getGeminiKey();
+    if (!key) {
+        throw new Error("API 키가 등록되지 않았습니다. 설정(⚙️) 탭에서 개인 Gemini API 키를 입력해 주세요.");
+    }
     const preferredModel = getGeminiModel();
     const models = [preferredModel, ...GEMINI_MODEL_FALLBACKS.filter(m => m !== preferredModel)];
     let lastErrorMsg = '';
@@ -229,30 +232,14 @@ async function geminiScore(question, correct_answer, user_answer, points) {
 문제: ${question}
 정답: ${correct_answer}
 사용자 답변: ${user_answer}
-배점: ${points}점`;
+배점: ${points}점
 
-    const schema = {
-        type: "OBJECT",
-        properties: {
-            score: { 
-                type: "INTEGER", 
-                description: "정답 비율 및 배점에 따른 최종 점수. 완벽히 맞으면 배점과 같고, 오답이면 0, 부분점수가 있다면 배점보다 작은 정수." 
-            },
-            feedback: { 
-                type: "STRING", 
-                description: "오답이거나 부분점수인 경우 1문장 피드백. 정답인 경우 빈 문자열 \"\"로 설정." 
-            },
-            is_correct: { 
-                type: "BOOLEAN", 
-                description: "점수가 배점과 동일하면 true, 그렇지 않으면 false." 
-            }
-        },
-        required: ["score", "feedback", "is_correct"]
-    };
+반드시 다른 설명 없이 아래 형태의 JSON 데이터만 응답하세요:
+{"score": 숫자, "feedback": "오답/부분점수 시 1문장 피드백 (정답 시 빈 문자열 \\"\\")", "is_correct": true/false}`;
 
     let text = '';
     try {
-        text = await callGemini(prompt, schema);
+        text = await callGemini(prompt);
         const match = text.match(/\{[\s\S]*?\}/);
         const jsonText = match ? match[0] : text;
         return JSON.parse(jsonText);
@@ -302,39 +289,19 @@ async function geminiScoreBulk(questionsToGrade) {
     const prompt = `정보보안기사 실기 시험 답안 일괄 채점기입니다. 다음 여러 문제들의 답안을 정밀 채점해 주세요.
 
 채점할 문제 목록:
-${JSON.stringify(questionsToGrade, null, 2)}`;
+${JSON.stringify(questionsToGrade, null, 2)}
 
-    const schema = {
-        type: "ARRAY",
-        description: "각 문제의 채점 결과를 담은 리스트. 순서는 원래 입력된 목록의 index 값과 정확히 일치해야 합니다.",
-        items: {
-            type: "OBJECT",
-            properties: {
-                index: { 
-                    type: "INTEGER",
-                    description: "입력 데이터에 제공된 문제의 index 값." 
-                },
-                score: { 
-                    type: "INTEGER", 
-                    description: "정답 비율 및 배점에 따른 최종 점수. 완벽히 맞으면 배점과 같고, 오답이면 0, 부분점수가 있다면 배점보다 작은 정수." 
-                },
-                feedback: { 
-                    type: "STRING", 
-                    description: "오답이거나 부분점수인 경우 1문장 피드백. 정답인 경우 빈 문자열 \"\"로 설정." 
-                },
-                is_correct: { 
-                    type: "BOOLEAN", 
-                    description: "점수가 배점과 동일하면 true, 그렇지 않으면 false." 
-                }
-            },
-            required: ["index", "score", "feedback", "is_correct"]
-        }
-    };
+반드시 각 문제의 채점 결과를 담은 JSON 배열 형태로만 정확하게 응답해 주세요. 순서(index)는 원래 목록의 index 값과 일치해야 합니다.
+JSON 응답 형식 예시:
+[
+  {"index": 0, "score": 3, "feedback": "피드백 문장", "is_correct": true},
+  {"index": 2, "score": 0, "feedback": "피드백 문장", "is_correct": false}
+]`;
 
-    console.log("[Gemini API] Requesting bulk score for", questionsToGrade.length, "questions with structured schema...");
+    console.log("[Gemini API] Requesting bulk score for", questionsToGrade.length, "questions...");
     let text = '';
     try {
-        text = await callGemini(prompt, schema);
+        text = await callGemini(prompt);
         console.log("[Gemini API] Received bulk response:", text);
         const match = text.match(/\[[\s\S]*?\]/);
         const jsonText = match ? match[0] : text;
