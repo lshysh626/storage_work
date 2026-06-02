@@ -533,7 +533,27 @@ async function geminiExplainStream(question, answer, onChunk, onStatus) {
 }
 
 // ─── AI 튜터 채팅 (스트리밍) ─────────────────────────────────
-async function geminiChatStream(question, answer, explanation, message, onChunk, onStatus) {
+async function geminiChatStream(question, answer, explanation, message, chatHistoryOrOnChunk, onChunkOrOnStatus, maybeOnStatus) {
+    let chatHistory = [];
+    let onChunk = chatHistoryOrOnChunk;
+    let onStatus = onChunkOrOnStatus;
+    
+    if (Array.isArray(chatHistoryOrOnChunk)) {
+        chatHistory = chatHistoryOrOnChunk;
+        onChunk = onChunkOrOnStatus;
+        onStatus = maybeOnStatus;
+    }
+    
+    let historyText = '';
+    if (chatHistory && chatHistory.length > 0) {
+        // Keep only last 6 exchanges (12 messages) to fit in context window and avoid token bloat
+        const recentHistory = chatHistory.slice(-12);
+        historyText = `\n[이전 대화 기록]\n` + recentHistory.map(h => {
+            const label = h.role === 'user' ? '학생' : 'AI 튜터';
+            return `${label}: ${h.text}`;
+        }).join('\n') + '\n';
+    }
+
     const prompt = `정보보안기사 실기 AI 튜터입니다. 학생의 질문에 핵심 위주로 친절하게 답변하세요.
 
 작성 규칙:
@@ -545,7 +565,8 @@ async function geminiChatStream(question, answer, explanation, message, onChunk,
 [문제] ${question}
 [정답] ${answer}
 [해설] ${explanation}
-[질문] ${message}`;
+${historyText}
+[학생의 새로운 질문] ${message}`;
 
     await callGeminiStream(prompt, onChunk, onStatus);
 }

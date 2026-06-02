@@ -774,6 +774,7 @@ function launchQuiz(questions, title) {
     switchView('quiz-view');
     renderQuestion();
     startTimer();
+    saveQuizStateForRecovery();
 }
 
 // ─── Render Question ──────────────────────────────────────
@@ -1009,6 +1010,7 @@ function renderQuestion() {
                 if (f) f.focus();
             }, 80);
         }
+        saveQuizStateForRecovery();
     }
 }
 
@@ -1022,6 +1024,7 @@ function saveAnswerRealtime() {
         userAnswer = textarea.value;
     }
     state.userAnswers[state.index] = userAnswer;
+    saveQuizStateForRecovery();
 }
 window.saveAnswerRealtime = saveAnswerRealtime;
 
@@ -1116,6 +1119,7 @@ async function submitAnswer() {
 
     state.submitting = false;
     state.userAnswers[state.index] = userAnswer;
+    saveQuizStateForRecovery();
     const fb = document.getElementById('feedback-area');
     fb.classList.remove('hidden');
     const skipBtn = document.getElementById('skip-btn');
@@ -1189,6 +1193,7 @@ async function submitAnswer() {
 
         recalculateSessionScores(session);
         saveQuizSessionToStorage(session);
+        saveQuizStateForRecovery();
 
         // 3. 현재 보고 있는 문제가 완료된 문제라면 실시간 UI 업데이트
         if (state.index === savedIndex) {
@@ -1361,6 +1366,7 @@ async function submitBulkAnswers() {
 
 function showSessionResult() {
     clearInterval(state.timerInt);
+    clearQuizRecoveryState();
     
     const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
     const session = history.find(h => h.id === state.currentSessionId);
@@ -1450,8 +1456,16 @@ async function requestExplanation(index) {
     
     if (!sidePanel || !expContainer) return;
     
-    // Reset Chat
-    chatMessages.innerHTML = '<div class="chat-message ai-message">이 문제에 대해 궁금한 점을 질문하세요.</div>';
+    // Restore or Reset Chat
+    const qState = state.questionStates[index];
+    if (qState && qState.chat && qState.chat.length > 0) {
+        chatMessages.innerHTML = qState.chat.map(msg => {
+            const cls = msg.role === 'user' ? 'user-message' : 'ai-message';
+            return `<div class="chat-message ${cls}">${msg.text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
+        }).join('');
+    } else {
+        chatMessages.innerHTML = '<div class="chat-message ai-message">이 문제에 대해 궁금한 점을 질문하세요.</div>';
+    }
     
     // (자동으로 패널을 열지 않고 백그라운드에서 내용만 업데이트합니다)
     
@@ -1538,13 +1552,21 @@ function togglePanel(type) {
 async function sendChatMessage() {
     const input = document.getElementById('chat-input');
     const msg = input.value.trim();
-    if (!msg) return;
+    if (!msg || input.disabled) return;
     
     const q = state.questions[state.index];
+    const qState = state.questionStates[state.index];
     const messagesContainer = document.getElementById('chat-messages');
     
-    // 사용자 메시지 추가
-    messagesContainer.innerHTML += `<div class="chat-message user-message">${msg}</div>`;
+    // Lock input
+    input.disabled = true;
+    
+    // Add user message to state and UI
+    if (!qState.chat) qState.chat = [];
+    const history = [...qState.chat]; // slice copy of previous history
+    qState.chat.push({ role: 'user', text: msg });
+    
+    messagesContainer.innerHTML += `<div class="chat-message user-message">${msg.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
     input.value = '';
     
     // AI 스트리밍 버블 생성
@@ -1557,7 +1579,7 @@ async function sendChatMessage() {
     try {
         let accumulated = '';
         await geminiChatStream(
-            q.question, q.answer, q.explanation || '', msg,
+            q.question, q.answer, q.explanation || '', msg, history,
             (chunk) => {
                 accumulated += chunk;
                 aiMsgDiv.textContent = accumulated;
@@ -1569,12 +1591,83 @@ async function sendChatMessage() {
             }
         );
         aiMsgDiv.style.color = ''; // 정상 색상 복원
+        qState.chat.push({ role: 'ai', text: accumulated });
+        
+        // Save state recovery
+        saveQuizStateForRecovery();
     } catch (e) {
         aiMsgDiv.textContent = '';
         aiMsgDiv.innerHTML = buildApiKeyErrorHTML(e.message, 'sendChatMessage()');
         aiMsgDiv.style.color = '';
+        // Remove failed message from state
+        qState.chat.pop();
+    } finally {
+        input.disabled = false;
+        input.focus();
     }
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// ─── Quiz Recovery System ──────────────────────────────────
+function saveQuizStateForRecovery() {
+    if (state.view !== 'quiz-view' || !state.questions || state.questions.length === 0) {
+        return;
+    }
+    const recoveryState = {
+        questions: state.questions,
+        index: state.index,
+        timer: state.timer,
+        quizMode: state.quizMode,
+        userAnswers: state.userAnswers,
+        questionStates: state.questionStates,
+        currentSessionId: state.currentSessionId,
+        quizTitle: document.getElementById('quiz-title')?.textContent || ''
+    };
+    localStorage.setItem('temp_quiz_recovery_state', JSON.stringify(recoveryState));
+}
+
+function clearQuizRecoveryState() {
+    localStorage.removeItem('temp_quiz_recovery_state');
+}
+
+function restoreQuizStateIfAvailable() {
+    const raw = localStorage.getItem('temp_quiz_recovery_state');
+    if (!raw) return;
+    try {
+        const recovery = JSON.parse(raw);
+        if (recovery && recovery.questions && recovery.questions.length > 0) {
+            if (confirm(`진행 중이던 학습 세션("${recovery.quizTitle || '기출문제'}")이 있습니다. 이어서 풀어나가시겠습니까?`)) {
+                state.questions = recovery.questions;
+                state.index = recovery.index;
+                state.timer = recovery.timer;
+                state.quizMode = recovery.quizMode || 'immediate';
+                state.userAnswers = recovery.userAnswers;
+                state.questionStates = recovery.questionStates;
+                state.currentSessionId = recovery.currentSessionId;
+                
+                clearInterval(state.timerInt);
+                const m = String(Math.floor(state.timer / 60)).padStart(2, '0');
+                const s = String(state.timer % 60).padStart(2, '0');
+                document.getElementById('timer').textContent = `${m}:${s}`;
+                
+                state.timerInt = setInterval(() => {
+                    state.timer++;
+                    const min = String(Math.floor(state.timer / 60)).padStart(2, '0');
+                    const sec = String(state.timer % 60).padStart(2, '0');
+                    document.getElementById('timer').textContent = `${min}:${sec}`;
+                    saveQuizStateForRecovery();
+                }, 1000);
+                
+                switchView('quiz-view');
+                document.getElementById('quiz-title').textContent = recovery.quizTitle || '기출문제';
+                renderQuestion();
+                return;
+            }
+        }
+    } catch (e) {
+        console.error('Failed to restore quiz state:', e);
+    }
+    clearQuizRecoveryState();
 }
 
 // ─── Timer ────────────────────────────────────────────────
@@ -1587,6 +1680,7 @@ function startTimer() {
         const m = String(Math.floor(state.timer / 60)).padStart(2, '0');
         const s = String(state.timer % 60).padStart(2, '0');
         document.getElementById('timer').textContent = `${m}:${s}`;
+        saveQuizStateForRecovery();
     }, 1000);
 }
 
@@ -1612,6 +1706,7 @@ document.getElementById('prev-btn').addEventListener('click', () => {
 document.getElementById('exit-quiz').addEventListener('click', () => {
     if (confirm('퀴즈를 종료하시겠습니까?')) {
         clearInterval(state.timerInt);
+        clearQuizRecoveryState();
         switchView('quiz-selection');
     }
 });
@@ -2319,6 +2414,7 @@ async function initApp() {
     }
     applyLoginState();
     loadSettings();
+    restoreQuizStateIfAvailable();
 }
 
 // Expose globals for inline event handlers
