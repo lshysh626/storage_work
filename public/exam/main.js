@@ -2843,14 +2843,89 @@ async function saveParsedExam() {
     }
 }
 
+async function handlePDFUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    if (file.type !== 'application/pdf') {
+        alert('PDF 파일만 업로드할 수 있습니다.');
+        return;
+    }
+    
+    const statusDiv = document.getElementById('admin-file-status');
+    const textInput = document.getElementById('admin-exam-raw-text');
+    const nameInput = document.getElementById('admin-exam-name');
+    
+    if (statusDiv) {
+        statusDiv.textContent = `⏳ 파일 읽는 중: ${file.name} ...`;
+        statusDiv.classList.remove('hidden');
+        statusDiv.style.color = 'var(--primary)';
+    }
+    
+    if (nameInput && !nameInput.value.trim()) {
+        const defaultName = file.name.replace(/\.[^/.]+$/, "");
+        nameInput.value = defaultName;
+    }
+    
+    try {
+        const arrayBuffer = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = err => reject(err);
+            reader.readAsArrayBuffer(file);
+        });
+        
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+        const totalPages = pdf.numPages;
+        
+        let extractedText = '';
+        if (statusDiv) statusDiv.textContent = `⏳ 텍스트 추출 중 (총 ${totalPages}페이지)...`;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            extractedText += pageText + '\n\n';
+            if (statusDiv) statusDiv.textContent = `⏳ 텍스트 추출 중: ${i} / ${totalPages} 페이지 완료`;
+        }
+        
+        if (textInput) {
+            textInput.value = extractedText.trim();
+        }
+        
+        if (statusDiv) {
+            statusDiv.textContent = `✅ 성공적으로 ${file.name}에서 텍스트를 추출했습니다!`;
+            statusDiv.style.color = '#10b981';
+        }
+    } catch (e) {
+        console.error('[Admin] PDF extraction failed:', e);
+        if (statusDiv) {
+            statusDiv.textContent = `❌ 텍스트 추출 실패: ${e.message}`;
+            statusDiv.style.color = '#f87171';
+        }
+        alert('PDF 파일에서 텍스트를 추출하지 못했습니다. 스캔 이미지 형태의 PDF이거나 보안이 걸린 파일일 수 있습니다. 이 경우 직접 텍스트를 복사-붙여넣기해 주세요.');
+    }
+}
+
 function resetExamForm() {
     const nameInput = document.getElementById('admin-exam-name');
     const textInput = document.getElementById('admin-exam-raw-text');
+    const fileInput = document.getElementById('admin-exam-file');
+    const fileStatus = document.getElementById('admin-file-status');
     const previewContainer = document.getElementById('admin-parse-preview-container');
     const previewList = document.getElementById('admin-parse-preview-list');
     
     if (nameInput) nameInput.value = '';
     if (textInput) textInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (fileStatus) {
+        fileStatus.textContent = '';
+        fileStatus.classList.add('hidden');
+        fileStatus.style.color = '';
+    }
     if (previewContainer) previewContainer.classList.add('hidden');
     if (previewList) previewList.innerHTML = '';
     
@@ -2876,6 +2951,7 @@ window.switchAdminTab = switchAdminTab;
 window.runAIParsing = runAIParsing;
 window.saveParsedExam = saveParsedExam;
 window.resetExamForm = resetExamForm;
+window.handlePDFUpload = handlePDFUpload;
 
 // Setup Event Listeners
 document.getElementById('sync-btn')?.addEventListener('click', syncData);

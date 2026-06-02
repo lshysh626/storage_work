@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.5.2">
+    <link rel="stylesheet" href="style.css?v=1.5.3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- PDF.js SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 </head>
 <body>
 <!-- Login/Signup Screen -->
@@ -287,9 +289,20 @@
                             <input type="text" id="admin-exam-name" placeholder="예: 정보보안기사 실기 - 31회" style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.8rem; color: #fff; outline: none;">
                         </div>
                         
+                        <!-- PDF File Upload Input -->
+                        <div style="margin-bottom: 1.5rem; background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s;" 
+                             onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"
+                             onclick="document.getElementById('admin-exam-file').click()">
+                            <span style="font-size: 2rem; display: block; margin-bottom: 0.5rem;">📁</span>
+                            <span style="color: #cbd5e1; font-weight: 700; display: block; font-size: 0.95rem;">PDF 파일을 직접 업로드하세요</span>
+                            <span style="color: var(--muted); font-size: 0.8rem; display: block; margin-top: 0.3rem;">클릭하여 파일 선택 (브라우저에서 직접 텍스트 추출)</span>
+                            <input type="file" id="admin-exam-file" accept="application/pdf" style="display: none;" onchange="handlePDFUpload(event)">
+                            <div id="admin-file-status" style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--primary); font-weight: 700;" class="hidden"></div>
+                        </div>
+
                         <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">📝 기출 텍스트 원문 (PDF 등에서 복사)</label>
-                            <textarea id="admin-exam-raw-text" placeholder="여기에 기출문제 원본 텍스트를 그대로 붙여넣으세요. 문제 번호, 질문, 답안 내용이 포함되어야 합니다." style="width: 100%; height: 250px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; color: #fff; line-height: 1.6; outline: none; resize: vertical; font-family: inherit;"></textarea>
+                            <label style="display: block; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">📝 추출된 텍스트 원문 (직접 수정 가능)</label>
+                            <textarea id="admin-exam-raw-text" placeholder="PDF 업로드 시 추출된 텍스트가 자동으로 채워집며, 직접 수정하거나 텍스트를 붙여넣을 수도 있습니다." style="width: 100%; height: 200px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; color: #fff; line-height: 1.6; outline: none; resize: vertical; font-family: inherit;"></textarea>
                         </div>
 
                         <div style="display: flex; gap: 1rem;">
@@ -325,8 +338,8 @@
         </section>
     </main>
 </div>
-<script src="gemini.js?v=1.5.2"></script>
-<script src="main.js?v=1.5.2"></script>
+<script src="gemini.js?v=1.5.3"></script>
+<script src="main.js?v=1.5.3"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();
