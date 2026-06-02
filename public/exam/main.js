@@ -1694,7 +1694,7 @@ async function runConnectionTest() {
         return;
     }
     
-    const preferredModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash';
+    const preferredModel = localStorage.getItem('gemini_model') || 'gemini-2.5-flash';
     const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/${preferredModel}:generateContent?key=${key}`;
     
     const bodyPayload = {

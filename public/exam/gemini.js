@@ -6,7 +6,8 @@ const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // 모델 후보 (순서대로 시도)
 const GEMINI_MODEL_FALLBACKS = [
-    'gemini-3.5-flash',
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
     'gemini-2.0-flash',
     'gemini-1.5-flash',
     'gemini-1.5-pro'
