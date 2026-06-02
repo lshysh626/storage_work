@@ -270,60 +270,83 @@ async function callGeminiStream(prompt, onChunk, onStatus) {
 // Robust parsing helper for AI scoring responses
 function parseScoringResponse(text, defaultPoints) {
     const trimmed = text.trim();
+    let result = null;
     
     // 1. Try standard JSON parse
     try {
-        return JSON.parse(trimmed);
+        result = JSON.parse(trimmed);
     } catch (e) {
         // Ignore and try next
     }
     
     // 2. Try to extract JSON block from text
-    const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-        try {
-            return JSON.parse(jsonMatch[0]);
-        } catch (e) {
-            // Ignore and try regex parsing
+    if (!result) {
+        const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+            try {
+                result = JSON.parse(jsonMatch[0]);
+            } catch (e) {
+                // Ignore and try regex parsing
+            }
         }
     }
     
     // 3. Fallback: Parse fields manually using Regex
-    console.warn("[Gemini API] Failed to parse JSON response. Attempting regex field extraction on raw text:", trimmed);
-    
-    // Extract score
-    let score = 0;
-    const scoreMatch = trimmed.match(/(?:score|점수|점)\s*:\s*(\d+)/i) || trimmed.match(/(\d+)\s*(?:점|points)/i);
-    if (scoreMatch) {
-        score = parseInt(scoreMatch[1], 10);
+    if (!result) {
+        console.warn("[Gemini API] Failed to parse JSON response. Attempting regex field extraction on raw text:", trimmed);
+        
+        // Extract score
+        let score = 0;
+        const scoreMatch = trimmed.match(/(?:score|점수|점)\s*:\s*(\d+)/i) || trimmed.match(/(\d+)\s*(?:점|points)/i);
+        if (scoreMatch) {
+            score = parseInt(scoreMatch[1], 10);
+        }
+        
+        // Extract is_correct
+        let isCorrect = false;
+        const correctMatch = trimmed.match(/(?:is_correct|correct|정답여부|정답)\s*:\s*(true|false|yes|no|y|n|일치|불일치|O|X)/i);
+        if (correctMatch) {
+            const val = correctMatch[1].toLowerCase();
+            isCorrect = (val === 'true' || val === 'yes' || val === 'y' || val === '일치' || val === 'o');
+        } else {
+            // If score is 60% or more of max points, assume correct
+            isCorrect = (score > 0 && score >= defaultPoints * 0.6);
+        }
+        
+        // Extract feedback
+        let feedback = '';
+        // Try to match double-quoted string first to avoid greediness into other fields
+        const jsonFeedbackMatch = trimmed.match(/"feedback"\s*:\s*"((?:[^"\\]|\\.)*)"/i) || 
+                                trimmed.match(/(?:feedback|피드백|설명)\s*:\s*"((?:[^"\\]|\\.)*)"/i);
+        if (jsonFeedbackMatch) {
+            feedback = jsonFeedbackMatch[1].replace(/\\"/g, '"').replace(/\\\\/g, '\\').trim();
+        } else {
+            const feedbackMatch = trimmed.match(/(?:feedback|피드백|설명)\s*:\s*([^\n]+)/i);
+            if (feedbackMatch) {
+                feedback = feedbackMatch[1].trim().replace(/^["']|["']$/g, '');
+            } else {
+                feedback = trimmed.replace(/[\{\}]/g, '').trim();
+            }
+        }
+        
+        result = {
+            score: score,
+            is_correct: isCorrect,
+            feedback: feedback
+        };
     }
     
-    // Extract is_correct
-    let isCorrect = false;
-    const correctMatch = trimmed.match(/(?:is_correct|correct|정답여부|정답)\s*:\s*(true|false|yes|no|y|n|일치|불일치|O|X)/i);
-    if (correctMatch) {
-        const val = correctMatch[1].toLowerCase();
-        isCorrect = (val === 'true' || val === 'yes' || val === 'y' || val === '일치' || val === 'o');
-    } else {
-        // If score is 60% or more of max points, assume correct
-        isCorrect = (score > 0 && score >= defaultPoints * 0.6);
+    // Post-processing cleanup for feedback
+    if (result && typeof result.feedback === 'string') {
+        let fb = result.feedback.trim();
+        // Remove trailing/leading quotes if they were returned as literal string escapes or leftovers
+        if (fb === '"' || fb === '""' || fb === '\\"' || fb === '\\"\\"') {
+            fb = '';
+        }
+        result.feedback = fb;
     }
     
-    // Extract feedback
-    let feedback = '';
-    const feedbackMatch = trimmed.match(/(?:feedback|피드백|설명)\s*:\s*([^\n]+)/i);
-    if (feedbackMatch) {
-        feedback = feedbackMatch[1].trim().replace(/^["']|["']$/g, '');
-    } else {
-        // If no explicit feedback field, use the whole text (excluding the score portion) as feedback
-        feedback = trimmed.replace(/[\{\}]/g, '').trim();
-    }
-    
-    return {
-        score: score,
-        is_correct: isCorrect,
-        feedback: feedback
-    };
+    return result;
 }
 
 // ─── 채점 ─────────────────────────────────────────────────────
