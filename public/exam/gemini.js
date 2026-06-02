@@ -410,10 +410,11 @@ async function geminiScore(question, correct_answer, user_answer, points) {
 async function geminiExplainStream(question, answer, onChunk, onStatus) {
     const prompt = `정보보안기사 실기 전문가입니다. 다음 문제의 핵심 해설을 작성하세요.
 
-규칙:
-- 3~5문장 이내로 간결하게
-- 핵심 개념 중심으로
-- 마크다운, 불릿, 별표 없이 순수 텍스트만
+작성 규칙:
+- 가독성을 높이기 위해 영역/단락별로 줄바꿈(\\n)을 적극적으로 사용하세요.
+- 글머리 기호(예: - 또는 ▶)와 번호(1., 2.)를 활용해 구조적으로 설명해 주세요.
+- **, * 와 같은 마크다운 강조 표시(굵게/기울임 등)는 텍스트 그대로 화면에 출력되므로 절대 사용하지 마세요. 대신 줄바꿈과 띄어쓰기를 활용하세요.
+- 핵심 개념 위주로 오답 원인이나 주의점을 3~5줄 내외로 간결하게 설명해 주세요.
 
 문제: ${question}
 정답: ${answer}`;
@@ -423,11 +424,13 @@ async function geminiExplainStream(question, answer, onChunk, onStatus) {
 
 // ─── AI 튜터 채팅 (스트리밍) ─────────────────────────────────
 async function geminiChatStream(question, answer, explanation, message, onChunk, onStatus) {
-    const prompt = `정보보안기사 실기 AI 튜터입니다. 학생의 질문에 답변하세요.
+    const prompt = `정보보안기사 실기 AI 튜터입니다. 학생의 질문에 핵심 위주로 친절하게 답변하세요.
 
-규칙:
-- 3~5문장 이내로 핵심만
-- 마크다운, 불릿, 별표 없이 순수 텍스트만
+작성 규칙:
+- 가독성을 높이기 위해 설명 간에 줄바꿈(\\n)을 적극적으로 사용하세요.
+- 번호(1., 2.) 또는 글머리 기호(예: - 또는 ▶)를 활용해 개념을 정리해 주세요.
+- **, * 와 같은 마크다운 강조 표시(굵게/기울임 등)는 텍스트 그대로 화면에 출력되므로 절대 사용하지 마세요. 대신 줄바꿈과 문단 나누기를 활용하세요.
+- 친근하고 간결하게 설명해 주세요.
 
 [문제] ${question}
 [정답] ${answer}
