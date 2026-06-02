@@ -1055,6 +1055,14 @@ async function submitAnswer() {
     }
 
     const q = state.questions[state.index];
+    if (!q) return;
+
+    const qState = state.questionStates[state.index];
+    if (qState && (qState.scored || qState.grading)) {
+        nextQuestion();
+        return;
+    }
+
     const inputs = document.querySelectorAll('.ans-input');
     const textarea = document.querySelector('.textarea-ans');
 
@@ -1082,6 +1090,11 @@ async function submitAnswer() {
             nextQuestion();
         }
         return;
+    }
+
+    // Set grading flag to true to prevent duplicate calls
+    if (qState) {
+        qState.grading = true;
     }
 
     state.submitting = false;
@@ -1117,6 +1130,7 @@ async function submitAnswer() {
         const qState = state.questionStates[savedIndex];
         if (qState) {
             qState.scored = true;
+            qState.grading = false; // Reset grading flag
             qState.score = result.score;
             qState.isCorrect = result.is_correct;
             qState.feedback = result.feedback;
@@ -1173,6 +1187,10 @@ async function submitAnswer() {
         }
     }).catch(err => {
         console.error("[Background Grading] Failed for index", savedIndex, err);
+        const qState = state.questionStates[savedIndex];
+        if (qState) {
+            qState.grading = false; // Reset grading flag
+        }
         if (state.index === savedIndex) {
             const aiArea = document.getElementById('ai-status-area');
             if (aiArea) {
@@ -1376,7 +1394,7 @@ function nextQuestion() {
     if (state.quizMode !== 'study') {
         const currentIndex = state.index;
         const qState = state.questionStates[currentIndex];
-        if (qState && !qState.scored) {
+        if (qState && !qState.scored && !qState.grading) {
             // Save answer typed so far
             saveAnswerRealtime();
             const uAns = state.userAnswers[currentIndex] || '미입력';
@@ -1754,6 +1772,12 @@ async function runConnectionTest() {
         
         let statusMsg = res.ok ? '✅ 연결 및 채점 API 호출 성공!' : `❌ 채점 API 호출 실패 (HTTP 상태 코드: ${res.status})`;
         let detail = `응답 시간: ${duration}ms\n\n`;
+        
+        if (res.status === 429) {
+            detail += `⚠️ 안내: API 호출 제한(Quota Exceeded)이 발생했습니다.\n`;
+            detail += `- 이 오류는 등록하신 API 키의 일일 호출 한도(1,500회)를 초과했거나 짧은 시간 동안 너무 많은 요청(분당 15회)을 보내 일시적으로 차단된 상태임을 나타냅니다.\n`;
+            detail += `- 조치 방법: Google AI Studio (https://aistudio.google.com/)에 접속하여 새 프로젝트(New Project)를 생성해 키를 재발급받으시거나, 다른 구글 계정으로 새 API 키를 생성하여 등록하시면 즉시 해결됩니다.\n\n`;
+        }
         
         try {
             const json = JSON.parse(text);
