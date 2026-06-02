@@ -20,6 +20,27 @@ const TYPE_LABEL = { short: '단답형', essay: '서술형', practical: '실무�
 const TYPE_POINTS = { short: 3, essay: 12, practical: 16 };
 
 // ─── Format Answers Helper ────────────────────────────────
+function extractLabelsFromAnswer(answer) {
+    if (!answer) return [];
+    const lines = String(answer).split('\n').map(l => l.trim()).filter(Boolean);
+    if (lines.length <= 1) return [];
+    
+    const labels = [];
+    // Match line starting with optional numbered marker, followed by OS/subject name, followed by colon
+    // e.g. "1) Solaris: ...", "Solaris: ...", "① Solaris: ..."
+    const lineRegex = /^(?:\d{1,2}\)|[A-Za-z가-힣]\)|[①-⑳]|\([A-Za-z0-9]\))?\s*([A-Za-z가-힣0-9_#-]+)\s*:/;
+    
+    for (const line of lines) {
+        const match = line.match(lineRegex);
+        if (match) {
+            labels.push(match[1].trim());
+        } else {
+            return [];
+        }
+    }
+    return labels;
+}
+
 function formatModelAnswer(answer, question = '') {
     if (!answer) return '';
     let formatted = String(answer).trim();
@@ -42,21 +63,26 @@ function formatModelAnswer(answer, question = '') {
 
     // 괄호나 번호 인덱스가 문제에는 없지만 모범 답안에 여러 개 기재되어 있는 경우
     if (blanks.length === 0 && answer) {
-        let matchAns1 = String(answer).match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
-        let matchAns2 = String(answer).match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
-        let matchAns3 = String(answer).match(/(?:^|[\s\n\r])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
-        
-        if (matchAns1.length > 1) {
-            blanks = [...new Set(matchAns1.map(m => m.replace(/[\(\)\s]/g, '')))];
-        } else if (matchAns2.length > 1) {
-            blanks = [...new Set(matchAns2)];
-        } else if (matchAns3.length > 1) {
-            blanks = [...new Set(matchAns3.map(m => m.replace(/[\)\s\n\r]/g, '')))];
+        const customLabels = extractLabelsFromAnswer(answer);
+        if (customLabels.length > 0) {
+            blanks = customLabels;
+        } else {
+            let matchAns1 = String(answer).match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+            let matchAns2 = String(answer).match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
+            let matchAns3 = String(answer).match(/^[ \t]*(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/gm) || [];
+            
+            if (matchAns1.length > 1) {
+                blanks = [...new Set(matchAns1.map(m => m.replace(/[\(\)\s]/g, '')))];
+            } else if (matchAns2.length > 1) {
+                blanks = [...new Set(matchAns2)];
+            } else if (matchAns3.length > 1) {
+                blanks = [...new Set(matchAns3.map(m => m.replace(/[\)\s\n\r]/g, '')))];
+            }
         }
     }
 
     // 1. If it already contains markers like (A), (B), [A], ①, etc., split them into new lines
-    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳]|\b\d{1,2}\))/g;
+    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳]|\b\d{1,2}\)(?!\)))/g;
     if (markerRegex.test(formatted)) {
         formatted = formatted.replace(markerRegex, (match, sep, marker, index) => {
             return index === 0 ? marker : '\n' + marker;
@@ -867,16 +893,22 @@ function renderQuestion() {
 
         // 괄호나 번호 인덱스가 문제에는 없지만 모범 답안에 여러 개 기재되어 있는 경우
         if (blanks.length === 0 && q.answer) {
-            let matchAns1 = q.answer.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
-            let matchAns2 = q.answer.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
-            let matchAns3 = q.answer.match(/(?:^|[\s\n\r])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
-            
-            if (matchAns1.length > 1) {
-                blanks = [...new Set(matchAns1.map(m => m.replace(/[\(\)\s]/g, '')))];
-            } else if (matchAns2.length > 1) {
-                blanks = [...new Set(matchAns2)];
-            } else if (matchAns3.length > 1) {
-                blanks = [...new Set(matchAns3.map(m => m.replace(/[\)\s\n\r]/g, '')))];
+            const customLabels = extractLabelsFromAnswer(q.answer);
+            if (customLabels.length > 0) {
+                blanks = customLabels;
+                isCustomLabels = true;
+            } else {
+                let matchAns1 = q.answer.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+                let matchAns2 = q.answer.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
+                let matchAns3 = q.answer.match(/^[ \t]*(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/gm) || [];
+                
+                if (matchAns1.length > 1) {
+                    blanks = [...new Set(matchAns1.map(m => m.replace(/[\(\)\s]/g, '')))];
+                } else if (matchAns2.length > 1) {
+                    blanks = [...new Set(matchAns2)];
+                } else if (matchAns3.length > 1) {
+                    blanks = [...new Set(matchAns3.map(m => m.replace(/[\)\s\n\r]/g, '')))];
+                }
             }
         }
 
