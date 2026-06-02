@@ -1738,8 +1738,8 @@ async function runConnectionTest() {
         panel.textContent = '❌ 오류: 설정에 입력된 API 키가 없습니다. API 키를 먼저 입력해 주세요.';
         return;
     }
-    
-    const preferredModel = (typeof getGeminiModel === 'function' ? getGeminiModel() : null) || localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
+    const modelInput = document.getElementById('setting-model');
+    const preferredModel = modelInput?.value || (typeof getGeminiModel === 'function' ? getGeminiModel() : null) || localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
     const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/${preferredModel}:generateContent?key=${key}`;
     
     const bodyPayload = {
