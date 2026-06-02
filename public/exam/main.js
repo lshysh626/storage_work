@@ -1243,9 +1243,7 @@ async function submitBulkAnswers() {
                 });
             } else {
                 // Check for perfect string match (Fast pass)
-                const cleanU = String(uAns).replace(/\s+/g, '').toLowerCase();
-                const cleanC = String(q.answer).replace(/\s+/g, '').toLowerCase();
-                if (cleanU === cleanC || (cleanC.length > 2 && cleanU.includes(cleanC))) {
+                if (window.isFastPassMatch && window.isFastPassMatch(uAns, q.answer)) {
                     resultsMap.set(i, {
                         score: pts,
                         is_correct: true,

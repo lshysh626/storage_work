@@ -406,6 +406,40 @@ function parseScoringResponse(text, defaultPoints) {
     return result;
 }
 
+function isFastPassMatch(userAnswer, correctAnswer) {
+    if (!userAnswer || !correctAnswer) return false;
+    const cleanU = String(userAnswer).replace(/\s+/g, '').toLowerCase();
+    const cleanC = String(correctAnswer).replace(/\s+/g, '').toLowerCase();
+    
+    if (cleanU === cleanC) return true;
+    
+    // Check substring match if long enough (original fallback check)
+    if (cleanC.length > 2 && cleanU.includes(cleanC)) return true;
+    if (cleanU.length > 2 && cleanC.includes(cleanU)) return true;
+    
+    // Parentheses check: "DLP (Data Loss Prevention)" -> ["DLP", "Data Loss Prevention"]
+    const parenRegex = /\(([^)]+)\)/;
+    const match = String(correctAnswer).match(parenRegex);
+    if (match) {
+        const insideParen = match[1].trim();
+        const outsideParen = String(correctAnswer).replace(parenRegex, '').trim();
+        
+        const cleanInside = insideParen.replace(/\s+/g, '').toLowerCase();
+        const cleanOutside = outsideParen.replace(/\s+/g, '').toLowerCase();
+        
+        if (cleanU === cleanInside || cleanU === cleanOutside) {
+            return true;
+        }
+        
+        if (cleanInside.includes('/')) {
+            const parts = cleanInside.split('/').map(p => p.trim().replace(/\s+/g, '').toLowerCase());
+            if (parts.includes(cleanU)) return true;
+        }
+    }
+    
+    return false;
+}
+
 // ─── 채점 ─────────────────────────────────────────────────────
 async function geminiScore(question, correct_answer, user_answer, points) {
     // 0. 미입력 시 빠른 오답 처리 (AI 호출 생략)
@@ -418,16 +452,12 @@ async function geminiScore(question, correct_answer, user_answer, points) {
     }
 
     // 1. 빠른 채점 (단답형 등에서 내용이 완벽히 일치할 경우 AI 호출 생략)
-    if (user_answer && correct_answer) {
-        const cleanU = String(user_answer).replace(/\s+/g, '').toLowerCase();
-        const cleanC = String(correct_answer).replace(/\s+/g, '').toLowerCase();
-        if (cleanU === cleanC || (cleanC.length > 2 && cleanU.includes(cleanC))) {
-            return {
-                score: points,
-                is_correct: true,
-                feedback: "정답과 완벽하게 일치합니다. (초고속 자동 채점)"
-            };
-        }
+    if (isFastPassMatch(user_answer, correct_answer)) {
+        return {
+            score: points,
+            is_correct: true,
+            feedback: "정답과 완벽하게 일치합니다. (초고속 자동 채점)"
+        };
     }
 
     const formattedCorrect = (typeof window.formatModelAnswer === 'function')
@@ -582,4 +612,5 @@ window.geminiExplainStream = geminiExplainStream;
 window.geminiChatStream = geminiChatStream;
 window.getGeminiKey = getGeminiKey;
 window.getGeminiModel = getGeminiModel;
+window.isFastPassMatch = isFastPassMatch;
 
