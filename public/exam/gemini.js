@@ -28,8 +28,11 @@ function parseGeminiError(status, errBody) {
         const retrySec = retryMatch ? Math.ceil(parseFloat(retryMatch[1])) : 60;
         return { isRateLimit: true, retrySec, message: `API 요청 한도 초과 — ${retrySec}초 후 자동 재시도합니다.` };
     }
-    if (status === 400) return { isRateLimit: false, message: 'API 키 또는 요청이 잘못되었습니다.' };
-    if (status === 403) return { isRateLimit: false, message: 'API 키 권한이 없습니다. 설정에서 키를 확인하세요.' };
+    if (status === 400) return { isRateLimit: false, message: msg || 'API 키 또는 요청이 잘못되었습니다.' };
+    if (status === 403) return { isRateLimit: false, message: msg || 'API 키 권한이 없습니다. 설정에서 키를 확인하세요.' };
+    if (msg) {
+        return { isRateLimit: false, message: `API 오류 (${status}): ${msg}` };
+    }
     return { isRateLimit: false, message: `API 오류 (${status})` };
 }
 
