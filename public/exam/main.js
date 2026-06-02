@@ -1565,7 +1565,7 @@ async function runConnectionTest() {
     
     panel.classList.remove('hidden');
     panel.style.color = '#38bdf8';
-    panel.textContent = '⏳ 구글 Gemini API 연결 테스트 및 모델 목록 조회 중...';
+    panel.textContent = '⏳ 구글 Gemini API 채점 연결 및 검증 테스트 중...';
     
     if (!key) {
         panel.style.color = '#f87171';
@@ -1573,39 +1573,52 @@ async function runConnectionTest() {
         return;
     }
     
-    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${key}`;
+    const preferredModel = localStorage.getItem('gemini_model') || 'gemini-3.5-flash';
+    const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/${preferredModel}:generateContent?key=${key}`;
+    
+    const bodyPayload = {
+        contents: [{ parts: [{ text: "Hello, this is a test. Answer with 'OK' in JSON format." }] }],
+        generationConfig: { 
+            temperature: 0.1,
+            responseMimeType: 'application/json',
+            maxOutputTokens: 50,
+            responseSchema: {
+                type: 'OBJECT',
+                properties: {
+                    status: { type: 'STRING' }
+                },
+                required: ['status']
+            }
+        }
+    };
     
     try {
         const startTime = Date.now();
-        const res = await fetch(url, { method: 'GET' });
+        const res = await fetch(testUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bodyPayload)
+        });
         const duration = Date.now() - startTime;
         
         let text = await res.text();
         panel.style.color = res.ok ? '#4ade80' : '#f87171';
         
-        let statusMsg = res.ok ? '✅ 연결 성공!' : `❌ 연결 실패 (HTTP 상태 코드: ${res.status})`;
+        let statusMsg = res.ok ? '✅ 연결 및 채점 API 호출 성공!' : `❌ 채점 API 호출 실패 (HTTP 상태 코드: ${res.status})`;
         let detail = `응답 시간: ${duration}ms\n\n`;
         
         try {
             const json = JSON.parse(text);
-            if (json.models && Array.isArray(json.models)) {
-                detail += `사용 가능한 모델 목록 (generateContent 지원):\n`;
-                const printableModels = json.models
-                    .filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'))
-                    .map(m => ` - ${m.name.replace('models/', '')} (${m.displayName})`);
-                detail += printableModels.join('\n');
-            } else {
-                detail += JSON.stringify(json, null, 2);
-            }
+            detail += `상세 응답 내용:\n` + JSON.stringify(json, null, 2);
         } catch (e) {
             detail += `[주의: JSON이 아닌 응답 본문이 반환되었습니다]\n\n`;
-            detail += text.slice(0, 500) + (text.length > 500 ? '\n... (이하 생략)' : '');
+            detail += text.slice(0, 1000) + (text.length > 1000 ? '\n... (이하 생략)' : '');
         }
         
         panel.textContent = `${statusMsg}\n${detail}`;
     } catch (err) {
         panel.style.color = '#f87171';
-        panel.textContent = `❌ 네트워크 오류 (연결 실패)\n상세 내용: ${err.message}\n\n[진단 안내] 외부 API 통신이 네트워크 방화벽, 프록시, VPN 혹은 백신 프로그램에 의해 완전히 차단되었습니다. 네트워크 연결을 다른 와이파이 또는 모바일 핫스팟으로 변경해 보세요.`;
+        panel.textContent = `❌ 네트워크 오류 (연결 실패)\n상세 내용: ${err.message}`;
     }
 }
 
