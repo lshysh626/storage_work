@@ -40,6 +40,21 @@ function formatModelAnswer(answer, question = '') {
         }
     }
 
+    // 괄호나 번호 인덱스가 문제에는 없지만 모범 답안에 여러 개 기재되어 있는 경우
+    if (blanks.length === 0 && answer) {
+        let matchAns1 = String(answer).match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+        let matchAns2 = String(answer).match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
+        let matchAns3 = String(answer).match(/(?:^|[\s\n\r])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
+        
+        if (matchAns1.length > 1) {
+            blanks = [...new Set(matchAns1.map(m => m.replace(/[\(\)\s]/g, '')))];
+        } else if (matchAns2.length > 1) {
+            blanks = [...new Set(matchAns2)];
+        } else if (matchAns3.length > 1) {
+            blanks = [...new Set(matchAns3.map(m => m.replace(/[\)\s\n\r]/g, '')))];
+        }
+    }
+
     // 1. If it already contains markers like (A), (B), [A], ①, etc., split them into new lines
     const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳]|\b\d{1,2}\))/g;
     if (markerRegex.test(formatted)) {
@@ -848,6 +863,21 @@ function renderQuestion() {
             blanks = [...new Set(matchText2)];
         } else if (matchText3.length > 0) {
             blanks = [...new Set(matchText3.map(m => m.replace(/[\)\s\n]/g, '')))];
+        }
+
+        // 괄호나 번호 인덱스가 문제에는 없지만 모범 답안에 여러 개 기재되어 있는 경우
+        if (blanks.length === 0 && q.answer) {
+            let matchAns1 = q.answer.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+            let matchAns2 = q.answer.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
+            let matchAns3 = q.answer.match(/(?:^|[\s\n\r])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
+            
+            if (matchAns1.length > 1) {
+                blanks = [...new Set(matchAns1.map(m => m.replace(/[\(\)\s]/g, '')))];
+            } else if (matchAns2.length > 1) {
+                blanks = [...new Set(matchAns2)];
+            } else if (matchAns3.length > 1) {
+                blanks = [...new Set(matchAns3.map(m => m.replace(/[\)\s\n\r]/g, '')))];
+            }
         }
 
         let isCustomLabels = false;
