@@ -390,6 +390,16 @@ function parseScoringResponse(text, defaultPoints) {
         if (fb === '"' || fb === '""' || fb === '\\"' || fb === '\\"\\"') {
             fb = '';
         }
+        
+        // Sanitize conversational prefix and markdown leftovers
+        fb = fb.replace(/^(Here is the JSON requested:?\s*|Here is the JSON:?\s*)/i, '').trim();
+        fb = fb.replace(/^```(json)?|```$/gi, '').trim();
+        
+        // If it still contains braces, strip them
+        if (fb.startsWith('{') && fb.endsWith('}')) {
+            fb = '';
+        }
+        
         result.feedback = fb;
     }
     
