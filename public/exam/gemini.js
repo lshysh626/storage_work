@@ -122,12 +122,20 @@ async function callGemini(prompt, schema = null) {
                     if (key === GEMINI_DEFAULT_KEY) {
                         throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
                     }
-                    rateLimitCount++;
-                    if (rateLimitCount > 2) {
-                        console.warn(`[${model}] Exceeded maximum rate limit retries (2). Falling back...`);
-                        break; // 다음 모델로 fallback
+                    
+                    // If wait time is too long (> 5s), it indicates a daily limit block. Fall back immediately.
+                    if (parsed.retrySec && parsed.retrySec > 5) {
+                        console.warn(`[${model}] Long rate limit detected (${parsed.retrySec}s). Falling back immediately...`);
+                        break;
                     }
-                    const waitMs = (parsed.retrySec || 5) * 1000;
+                    
+                    rateLimitCount++;
+                    if (rateLimitCount > 1) {
+                        console.warn(`[${model}] Exceeded maximum rate limit retries (1). Falling back...`);
+                        break;
+                    }
+                    
+                    const waitMs = Math.min(parsed.retrySec || 3, 3) * 1000;
                     console.warn(`[${model}] Rate Limit hit. Waiting ${waitMs / 1000}s before retry...`);
                     await sleep(waitMs);
                     retries++; // 재시도 횟수 차감 방지
@@ -238,12 +246,20 @@ async function callGeminiStream(prompt, onChunk, onStatus) {
                     if (key === GEMINI_DEFAULT_KEY) {
                         throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
                     }
-                    rateLimitCount++;
-                    if (rateLimitCount > 2) {
-                        console.warn(`[${model}] Exceeded maximum stream rate limit retries (2). Falling back...`);
-                        break; // 다음 모델로 fallback
+                    
+                    // If wait time is too long (> 5s), it indicates a daily limit block. Fall back immediately.
+                    if (parsed.retrySec && parsed.retrySec > 5) {
+                        console.warn(`[${model}] Long rate limit detected (${parsed.retrySec}s). Falling back immediately...`);
+                        break;
                     }
-                    const waitMs = (parsed.retrySec || 5) * 1000;
+                    
+                    rateLimitCount++;
+                    if (rateLimitCount > 1) {
+                        console.warn(`[${model}] Exceeded maximum stream rate limit retries (1). Falling back...`);
+                        break;
+                    }
+                    
+                    const waitMs = Math.min(parsed.retrySec || 3, 3) * 1000;
                     if (onStatus) onStatus(`[${model}] 한도 초과. ${waitMs / 1000}초 후 동일 모델 재시도...`);
                     await sleep(waitMs);
                     retries++; // 재시도 횟수 차감 방지
