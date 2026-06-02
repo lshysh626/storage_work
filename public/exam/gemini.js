@@ -8,7 +8,7 @@ const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 const GEMINI_MODEL_FALLBACKS = [
     'gemini-2.0-flash',
     'gemini-1.5-flash',
-    'gemini-flash-latest'
+    'gemini-1.5-pro'
 ];
 
 function getGeminiKey() {
@@ -97,6 +97,16 @@ async function callGemini(prompt, schema = null) {
                     throw new Error("API 응답 구조가 올바르지 않거나 안전 필터링에 의해 차단되었습니다.");
                 }
 
+                if (res.status >= 500) {
+                    const errBody = await res.json().catch(() => ({}));
+                    const parsed = parseGeminiError(res.status, errBody);
+                    lastErrorMsg = parsed.message;
+                    const waitSec = 2 * (3 - retries); // 2s, 4s
+                    console.warn(`[Gemini API] 5xx Server Error (${res.status}) on model ${model}. Retrying in ${waitSec} seconds...`);
+                    await sleep(waitSec * 1000);
+                    continue; // 동일 모델 재시도
+                }
+
                 const errBody = await res.json().catch(() => ({}));
                 const parsed = parseGeminiError(res.status, errBody);
                 lastErrorMsg = parsed.message;
@@ -108,16 +118,22 @@ async function callGemini(prompt, schema = null) {
                     }
                     console.warn(`[${model}] Rate Limit hit. Waiting 4 seconds before retry/fallback...`);
                     await sleep(4000);
-                    break;
+                    break; // 다음 모델로 fallback
                 }
 
-                break;
+                break; // 다음 모델로 fallback
             } catch (fetchErr) {
                 clearTimeout(timeoutId);
                 console.error(`[Gemini API] Fetch exception on model ${model}:`, fetchErr);
                 lastErrorMsg = fetchErr.name === 'AbortError' 
                     ? "API 요청 시간 초과 (12초) - 네트워크 연결이 원활하지 않거나 API 응답이 지연되고 있습니다." 
                     : `네트워크 오류 (${fetchErr.message})`;
+                
+                if (retries >= 0) {
+                    console.warn(`[Gemini API] Retrying model ${model} after network error in 2 seconds...`);
+                    await sleep(2000);
+                    continue;
+                }
                 break;
             }
         }
@@ -141,66 +157,89 @@ async function callGeminiStream(prompt, onChunk, onStatus) {
         let retries = 2;
 
         while (retries >= 0) {
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { temperature: 0.5 }
-                })
-            });
+            retries--;
 
-            if (res.ok) {
-                const reader = res.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = '';
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.5 }
+                    })
+                });
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    buffer += decoder.decode(value, { stream: true });
-                    const lines = buffer.split('\n');
-                    buffer = lines.pop() || '';
-                    for (const line of lines) {
-                        if (!line.startsWith('data: ')) continue;
-                        const json = line.slice(6).trim();
-                        if (!json || json === '[DONE]') continue;
-                        try {
-                            const data = JSON.parse(json);
-                            if (data.error) {
-                                throw new Error(data.error.message || 'API 스트림 에러');
+                if (res.ok) {
+                    const reader = res.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = '';
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        buffer += decoder.decode(value, { stream: true });
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop() || '';
+                        for (const line of lines) {
+                            if (!line.startsWith('data: ')) continue;
+                            const json = line.slice(6).trim();
+                            if (!json || json === '[DONE]') continue;
+                            try {
+                                const data = JSON.parse(json);
+                                if (data.error) {
+                                    throw new Error(data.error.message || 'API 스트림 에러');
+                                }
+                                
+                                const candidate = data.candidates?.[0];
+                                if (candidate?.finishReason && candidate.finishReason !== 'STOP') {
+                                    throw new Error(`응답 차단됨 (사유: ${candidate.finishReason})`);
+                                }
+                                
+                                const text = candidate?.content?.parts?.[0]?.text;
+                                if (text) onChunk(text);
+                            } catch (e) {
+                                if (e.name === 'SyntaxError') continue;
+                                throw e;
                             }
-                            
-                            const candidate = data.candidates?.[0];
-                            if (candidate?.finishReason && candidate.finishReason !== 'STOP') {
-                                throw new Error(`응답 차단됨 (사유: ${candidate.finishReason})`);
-                            }
-                            
-                            const text = candidate?.content?.parts?.[0]?.text;
-                            if (text) onChunk(text);
-                        } catch (e) {
-                            if (e.name === 'SyntaxError') continue;
-                            throw e;
                         }
                     }
+                    return; // 성공
                 }
-                return; // 성공
-            }
 
-            const errBody = await res.json().catch(() => ({}));
-            const parsed = parseGeminiError(res.status, errBody);
-            lastErrorMsg = parsed.message;
-
-            if (parsed.isRateLimit) {
-                if (key === GEMINI_DEFAULT_KEY) {
-                    throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
+                if (res.status >= 500) {
+                    const errBody = await res.json().catch(() => ({}));
+                    const parsed = parseGeminiError(res.status, errBody);
+                    lastErrorMsg = parsed.message;
+                    const waitSec = 2 * (3 - retries); // 2s, 4s
+                    console.warn(`[Gemini API Stream] 5xx Server Error (${res.status}) on model ${model}. Retrying in ${waitSec} seconds...`);
+                    await sleep(waitSec * 1000);
+                    continue; // 동일 모델 재시도
                 }
-                if (onStatus) onStatus(`[${model}] 한도 초과. 4초 대기 후 전환...`);
-                await sleep(4000);
-                break; // 대기 후 다음 모델로
-            }
 
-            break; // 다음 모델로
+                const errBody = await res.json().catch(() => ({}));
+                const parsed = parseGeminiError(res.status, errBody);
+                lastErrorMsg = parsed.message;
+
+                if (parsed.isRateLimit) {
+                    if (key === GEMINI_DEFAULT_KEY) {
+                        throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
+                    }
+                    if (onStatus) onStatus(`[${model}] 한도 초과. 4초 대기 후 전환...`);
+                    await sleep(4000);
+                    break; // 다음 모델로 fallback
+                }
+
+                break; // 다음 모델로 fallback
+            } catch (err) {
+                console.error(`[Gemini API Stream] Fetch exception on model ${model}:`, err);
+                lastErrorMsg = `네트워크 오류 (${err.message})`;
+                if (retries >= 0) {
+                    console.warn(`[Gemini API Stream] Retrying model ${model} after error in 2 seconds...`);
+                    await sleep(2000);
+                    continue;
+                }
+                break;
+            }
         }
     }
 
@@ -244,18 +283,22 @@ async function geminiScore(question, correct_answer, user_answer, points) {
     let text = '';
     try {
         const schema = {
-            type: 'OBJECT',
+            type: 'object',
             properties: {
-                score: { type: 'NUMBER' },
-                feedback: { type: 'STRING' },
-                is_correct: { type: 'BOOLEAN' }
+                score: { type: 'number' },
+                feedback: { type: 'string' },
+                is_correct: { type: 'boolean' }
             },
             required: ['score', 'feedback', 'is_correct']
         };
         text = await callGemini(prompt, schema);
-        const match = text.match(/\{[\s\S]*?\}/);
-        const jsonText = match ? match[0] : text;
-        return JSON.parse(jsonText);
+        try {
+            return JSON.parse(text);
+        } catch (parseErr) {
+            const match = text.match(/\{[\s\S]*\}/);
+            const jsonText = match ? match[0] : text;
+            return JSON.parse(jsonText);
+        }
     } catch (err) {
         console.error("[Gemini API] Single score error:", err, "Raw text was:", text);
         return {
@@ -315,25 +358,30 @@ JSON 응답 형식 예시:
     let text = '';
     try {
         const schema = {
-            type: 'ARRAY',
+            type: 'array',
             items: {
-                type: 'OBJECT',
+                type: 'object',
                 properties: {
-                    index: { type: 'INTEGER' },
-                    score: { type: 'NUMBER' },
-                    feedback: { type: 'STRING' },
-                    is_correct: { type: 'BOOLEAN' }
+                    index: { type: 'integer' },
+                    score: { type: 'number' },
+                    feedback: { type: 'string' },
+                    is_correct: { type: 'boolean' }
                 },
                 required: ['index', 'score', 'feedback', 'is_correct']
             }
         };
         text = await callGemini(prompt, schema);
         console.log("[Gemini API] Received bulk response:", text);
-        const match = text.match(/\[[\s\S]*?\]/);
-        const jsonText = match ? match[0] : text;
-        const parsed = JSON.parse(jsonText);
-        if (Array.isArray(parsed)) {
-            return parsed;
+        try {
+            const parsed = JSON.parse(text);
+            if (Array.isArray(parsed)) return parsed;
+        } catch (parseErr) {
+            const match = text.match(/\[[\s\S]*\]/);
+            const jsonText = match ? match[0] : text;
+            const parsed = JSON.parse(jsonText);
+            if (Array.isArray(parsed)) {
+                return parsed;
+            }
         }
     } catch (e) {
         console.error("[Gemini API] JSON Parse Error in bulk score:", e, "Raw text was:", text);
