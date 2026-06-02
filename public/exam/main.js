@@ -870,6 +870,21 @@ function renderQuestion() {
             }
         }
 
+        // Update skip-btn visibility
+        const skipBtn = document.getElementById('skip-btn');
+        if (skipBtn) {
+            if (!state.bulkScoring && !qState.scored && state.quizMode !== 'study') {
+                skipBtn.classList.remove('hidden');
+                if (state.index === state.questions.length - 1) {
+                    skipBtn.textContent = '완료 (Ctrl+])';
+                } else {
+                    skipBtn.textContent = '건너뛰기 (Ctrl+])';
+                }
+            } else {
+                skipBtn.classList.add('hidden');
+            }
+        }
+
         // Restore Feedback if scored
         const fb = document.getElementById('feedback-area');
         if (qState.scored) {
@@ -1016,6 +1031,8 @@ async function submitAnswer() {
     state.userAnswers[state.index] = userAnswer;
     const fb = document.getElementById('feedback-area');
     fb.classList.remove('hidden');
+    const skipBtn = document.getElementById('skip-btn');
+    if (skipBtn) skipBtn.classList.add('hidden');
 
     const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
 
