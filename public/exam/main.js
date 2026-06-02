@@ -893,6 +893,7 @@ function renderQuestion() {
         let matchText3 = q.question.match(/(?:^|[\s\n])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
         
         let blanks = [];
+        let isCustomLabels = false;
         if (matchText1.length > 0) {
             blanks = [...new Set(matchText1.map(m => m.replace(/[\(\)\s]/g, '')))];
         } else if (matchText2.length > 0) {
@@ -921,8 +922,6 @@ function renderQuestion() {
                 }
             }
         }
-
-        let isCustomLabels = false;
         // If no explicit blank labels are found, check if it asks to list N items (N > 1)
         if (blanks.length === 0) {
             const numMatches = q.question.match(/(\d+)\s*(가지|개)[^.\n]*(기술|서술|쓰시오|작성|답하시오)/);
