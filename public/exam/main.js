@@ -699,6 +699,32 @@ function launchQuiz(questions, title) {
     state.submitting = false;
     state.currentSessionId = Date.now().toString();
     document.getElementById('quiz-title').textContent = title;
+
+    // Initialize session in localStorage/Firestore if not study mode
+    if (state.quizMode !== 'study') {
+        const session = {
+            id: state.currentSessionId,
+            title: title,
+            date: new Date().toISOString(),
+            totalScore: 0,
+            maxScore: 0,
+            details: questions.map((q, idx) => {
+                const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
+                return {
+                    qIndex: idx,
+                    question: q.question,
+                    correct_answer: q.answer,
+                    user_answer: '미입력',
+                    score: 0,
+                    points: pts,
+                    is_correct: false,
+                    feedback: '제출하지 않음 (건너뜀)'
+                };
+            })
+        };
+        recalculateSessionScores(session);
+        saveQuizSessionToStorage(session);
+    }
     
     // 패널 기본 상태를 닫힘으로 설정
     const sidePanel = document.getElementById('quiz-side-panel');
@@ -860,6 +886,14 @@ function renderQuestion() {
                 nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
                 nextBtn.style.background = '';
             }
+        } else if (state.quizMode === 'study') {
+            if (state.index === state.questions.length - 1) {
+                nextBtn.textContent = '완료 🚀 (Ctrl+Enter)';
+                nextBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else {
+                nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
+                nextBtn.style.background = '';
+            }
         } else {
             if (qState.scored) {
                 nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
@@ -878,7 +912,7 @@ function renderQuestion() {
                 if (state.index === state.questions.length - 1) {
                     skipBtn.textContent = '완료 (Ctrl+])';
                 } else {
-                    skipBtn.textContent = '건너뛰기 (Ctrl+])';
+                    skipBtn.textContent = '다음 문제 (건너뛰기) → (Ctrl+])';
                 }
             } else {
                 skipBtn.classList.add('hidden');
@@ -1093,6 +1127,7 @@ async function submitAnswer() {
                 feedback: result.feedback
             });
         } else {
+            existingDetail.user_answer = userAnswer;
             existingDetail.score = result.score;
             existingDetail.is_correct = result.is_correct;
             existingDetail.feedback = result.feedback;
@@ -1279,6 +1314,8 @@ function showSessionResult() {
         switchView('quiz-selection');
         return;
     }
+
+    session.details.sort((a, b) => a.qIndex - b.qIndex);
     
     switchView('bulk-result-view');
     const container = document.getElementById('bulk-result-container');
@@ -1313,6 +1350,31 @@ function showSessionResult() {
 }
 
 function nextQuestion() {
+    if (state.quizMode !== 'study') {
+        const currentIndex = state.index;
+        const qState = state.questionStates[currentIndex];
+        if (qState && !qState.scored) {
+            // Save answer typed so far
+            saveAnswerRealtime();
+            const uAns = state.userAnswers[currentIndex] || '미입력';
+            
+            // Retrieve session and save skipped details
+            const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
+            const session = history.find(h => h.id === state.currentSessionId);
+            if (session && session.details) {
+                const detail = session.details.find(d => d.qIndex === currentIndex);
+                if (detail) {
+                    detail.user_answer = uAns;
+                    detail.score = 0;
+                    detail.is_correct = false;
+                    detail.feedback = '제출하지 않음 (건너뜀)';
+                }
+                recalculateSessionScores(session);
+                saveQuizSessionToStorage(session);
+            }
+        }
+    }
+
     state.index++;
     if (state.index < state.questions.length) {
         renderQuestion();
