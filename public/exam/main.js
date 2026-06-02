@@ -19,6 +19,48 @@ let state = {
 const TYPE_LABEL = { short: '단답형', essay: '서술형', practical: '실무형' };
 const TYPE_POINTS = { short: 3, essay: 12, practical: 16 };
 
+// ─── Format Answers Helper ────────────────────────────────
+function formatModelAnswer(answer, question = '') {
+    if (!answer) return '';
+    let formatted = String(answer).trim();
+
+    // Try to extract blanks from question
+    let blanks = [];
+    if (question) {
+        let matchText1 = question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+        let matchText2 = question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
+        blanks = [...new Set([...matchText1, ...matchText2].map(m => m.replace(/[\(\)\s]/g, '')))];
+    }
+
+    // 1. If it already contains markers like (A), (B), [A], ①, etc., split them into new lines
+    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳])/g;
+    if (markerRegex.test(formatted)) {
+        formatted = formatted.replace(markerRegex, (match, sep, marker, index) => {
+            return index === 0 ? marker : '\n' + marker;
+        });
+        return formatted;
+    }
+
+    // 2. If the question has multiple blanks, and the answer is comma or semicolon separated
+    if (blanks && blanks.length > 1) {
+        let parts = formatted.split(/[,;\/]+/).map(p => p.trim()).filter(Boolean);
+        if (parts.length === blanks.length) {
+            return blanks.map((label, idx) => `(${label}) ${parts[idx]}`).join('\n');
+        }
+    }
+
+    return formatted;
+}
+
+function formatUserAnswer(userAnswer) {
+    if (!userAnswer) return '';
+    let formatted = String(userAnswer).trim();
+    if (formatted.includes(' / ')) {
+        formatted = formatted.split(' / ').join('\n');
+    }
+    return formatted;
+}
+
 // ─── API Key Error UI ─────────────────────────────────────
 function buildApiKeyErrorHTML(message, retryCall) {
     const isQuota = message.includes('한도') || message.includes('quota') || message.includes('Quota');
@@ -731,7 +773,7 @@ function renderQuestion() {
         container.innerHTML = `
             <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 1.5rem; margin-top: 1rem;">
                 <strong style="color: var(--primary); display: block; margin-bottom: 0.8rem; font-size: 1.1rem;">💡 정답 (학습 모드)</strong>
-                <span style="color: #fff; line-height: 1.6; white-space: pre-wrap;">${q.answer}</span>
+                <span style="color: #fff; line-height: 1.6; white-space: pre-wrap; display: block;">${formatModelAnswer(q.answer, q.question)}</span>
             </div>
         `;
         nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
@@ -836,7 +878,7 @@ function renderQuestion() {
                     <strong>${qState.isCorrect ? '✅ 정답' : '⚠️ 오답/부분점수'} (${qState.score}점)</strong>
                     <div style="margin-top:0.8rem; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 6px;">
                         <strong style="color:var(--primary);">모범 답안:</strong> 
-                        <span style="color:#fff;">${q.answer}</span>
+                        <span style="color:#fff; white-space: pre-wrap; line-height: 1.6; display: block;">${formatModelAnswer(q.answer, q.question)}</span>
                     </div>
                     <p style="margin-top:0.8rem; color:var(--muted); white-space:pre-wrap">${qState.feedback}</p>
                     <button class="btn-next" onclick="nextQuestion()" style="margin-top:1.5rem; width:100%">다음 문제 → (Ctrl+Enter)</button>
@@ -985,7 +1027,7 @@ async function submitAnswer() {
             </div>
             <div style="margin-top:0.8rem; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 6px;">
                 <strong style="color:var(--primary);">모범 답안:</strong> 
-                <span style="color:#fff;">${q.answer}</span>
+                <span style="color:#fff; white-space: pre-wrap; line-height: 1.6; display: block;">${formatModelAnswer(q.answer, q.question)}</span>
             </div>
             <button class="btn-next" onclick="nextQuestion()" style="margin-top:1.5rem; width:100%">다음 문제 → (Ctrl+Enter)</button>
         </div>
@@ -1235,10 +1277,10 @@ function showSessionResult() {
                 <p style="color: #cbd5e1; margin-bottom: 1rem; line-height: 1.5;">${d.question}</p>
                 <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
                     <strong style="color: var(--muted); display: block; margin-bottom: 0.5rem;">내 답안:</strong>
-                    <span style="color: #fff;">${d.user_answer}</span>
+                    <span style="color: #fff; white-space: pre-wrap; line-height: 1.6; display: block;">${formatUserAnswer(d.user_answer)}</span>
                     <div style="margin-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.8rem;">
                         <strong style="color: var(--primary); display: block; margin-bottom: 0.5rem;">모범 답안:</strong>
-                        <span style="color: #fff;">${d.correct_answer}</span>
+                        <span style="color: #fff; white-space: pre-wrap; line-height: 1.6; display: block;">${formatModelAnswer(d.correct_answer, d.question)}</span>
                     </div>
                 </div>
                 <div>
