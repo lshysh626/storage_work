@@ -7,8 +7,8 @@ const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 // 모델 후보 (순서대로 시도)
 const GEMINI_MODEL_FALLBACKS = [
     'gemini-2.0-flash',
-    'gemini-flash-latest',
-    'gemini-3-flash-preview'
+    'gemini-1.5-flash',
+    'gemini-flash-latest'
 ];
 
 function getGeminiKey() {
@@ -37,7 +37,7 @@ function parseGeminiError(status, errBody) {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // ─── 일반 호출 (재시도 + 모델 폴백) ─────────────────────────
-async function callGemini(prompt) {
+async function callGemini(prompt, schema = null) {
     const key = getGeminiKey();
     if (!key) {
         throw new Error("API 키가 등록되지 않았습니다. 설정(⚙️) 탭에서 개인 Gemini API 키를 입력해 주세요.");
@@ -61,9 +61,13 @@ async function callGemini(prompt) {
                 generationConfig: { 
                     temperature: 0.1,
                     responseMimeType: 'application/json',
-                    maxOutputTokens: 150
+                    maxOutputTokens: 300
                 }
             };
+
+            if (schema) {
+                bodyPayload.generationConfig.responseSchema = schema;
+            }
 
             console.log(`[Gemini API] Sending fetch request to ${model}... (Remaining retries: ${retries + 1})`);
             
@@ -239,7 +243,16 @@ async function geminiScore(question, correct_answer, user_answer, points) {
 
     let text = '';
     try {
-        text = await callGemini(prompt);
+        const schema = {
+            type: 'OBJECT',
+            properties: {
+                score: { type: 'NUMBER' },
+                feedback: { type: 'STRING' },
+                is_correct: { type: 'BOOLEAN' }
+            },
+            required: ['score', 'feedback', 'is_correct']
+        };
+        text = await callGemini(prompt, schema);
         const match = text.match(/\{[\s\S]*?\}/);
         const jsonText = match ? match[0] : text;
         return JSON.parse(jsonText);
@@ -301,7 +314,20 @@ JSON 응답 형식 예시:
     console.log("[Gemini API] Requesting bulk score for", questionsToGrade.length, "questions...");
     let text = '';
     try {
-        text = await callGemini(prompt);
+        const schema = {
+            type: 'ARRAY',
+            items: {
+                type: 'OBJECT',
+                properties: {
+                    index: { type: 'INTEGER' },
+                    score: { type: 'NUMBER' },
+                    feedback: { type: 'STRING' },
+                    is_correct: { type: 'BOOLEAN' }
+                },
+                required: ['index', 'score', 'feedback', 'is_correct']
+            }
+        };
+        text = await callGemini(prompt, schema);
         console.log("[Gemini API] Received bulk response:", text);
         const match = text.match(/\[[\s\S]*?\]/);
         const jsonText = match ? match[0] : text;
