@@ -267,6 +267,65 @@ async function callGeminiStream(prompt, onChunk, onStatus) {
     throw new Error(lastErrorMsg || 'API 요청 실패');
 }
 
+// Robust parsing helper for AI scoring responses
+function parseScoringResponse(text, defaultPoints) {
+    const trimmed = text.trim();
+    
+    // 1. Try standard JSON parse
+    try {
+        return JSON.parse(trimmed);
+    } catch (e) {
+        // Ignore and try next
+    }
+    
+    // 2. Try to extract JSON block from text
+    const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+        try {
+            return JSON.parse(jsonMatch[0]);
+        } catch (e) {
+            // Ignore and try regex parsing
+        }
+    }
+    
+    // 3. Fallback: Parse fields manually using Regex
+    console.warn("[Gemini API] Failed to parse JSON response. Attempting regex field extraction on raw text:", trimmed);
+    
+    // Extract score
+    let score = 0;
+    const scoreMatch = trimmed.match(/(?:score|점수|점)\s*:\s*(\d+)/i) || trimmed.match(/(\d+)\s*(?:점|points)/i);
+    if (scoreMatch) {
+        score = parseInt(scoreMatch[1], 10);
+    }
+    
+    // Extract is_correct
+    let isCorrect = false;
+    const correctMatch = trimmed.match(/(?:is_correct|correct|정답여부|정답)\s*:\s*(true|false|yes|no|y|n|일치|불일치|O|X)/i);
+    if (correctMatch) {
+        const val = correctMatch[1].toLowerCase();
+        isCorrect = (val === 'true' || val === 'yes' || val === 'y' || val === '일치' || val === 'o');
+    } else {
+        // If score is 60% or more of max points, assume correct
+        isCorrect = (score > 0 && score >= defaultPoints * 0.6);
+    }
+    
+    // Extract feedback
+    let feedback = '';
+    const feedbackMatch = trimmed.match(/(?:feedback|피드백|설명)\s*:\s*([^\n]+)/i);
+    if (feedbackMatch) {
+        feedback = feedbackMatch[1].trim().replace(/^["']|["']$/g, '');
+    } else {
+        // If no explicit feedback field, use the whole text (excluding the score portion) as feedback
+        feedback = trimmed.replace(/[\{\}]/g, '').trim();
+    }
+    
+    return {
+        score: score,
+        is_correct: isCorrect,
+        feedback: feedback
+    };
+}
+
 // ─── 채점 ─────────────────────────────────────────────────────
 async function geminiScore(question, correct_answer, user_answer, points) {
     // 0. 미입력 시 빠른 오답 처리 (AI 호출 생략)
@@ -313,13 +372,7 @@ async function geminiScore(question, correct_answer, user_answer, points) {
             required: ['score', 'feedback', 'is_correct']
         };
         text = await callGemini(prompt, schema);
-        try {
-            return JSON.parse(text);
-        } catch (parseErr) {
-            const match = text.match(/\{[\s\S]*\}/);
-            const jsonText = match ? match[0] : text;
-            return JSON.parse(jsonText);
-        }
+        return parseScoringResponse(text, points);
     } catch (err) {
         console.error("[Gemini API] Single score error:", err, "Raw text was:", text);
         return {
