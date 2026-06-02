@@ -22,7 +22,17 @@ const TYPE_POINTS = { short: 3, essay: 12, practical: 16 };
 // ─── Format Answers Helper ────────────────────────────────
 function extractLabelsFromAnswer(answer) {
     if (!answer) return [];
-    const lines = String(answer).split('\n').map(l => l.trim()).filter(Boolean);
+    
+    // Pre-process: split inline markers into newlines using our improved markerRegex
+    let formatted = String(answer).trim();
+    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳]|\b\d{1,2}\)(?=\s+[A-Za-z가-힣/]))/g;
+    if (markerRegex.test(formatted)) {
+        formatted = formatted.replace(markerRegex, (match, sep, marker, index) => {
+            return index === 0 ? marker : '\n' + marker;
+        });
+    }
+
+    const lines = formatted.split('\n').map(l => l.trim()).filter(Boolean);
     if (lines.length <= 1) return [];
     
     const labels = [];
@@ -82,7 +92,7 @@ function formatModelAnswer(answer, question = '') {
     }
 
     // 1. If it already contains markers like (A), (B), [A], ①, etc., split them into new lines
-    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳]|\b\d{1,2}\)(?!\)))/g;
+    const markerRegex = /([,;/\s]+)?(\([A-Za-z가-힣0-9]\)|\[[A-Za-z가-힣0-9]\]|[①-⑳]|\b\d{1,2}\)(?=\s+[A-Za-z가-힣/]))/g;
     if (markerRegex.test(formatted)) {
         formatted = formatted.replace(markerRegex, (match, sep, marker, index) => {
             return index === 0 ? marker : '\n' + marker;
