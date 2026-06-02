@@ -15,29 +15,7 @@
 <!-- Login/Signup Screen -->
 <div id="login-screen" class="login-screen">
     <div class="login-container">
-        <!-- Left: Explanation / Guide Column -->
-        <div class="login-guide-card">
-            <div class="login-logo">IS MASTER</div>
-            <h2>기출 훈련 시스템 안내</h2>
-            
-            <div style="display: flex; flex-direction: column; gap: 1.2rem;">
-                <div style="background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--primary); padding: 1.2rem; border-radius: 4px 12px 12px 4px;">
-                    <strong style="color: var(--primary); font-size: 1rem; display: block; margin-bottom: 0.5rem; letter-spacing: -0.02em;">💡 개인 계정이 필요한 이유</strong>
-                    <span style="color: #cbd5e1; font-size: 0.88rem; line-height: 1.6; display: block;">
-                        개별 학습 이력(문제 풀이 횟수, 오답 노트, 정답률 추이 등)을 브라우저나 기기 교체와 상관없이 안전하게 동기화하고 개인별로 편하게 관리하기 위함입니다. 또한, 본인의 Gemini API 키를 개인 설정에 연동하여 원활하게 AI 채점과 피드백을 이용할 수 있습니다.
-                    </span>
-                </div>
-
-                <div style="background: rgba(16, 185, 129, 0.06); border-left: 4px solid #10b981; padding: 1.2rem; border-radius: 4px 12px 12px 4px;">
-                    <strong style="color: #10b981; font-size: 1rem; display: block; margin-bottom: 0.5rem; letter-spacing: -0.02em;">⚡ 제한 없는 초간단 회원가입</strong>
-                    <span style="color: #cbd5e1; font-size: 0.88rem; line-height: 1.6; display: block;">
-                        복잡한 이메일 인증이나 본인 확인 없이, <strong>원하는 아이디와 비밀번호만 입력하면 즉시 가입</strong>할 수 있습니다. 계정 생성을 위한 별도의 패턴이나 복잡도 제한이 없어 매우 간편하고 자유롭습니다.
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right: Login Card -->
+        <!-- Left: Login Card -->
         <div class="login-card">
             <h2 id="login-title">로그인</h2>
             <form id="login-form" onsubmit="handleLoginSubmit(event)">
@@ -56,6 +34,28 @@
                 <button id="switch-btn" onclick="toggleLoginSignup()">회원가입</button>
             </div>
             <div id="login-message" class="login-message error hidden"></div>
+        </div>
+
+        <!-- Right: Explanation / Guide Column -->
+        <div class="login-guide-card">
+            <div class="login-logo">IS MASTER</div>
+            <h2>기출 훈련 시스템 안내</h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 1.2rem;">
+                <div style="background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--primary); padding: 1.2rem; border-radius: 4px 12px 12px 4px;">
+                    <strong style="color: var(--primary); font-size: 1rem; display: block; margin-bottom: 0.5rem; letter-spacing: -0.02em;">💡 개인 계정이 필요한 이유</strong>
+                    <span style="color: #cbd5e1; font-size: 0.88rem; line-height: 1.6; display: block;">
+                        개별 학습 이력(문제 풀이 횟수, 오답 노트, 정답률 추이 등)을 브라우저나 기기 교체와 상관없이 안전하게 동기화하고 개인별로 편하게 관리하기 위함입니다. 또한, 본인의 Gemini API 키를 개인 설정에 연동하여 원활하게 AI 채점과 피드백을 이용할 수 있습니다. <strong>(개인 API 키 고유의 할당량 및 토큰 제한 범위 내에서 작동하므로, 타인의 과도한 사용으로 인해 나의 채점 기능이 차단되는 현상을 방지합니다.)</strong>
+                    </span>
+                </div>
+
+                <div style="background: rgba(16, 185, 129, 0.06); border-left: 4px solid #10b981; padding: 1.2rem; border-radius: 4px 12px 12px 4px;">
+                    <strong style="color: #10b981; font-size: 1rem; display: block; margin-bottom: 0.5rem; letter-spacing: -0.02em;">⚡ 제한 없는 초간단 회원가입</strong>
+                    <span style="color: #cbd5e1; font-size: 0.88rem; line-height: 1.6; display: block;">
+                        복잡한 이메일 인증이나 본인 확인 없이, <strong>원하는 아이디와 비밀번호만 입력하면 즉시 가입</strong>할 수 있습니다. 계정 생성을 위한 별도의 패턴이나 복잡도 제한이 없어 매우 간편하고 자유롭습니다.
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

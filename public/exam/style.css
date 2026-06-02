@@ -607,7 +607,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
 
 @media (max-width: 768px) {
     .login-container {
-        flex-direction: column-reverse;
+        flex-direction: column;
         align-items: center;
         gap: 1.5rem;
     }
