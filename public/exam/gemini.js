@@ -9,8 +9,7 @@ const GEMINI_MODEL_FALLBACKS = [
     'gemini-2.5-flash',
     'gemini-2.5-pro',
     'gemini-2.0-flash',
-    'gemini-1.5-flash',
-    'gemini-1.5-pro'
+    'gemini-1.5-flash'
 ];
 
 function getGeminiKey() {
@@ -123,21 +122,21 @@ async function callGemini(prompt, schema = null) {
                         throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
                     }
                     
-                    // If wait time is too long (> 5s), it indicates a daily limit block. Fall back immediately.
-                    if (parsed.retrySec && parsed.retrySec > 5) {
-                        console.warn(`[${model}] Long rate limit detected (${parsed.retrySec}s). Falling back immediately...`);
-                        break;
+                    const errMsg = errBody?.error?.message || '';
+                    const isDailyLimit = errMsg.includes('limit: 0') || errMsg.includes('limit:0');
+                    if (isDailyLimit) {
+                        throw new Error("Gemini API 일일 사용 한도(Quota)가 모두 소진되었습니다. 내일 다시 이용하시거나 설정에서 다른 API 키를 등록해 주세요.");
                     }
                     
                     rateLimitCount++;
                     if (rateLimitCount > 1) {
-                        console.warn(`[${model}] Exceeded maximum rate limit retries (1). Falling back...`);
-                        break;
+                        console.warn(`[${model}] Exceeded maximum rate limit retries (1). Failing fast.`);
+                        throw new Error(parsed.message); // Fail immediately under rate limit rather than cascading
                     }
                     
-                    const waitMs = Math.min(parsed.retrySec || 3, 3) * 1000;
-                    console.warn(`[${model}] Rate Limit hit. Waiting ${waitMs / 1000}s before retry...`);
-                    await sleep(waitMs);
+                    const waitSec = Math.min(parsed.retrySec || 5, 30);
+                    console.warn(`[${model}] Rate Limit hit. Waiting ${waitSec}s before retry...`);
+                    await sleep(waitSec * 1000);
                     retries++; // 재시도 횟수 차감 방지
                     continue; // 동일 모델 재시도
                 }
@@ -247,21 +246,21 @@ async function callGeminiStream(prompt, onChunk, onStatus) {
                         throw new Error("기본 제공 API 키의 일일 할당량이 모두 소진되었습니다. 설정(Settings) 탭에서 개인 API 키를 등록하시면 대기 시간 없이 즉시 채점이 가능합니다.");
                     }
                     
-                    // If wait time is too long (> 5s), it indicates a daily limit block. Fall back immediately.
-                    if (parsed.retrySec && parsed.retrySec > 5) {
-                        console.warn(`[${model}] Long rate limit detected (${parsed.retrySec}s). Falling back immediately...`);
-                        break;
+                    const errMsg = errBody?.error?.message || '';
+                    const isDailyLimit = errMsg.includes('limit: 0') || errMsg.includes('limit:0');
+                    if (isDailyLimit) {
+                        throw new Error("Gemini API 일일 사용 한도(Quota)가 모두 소진되었습니다. 내일 다시 이용하시거나 설정에서 다른 API 키를 등록해 주세요.");
                     }
                     
                     rateLimitCount++;
                     if (rateLimitCount > 1) {
-                        console.warn(`[${model}] Exceeded maximum stream rate limit retries (1). Falling back...`);
-                        break;
+                        console.warn(`[${model}] Exceeded maximum stream rate limit retries (1). Failing fast.`);
+                        throw new Error(parsed.message); // Fail immediately under rate limit rather than cascading
                     }
                     
-                    const waitMs = Math.min(parsed.retrySec || 3, 3) * 1000;
-                    if (onStatus) onStatus(`[${model}] 한도 초과. ${waitMs / 1000}초 후 동일 모델 재시도...`);
-                    await sleep(waitMs);
+                    const waitSec = Math.min(parsed.retrySec || 5, 30);
+                    if (onStatus) onStatus(`[${model}] 한도 초과. ${waitSec}초 후 동일 모델 재시도...`);
+                    await sleep(waitSec * 1000);
                     retries++; // 재시도 횟수 차감 방지
                     continue; // 동일 모델 재시도
                 }
