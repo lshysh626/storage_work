@@ -2083,6 +2083,8 @@ try {
             firebase.initializeApp(firebaseConfig);
         }
         db = firebase.firestore();
+        // Force long polling to bypass strict network environments (solves hanging logins & admin panels)
+        db.settings({ experimentalForceLongPolling: true });
     }
 } catch (e) {
     console.error('Firebase initialization failed:', e);
