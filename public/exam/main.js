@@ -2081,7 +2081,7 @@ window.checkAvailableModels = async function() {
     
     panel.classList.remove('hidden');
     panel.style.color = '#10b981';
-    panel.textContent = '⏳ 구글 서버에서 현재 API 키로 사용 가능한 모델 목록을 조회 중...';
+    panel.textContent = '⏳ 구글 서버 조회 및 실제 사용 가능 여부(한도) 테스트 중... (약 2~3초 소요)';
     
     if (!key) {
         panel.style.color = '#f87171';
@@ -2097,20 +2097,49 @@ window.checkAvailableModels = async function() {
         }
         const data = await res.json();
         
-        // Filter out non-generateContent models (like embedding models)
+        // Filter generateContent models
         const generateModels = data.models.filter(m => m.supportedGenerationMethods.includes('generateContent'));
-        const modelNames = generateModels.map(m => m.name.replace('models/', ''));
+        const allModelNames = generateModels.map(m => m.name.replace('models/', ''));
         
-        // Dynamically update the dropdown with all available models
+        // We only test the main models to avoid hitting the 15 RPM rate limit
+        const targetModelsToTest = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash-8b'];
+        const modelsToTest = targetModelsToTest.filter(m => allModelNames.includes(m));
+        
+        const workingModels = [];
+        
+        for (const modelName of modelsToTest) {
+            try {
+                const testRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${key}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: "ping" }] }],
+                        generationConfig: { maxOutputTokens: 1 }
+                    })
+                });
+                if (testRes.ok) {
+                    workingModels.push(modelName);
+                }
+            } catch (e) {
+                // Ignore network errors for individual models
+            }
+        }
+        
+        if (workingModels.length === 0) {
+            panel.style.color = '#f87171';
+            panel.textContent = '❌ 실제 사용 가능한 모델이 하나도 없습니다. (모두 한도 초과 또는 차단됨)\n새 API 키를 발급받아 주세요.';
+            return;
+        }
+
+        // Dynamically update the dropdown with ONLY working models
         const modelSelect = document.getElementById('setting-model');
         if (modelSelect) {
             const currentSelected = modelSelect.value;
-            modelSelect.innerHTML = ''; // Clear existing hardcoded options
+            modelSelect.innerHTML = '';
             
-            modelNames.forEach(name => {
+            workingModels.forEach(name => {
                 const option = document.createElement('option');
                 option.value = name;
-                // Add some friendly labels for known models
                 if (name === 'gemini-2.5-flash') option.textContent = name + ' (최신/초고속 추천)';
                 else if (name === 'gemini-2.0-flash') option.textContent = name + ' (안정적 최신 권장)';
                 else option.textContent = name;
@@ -2118,20 +2147,19 @@ window.checkAvailableModels = async function() {
                 modelSelect.appendChild(option);
             });
             
-            // Try to restore previous selection if it still exists
-            if (modelNames.includes(currentSelected)) {
+            if (workingModels.includes(currentSelected)) {
                 modelSelect.value = currentSelected;
-            } else if (modelNames.includes('gemini-2.0-flash')) {
-                modelSelect.value = 'gemini-2.0-flash';
+            } else {
+                modelSelect.value = workingModels[0]; // Select the first working model automatically
             }
         }
         
-        let output = `✅ 내 API 키로 사용 가능한 텍스트 생성 모델 목록:\n\n`;
-        modelNames.forEach(name => {
+        let output = `✅ 내 API 키로 "실제" 사용 가능한 텍스트 생성 모델 목록:\n\n`;
+        workingModels.forEach(name => {
             output += `🔹 ${name}\n`;
         });
         
-        output += `\n💡 목록에 있는 모델 중 하나를 위 설정창에서 선택해 주세요!`;
+        output += `\n💡 껍데기뿐인 모델들을 제외하고, 쿼터(한도)가 열려있는 "진짜" 사용 가능한 모델만 필터링했습니다.\n드롭다운 메뉴가 이 모델들로 갱신되었습니다!`;
         panel.textContent = output;
         
     } catch (err) {
