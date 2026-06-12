@@ -2085,6 +2085,10 @@ try {
         db = firebase.firestore();
         // Force long polling to bypass strict network environments (solves hanging logins & admin panels)
         db.settings({ experimentalForceLongPolling: true });
+        // Enable offline persistence for instant local reads
+        db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+            console.warn('Firestore persistence error:', err.code);
+        });
     }
 } catch (e) {
     console.error('Firebase initialization failed:', e);

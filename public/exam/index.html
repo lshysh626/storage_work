@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.6.8">
+    <link rel="stylesheet" href="style.css?v=1.6.9">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
@@ -228,10 +228,12 @@
                 <div style="margin-bottom: 2.5rem;">
                     <label style="display: block; color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.8rem;">🧠 AI 모델 선택</label>
                     <select id="setting-model" style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.2rem; color: #fff; font-size: 1.1rem; outline: none; cursor: pointer;">
-                        <option value="gemini-2.0-flash" selected>Gemini 2.0 Flash (빠르고 안정적, 일 1500회 - 적극 권장)</option>
-                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (안정적인 이전 버전, 일 1500회)</option>
-                        <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B (가벼운 버전, 일 1500회)</option>
-                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (고성능, 일 50회 제한)</option>
+                        <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash (최신/초고속, 일 1500회 - 적극 권장)</option>
+                        <option value="gemini-2.5-pro">Gemini 2.5 Pro (최신 고성능, 일 50회 제한)</option>
+                        <option value="gemini-2.0-flash">Gemini 2.0 Flash (안정적 최신 버전)</option>
+                        <option value="gemini-1.5-flash">Gemini 1.5 Flash (이전 안정화 버전)</option>
+                        <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B (가벼운 버전)</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro (고성능)</option>
                     </select>
                 </div>
                 <div style="margin-bottom: 2rem;">
@@ -409,8 +411,8 @@
 
     </main>
 </div>
-  <script src="gemini.js?v=1.6.8"></script>
-  <script src="main.js?v=1.6.8"></script>
+  <script src="gemini.js?v=1.6.9"></script>
+  <script src="main.js?v=1.6.9"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();
