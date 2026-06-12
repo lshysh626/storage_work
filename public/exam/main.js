@@ -2154,10 +2154,13 @@ async function handleLogin(username, password) {
         localStorage.removeItem('gemini_model');
     }
 
-    // Sync statistics history
-    await syncStatsFromFirestore(userData.username);
+    // Sync statistics history in background to speed up login
+    syncStatsFromFirestore(userData.username).then(() => {
+        // Re-render dashboard to show synced stats
+        if (typeof renderDashboard === 'function') renderDashboard();
+    });
 
-    // Apply login UI state
+    // Apply login UI state immediately
     applyLoginState();
 }
 
