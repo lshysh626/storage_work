@@ -2101,12 +2101,37 @@ window.checkAvailableModels = async function() {
         const generateModels = data.models.filter(m => m.supportedGenerationMethods.includes('generateContent'));
         const modelNames = generateModels.map(m => m.name.replace('models/', ''));
         
+        // Dynamically update the dropdown with all available models
+        const modelSelect = document.getElementById('setting-model');
+        if (modelSelect) {
+            const currentSelected = modelSelect.value;
+            modelSelect.innerHTML = ''; // Clear existing hardcoded options
+            
+            modelNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                // Add some friendly labels for known models
+                if (name === 'gemini-2.5-flash') option.textContent = name + ' (최신/초고속 추천)';
+                else if (name === 'gemini-2.0-flash') option.textContent = name + ' (안정적 최신 권장)';
+                else option.textContent = name;
+                
+                modelSelect.appendChild(option);
+            });
+            
+            // Try to restore previous selection if it still exists
+            if (modelNames.includes(currentSelected)) {
+                modelSelect.value = currentSelected;
+            } else if (modelNames.includes('gemini-2.0-flash')) {
+                modelSelect.value = 'gemini-2.0-flash';
+            }
+        }
+        
         let output = `✅ 내 API 키로 사용 가능한 텍스트 생성 모델 목록:\n\n`;
         modelNames.forEach(name => {
             output += `🔹 ${name}\n`;
         });
         
-        output += `\n💡 만약 위 목록에 'gemini-2.0-flash'가 없다면, 선생님의 계정/키는 2.0 버전을 권한상 사용할 수 없는 상태입니다. 목록에 있는 모델 중 하나를 위 설정창에서 선택해 주세요!`;
+        output += `\n💡 조회된 모든 모델이 상단의 [AI 모델 선택] 드롭다운 메뉴에 자동으로 추가되었습니다! 이제 원하는 모델을 자유롭게 선택해 보세요.`;
         panel.textContent = output;
         
     } catch (err) {
