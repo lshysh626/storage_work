@@ -625,18 +625,18 @@ function toggleTypeSelection() {
     types.forEach(async t => {
         try {
             if (!window.typeMaxCounts[t]) {
-                const res = await fetch(\`./data/questions_type_\${t}.json\`);
+                const res = await fetch(`./data/questions_type_${t}.json`);
                 const data = await res.json();
                 window.typeMaxCounts[t] = data.questions ? data.questions.length : 0;
             }
-            const countEl = document.getElementById(\`count-\${t}\`);
+            const countEl = document.getElementById(`count-${t}`);
             if (countEl) {
-                countEl.textContent = \`\${scores[t]}점 문제 (보유: 총 \${window.typeMaxCounts[t]}문제)\`;
+                countEl.textContent = `${scores[t]}점 문제 (보유: 총 ${window.typeMaxCounts[t]}문제)`;
             }
         } catch (e) {
             console.error('Failed to load count for ' + t);
-            const countEl = document.getElementById(\`count-\${t}\`);
-            if (countEl) countEl.textContent = \`\${scores[t]}점 문제\`;
+            const countEl = document.getElementById(`count-${t}`);
+            if (countEl) countEl.textContent = `${scores[t]}점 문제`;
         }
     });
 }
@@ -647,7 +647,7 @@ function selectType(type, defaultCount, typeName) {
         el.style.background = 'rgba(255,255,255,0.03)';
     });
     
-    const row = document.getElementById(\`type-row-\${type}\`);
+    const row = document.getElementById(`type-row-${type}`);
     if (row) {
         row.style.borderColor = 'rgba(56, 189, 248, 0.4)';
         row.style.background = 'rgba(30, 41, 59, 0.7)';
@@ -665,13 +665,13 @@ function selectType(type, defaultCount, typeName) {
         
         const hintEl = document.getElementById('max-count-hint');
         if (hintEl) {
-            hintEl.textContent = \`현재 DB에 파싱 완료된 문제: 총 \${max}문제 (최대 선택 가능)\`;
+            hintEl.textContent = `현재 DB에 파싱 완료된 문제: 총 ${max}문제 (최대 선택 가능)`;
         }
         
         document.getElementById('global-type-start-btn').onclick = () => {
             let val = parseInt(countInput.value, 10);
             if (val > max) {
-                alert(\`해당 유형은 현재 최대 \${max}문제까지만 준비되어 있습니다!\`);
+                alert(`해당 유형은 현재 최대 ${max}문제까지만 준비되어 있습니다!`);
                 countInput.value = max;
                 return;
             }
