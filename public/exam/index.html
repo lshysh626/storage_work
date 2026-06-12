@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.5.5">
+    <link rel="stylesheet" href="style.css?v=1.5.6">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
@@ -110,6 +110,22 @@
                     <div class="text">
                         <strong>실전 모의고사 풀기</strong>
                         <span>단답 12, 서술 4, 실무 2 (총 100점 만점)</span>
+                    </div>
+                </div>
+                <div class="row-half">
+                    <div class="item-row" onclick="toggleSessionSelection()">
+                        <span class="icon">📅</span>
+                        <div class="text">
+                            <strong>회차별 풀기</strong>
+                            <span>원하는 회차 선택</span>
+                        </div>
+                    </div>
+                    <div class="item-row" onclick="toggleTypeSelection()">
+                        <span class="icon">📂</span>
+                        <div class="text">
+                            <strong>유형별 풀기</strong>
+                            <span>단답형/서술형/실무형</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -330,13 +346,208 @@
 
                         <button onclick="saveParsedExam()" id="admin-save-exam-btn" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800; font-size: 1.15rem; border: none; border-radius: 10px; padding: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">💾 데이터베이스(Firestore)에 최종 업로드</button>
                     </div>
+                        <span class="badge-type" id="q-type">단답형</span>
+                        <span class="badge-pts" id="q-points">3점</span>
+                    </div>
+                    <div id="q-source" style="font-size: 0.9rem; color: #94a3b8; margin-top: -1rem; margin-bottom: 1.5rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="opacity: 0.7;">📑 출처:</span> <span id="q-source-text"></span>
+                    </div>
+                    <div class="question-text" id="q-text"></div>
+                    <div id="inputs-container"></div>
+                    <div class="quiz-actions">
+                        <button class="btn-prev hidden" id="prev-btn">이전 (Ctrl+[)</button>
+                        <button class="btn-next" id="submit-btn">제출 (Ctrl+Enter)</button>
+                        <button class="btn-prev hidden" id="skip-btn" onclick="nextQuestion()">건너뛰기 (Ctrl+])</button>
+                    </div>
+                    <div class="feedback hidden" id="feedback-area"></div>
+                </div>
+                
+                <div class="quiz-side-panel hidden" id="quiz-side-panel">
+                    <div id="explanation-container"></div>
+                    <div class="resizer" id="panel-resizer"></div>
+                    <div id="chat-container">
+                        <div class="chat-header">AI 튜터</div>
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-message ai-message">문제를 선택하면 해설이 표시되고, 질문을 입력하면 AI가 답변합니다.</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" placeholder="질문을 입력하세요...">
+                            <button id="chat-send-btn">전송</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW: Memo Panel -->
+                <div class="quiz-memo-panel hidden" id="quiz-memo-panel">
+                    <div class="chat-header" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255,255,255,0.05);">나만의 메모장</div>
+                    <textarea id="memo-pad" placeholder="여기에 자유롭게 메모하세요. 세션 동안 유지됩니다..." style="flex: 1; background: transparent; border: none; padding: 1.5rem; color: #cbd5e1; font-size: 1rem; line-height: 1.6; resize: none; outline: none; font-family: 'Inter', sans-serif;"></textarea>
+                </div>
+            </div>
+
+            <!-- Floating Toggle Buttons -->
+            <div class="floating-btn-group">
+                <div id="btn-toggle-ai" class="floating-btn" onclick="togglePanel('ai')">AI 튜터</div>
+                <div id="btn-toggle-memo" class="floating-btn" onclick="togglePanel('memo')">메모장</div>
+            </div>
+        </section>
+
+        <!-- Bulk Result View -->
+        <section id="bulk-result-view" class="view">
+            <div class="quiz-header">
+                <span class="quiz-badge">채점 결과</span>
+                <span class="timer" id="final-score">총점: 0점</span>
+                <button class="close-btn" onclick="switchView('dashboard')">×</button>
+            </div>
+            <div class="quiz-body" style="max-width: 900px;" id="bulk-result-container">
+                <!-- Results injected here -->
+            </div>
+        </section>
+
+        <!-- Settings View -->
+        <section id="settings" class="view">
+            <h1 style="margin-bottom: 2rem;">⚙️ 설정</h1>
+            <div class="settings-card">
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.8rem;">🔑 AI API Key (Gemini)</label>
+                    <input type="password" id="setting-api-key" placeholder="AIzaSy..." style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.2rem; color: #fff; font-size: 1.1rem; outline: none;">
+                    <div style="color: var(--muted); font-size: 0.85rem; margin-top: 0.8rem; line-height: 1.6; background: rgba(15,23,42,0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                        <p style="margin-bottom: 0.5rem; color: #fff; font-weight: 700;">💡 API 키 설정 가이드</p>
+                        1. 이 사이트는 서버 없이 브라우저에서 직접 Gemini AI를 호출합니다.<br>
+                        2. AI 채점 및 AI 튜터 기능을 이용하려면 <strong>본인의 Gemini API 키</strong>가 필요합니다.<br>
+                        3. <a href="https://aistudio.google.com/apikey" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: 700;">Google AI Studio API 키 발급 사이트</a>에 접속합니다. (Google 계정 필요, 무료)<br>
+                        4. <strong>"Create API key"</strong> 버튼을 클릭하여 새 키를 생성하고 복사합니다.<br>
+                        5. 복사한 키를 위 입력란에 붙여넣고 <strong>설정 저장</strong>을 눌러주세요.<br>
+                        <p style="margin-top: 0.5rem; color: #f87171; font-weight: 700;">* 입력하신 API 키는 암호화나 외부 노출 없이 브라우저 로컬 저장소(localStorage)에 안전하게 보관됩니다.</p>
+                    </div>
+                </div>
+                <div style="margin-bottom: 2.5rem;">
+                    <label style="display: block; color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 0.8rem;">🧠 AI 모델 선택</label>
+                    <select id="setting-model" style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.2rem; color: #fff; font-size: 1.1rem; outline: none; cursor: pointer;">
+                        <option value="gemini-2.0-flash" selected>Gemini 2.0 Flash (빠르고 안정적, 일 1500회 - 적극 권장)</option>
+                        <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash-Lite (가볍고 신속함, 일 1500회 - 백업용)</option>
+                        <option value="gemini-2.5-flash">Gemini 2.5 Flash (최신/초고속, 일 20회 제한)</option>
+                        <option value="gemini-2.5-pro">Gemini 2.5 Pro (최신 고성능, 일 20회 제한)</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    <button type="button" onclick="runConnectionTest()" style="width: 100%; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); font-weight: 700; font-size: 1rem; border-radius: 8px; padding: 0.8rem; cursor: pointer; transition: 0.2s;">⚡ API 연결 테스트 (네트워크 진단)</button>
+                    <div id="test-result-panel" class="hidden" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; font-size: 0.9rem; line-height: 1.5; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.05); max-height: 250px; overflow-y: auto; font-family: monospace; white-space: pre-wrap; word-break: break-all;"></div>
+                </div>
+                <button onclick="saveSettings()" style="width: 100%; background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: #fff; font-weight: 800; font-size: 1.2rem; border: none; border-radius: 10px; padding: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);">설정 저장</button>
+            </div>
+        </section>
+
+        <!-- Admin Panel View -->
+        <section id="admin-panel" class="view">
+            <h1 style="margin-bottom: 2rem;">🔑 관리자 콘솔</h1>
+            
+            <!-- Tab Navigation -->
+            <div class="admin-tabs" style="display: flex; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 2rem; padding-bottom: 0.5rem;">
+                <button class="admin-tab-btn active" id="tab-users-btn" onclick="switchAdminTab('users')" style="background: none; border: none; color: #fff; font-size: 1.1rem; font-weight: 700; padding: 0.5rem 1rem; cursor: pointer; border-bottom: 2px solid var(--primary); transition: all 0.2s; outline: none;">👥 회원 관리</button>
+                <button class="admin-tab-btn" id="tab-exams-btn" onclick="switchAdminTab('exams')" style="background: none; border: none; color: var(--muted); font-size: 1.1rem; font-weight: 700; padding: 0.5rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; outline: none;">📄 기출 자료 관리</button>
+            </div>
+
+            <!-- Content Area 1: User Management -->
+            <div id="admin-users-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 1rem; flex-wrap: wrap;">
+                    <p style="color: var(--muted); font-size: 1rem; line-height: 1.6; margin: 0;">
+                        정보보안기사 기출 사이트에 가입된 회원 목록을 조회하고 관리할 수 있습니다.
+                    </p>
+                    <div style="background: rgba(56, 189, 248, 0.1); color: var(--primary); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 800; border: 1px solid rgba(56,189,248,0.2);" id="admin-user-count">
+                        총 회원 수: 0명
+                    </div>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>아이디</th>
+                                <th>구분</th>
+                                <th>가입 일시</th>
+                                <th>이용 현황</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-list">
+                            <!-- 사용자 정보 렌더링 영역 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Content Area 2: Exam Upload -->
+            <div id="admin-exams-section" class="hidden">
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <p style="color: var(--muted); font-size: 1rem; line-height: 1.6; margin: 0;">
+                        PDF 등 기출 자료 원문 텍스트를 붙여넣어 AI로 파싱한 후 Firestore에 실시간 등록할 수 있습니다.
+                    </p>
+                    
+                    <div class="settings-card" style="padding: 1.5rem; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">📅 회차 이름</label>
+                            <input type="text" id="admin-exam-name" placeholder="예: 정보보안기사 실기 - 31회" style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.8rem; color: #fff; outline: none;">
+                        </div>
+                        
+                        <!-- PDF File Upload Input -->
+                        <div style="margin-bottom: 1.5rem; background: rgba(255, 255, 255, 0.02); border: 2px dashed rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s;" 
+                             onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"
+                             onclick="document.getElementById('admin-exam-file').click()">
+                            <span style="font-size: 2rem; display: block; margin-bottom: 0.5rem;">📁</span>
+                            <span style="color: #cbd5e1; font-weight: 700; display: block; font-size: 0.95rem;">PDF 파일을 직접 업로드하세요</span>
+                            <span style="color: var(--muted); font-size: 0.8rem; display: block; margin-top: 0.3rem;">클릭하여 파일 선택 (브라우저에서 직접 텍스트 추출)</span>
+                            <input type="file" id="admin-exam-file" accept="application/pdf" style="display: none;" onchange="handlePDFUpload(event)">
+                            <div id="admin-file-status" style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--primary); font-weight: 700;" class="hidden"></div>
+                        </div>
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">📝 추출된 텍스트 원문 (직접 수정 가능)</label>
+                            <textarea id="admin-exam-raw-text" placeholder="PDF 업로드 시 추출된 텍스트가 자동으로 채워집며, 직접 수정하거나 텍스트를 붙여넣을 수도 있습니다." style="width: 100%; height: 200px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; color: #fff; line-height: 1.6; outline: none; resize: vertical; font-family: inherit;"></textarea>
+                            
+                            <!-- Cumulative Checkbox -->
+                            <div style="margin-top: 0.8rem; display: flex; align-items: center;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; color: #cbd5e1; font-size: 0.9rem; cursor: pointer; user-select: none;">
+                                    <input type="checkbox" id="admin-append-mode" style="width: 1.1rem; height: 1.1rem; accent-color: var(--primary); cursor: pointer;">
+                                    기존 미리보기에 누적하여 추가 (문제가 많을 때 분할 파싱용)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button type="button" onclick="runAIParsing()" id="admin-parse-btn" style="flex: 1; min-width: 180px; background: linear-gradient(135deg, #3b82f6, #60a5fa); color: #fff; font-weight: 700; border: none; border-radius: 8px; padding: 0.9rem; cursor: pointer; transition: 0.2s;">⚡ AI 자동 파싱 시작</button>
+                            <button type="button" onclick="runLocalRegexParsing()" id="admin-local-parse-btn" style="flex: 1; min-width: 180px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; border-radius: 8px; padding: 0.9rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(16, 185, 129, 0.25)'" onmouseout="this.style.background='rgba(16, 185, 129, 0.15)'">⚡ 로컬 엔진 파싱 (즉시 완료)</button>
+                            <button type="button" onclick="resetExamForm()" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); font-weight: 700; border-radius: 8px; padding: 0.9rem 1.5rem; cursor: pointer; transition: 0.2s;">초기화</button>
+                        </div>
+                    </div>
+
+                    <!-- AI Parsing Preview Section -->
+                    <div id="admin-parse-preview-container" class="hidden" style="margin-top: 1rem;">
+                        <h3 style="color: #fff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">🔍 AI 파싱 결과 미리보기 <span id="admin-preview-count" style="font-size: 0.85rem; background: rgba(56, 189, 248, 0.15); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 800;">0문항</span></h3>
+                        
+                        <div class="admin-table-container" style="max-height: 400px; overflow-y: auto; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.1);">
+                            <table class="admin-table" style="font-size: 0.9rem;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">번호</th>
+                                        <th style="width: 100px;">유형</th>
+                                        <th>질문</th>
+                                        <th>모범답안</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-parse-preview-list">
+                                    <!-- AI 파싱된 질문 목록 미리보기 영역 -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button onclick="saveParsedExam()" id="admin-save-exam-btn" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800; font-size: 1.15rem; border: none; border-radius: 10px; padding: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">💾 데이터베이스(Firestore)에 최종 업로드</button>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 </div>
-  <script src="gemini.js?v=1.5.5"></script>
-  <script src="main.js?v=1.5.5"></script>
+  <script src="gemini.js?v=1.5.6"></script>
+  <script src="main.js?v=1.5.6"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();
