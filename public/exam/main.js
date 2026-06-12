@@ -2131,7 +2131,7 @@ window.checkAvailableModels = async function() {
             output += `🔹 ${name}\n`;
         });
         
-        output += `\n💡 조회된 모든 모델이 상단의 [AI 모델 선택] 드롭다운 메뉴에 자동으로 추가되었습니다! 이제 원하는 모델을 자유롭게 선택해 보세요.`;
+        output += `\n💡 목록에 있는 모델 중 하나를 위 설정창에서 선택해 주세요!`;
         panel.textContent = output;
         
     } catch (err) {
