@@ -2345,15 +2345,19 @@ async function handleLoginSubmit(e) {
     msgEl.classList.add('hidden');
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.7';
+    const originalText = submitBtn.textContent;
+    submitBtn.innerHTML = '인증 처리 중... ⏳';
 
     try {
         if (isSignupMode) {
+            submitBtn.innerHTML = '가입 처리 중... ⏳';
             await handleSignup(username, password);
             msgEl.className = 'login-message success';
             msgEl.textContent = '회원가입이 완료되었습니다! 로그인 창에서 로그인해 주세요.';
             msgEl.classList.remove('hidden');
             toggleLoginSignup();
         } else {
+            // First time connection to Firestore might take a few seconds
             await handleLogin(username, password);
         }
     } catch (err) {
@@ -2363,6 +2367,7 @@ async function handleLoginSubmit(e) {
     } finally {
         submitBtn.disabled = false;
         submitBtn.style.opacity = '1';
+        submitBtn.textContent = originalText;
     }
 }
 
