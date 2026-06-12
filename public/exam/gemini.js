@@ -52,7 +52,8 @@ async function callGemini(prompt, schema = null) {
         throw new Error("API 키가 등록되지 않았습니다. 설정(⚙️) 탭에서 개인 Gemini API 키를 입력해 주세요.");
     }
     const preferredModel = getGeminiModel();
-    const models = [preferredModel, ...GEMINI_MODEL_FALLBACKS.filter(m => m !== preferredModel)];
+    // Only attempt the preferred model. Fallbacks cause confusing error messages.
+    const models = [preferredModel];
     let lastErrorMsg = '';
 
     console.log("[Gemini API] callGemini Start. Key length:", key ? key.length : 0, "Preferred Model:", preferredModel);
@@ -179,7 +180,8 @@ async function callGeminiStream(prompt, onChunk, onStatus) {
         throw new Error("API 키가 등록되지 않았습니다. 설정(⚙️) 탭에서 개인 Gemini API 키를 입력해 주세요.");
     }
     const preferredModel = getGeminiModel();
-    const models = [preferredModel, ...GEMINI_MODEL_FALLBACKS.filter(m => m !== preferredModel)];
+    // Only attempt the preferred model. Fallbacks cause confusing error messages.
+    const models = [preferredModel];
     let lastErrorMsg = '';
 
     for (const model of models) {
