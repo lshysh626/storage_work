@@ -6,10 +6,9 @@ const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 // 모델 후보 (순서대로 시도)
 const GEMINI_MODEL_FALLBACKS = [
-    'gemini-2.0-flash',
-    'gemini-2.0-flash-lite',
-    'gemini-2.5-flash',
-    'gemini-2.5-pro'
+    'gemini-1.5-flash',
+    'gemini-1.5-flash-8b',
+    'gemini-1.5-pro'
 ];
 
 function getGeminiKey() {
@@ -18,8 +17,8 @@ function getGeminiKey() {
 
 function getGeminiModel() {
     let model = localStorage.getItem('gemini_model');
-    if (!model || model.includes('1.5')) {
-        model = GEMINI_MODEL_FALLBACKS[0]; // gemini-2.0-flash
+    if (!model || model.includes('2.')) {
+        model = GEMINI_MODEL_FALLBACKS[0]; // gemini-1.5-flash
         localStorage.setItem('gemini_model', model);
     }
     return model;
