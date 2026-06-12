@@ -2073,6 +2073,48 @@ async function runConnectionTest() {
 window.saveSettings = saveSettings;
 window.runConnectionTest = runConnectionTest;
 
+window.checkAvailableModels = async function() {
+    const keyInput = document.getElementById('setting-api-key');
+    const key = keyInput?.value?.trim() || localStorage.getItem('gemini_api_key') || '';
+    const panel = document.getElementById('test-result-panel');
+    if (!panel) return;
+    
+    panel.classList.remove('hidden');
+    panel.style.color = '#10b981';
+    panel.textContent = '⏳ 구글 서버에서 현재 API 키로 사용 가능한 모델 목록을 조회 중...';
+    
+    if (!key) {
+        panel.style.color = '#f87171';
+        panel.textContent = '❌ 오류: 설정에 입력된 API 키가 없습니다. API 키를 먼저 입력해 주세요.';
+        return;
+    }
+    
+    try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error?.message || `HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        
+        // Filter out non-generateContent models (like embedding models)
+        const generateModels = data.models.filter(m => m.supportedGenerationMethods.includes('generateContent'));
+        const modelNames = generateModels.map(m => m.name.replace('models/', ''));
+        
+        let output = `✅ 내 API 키로 사용 가능한 텍스트 생성 모델 목록:\n\n`;
+        modelNames.forEach(name => {
+            output += `🔹 ${name}\n`;
+        });
+        
+        output += `\n💡 만약 위 목록에 'gemini-2.0-flash'가 없다면, 선생님의 계정/키는 2.0 버전을 권한상 사용할 수 없는 상태입니다. 목록에 있는 모델 중 하나를 위 설정창에서 선택해 주세요!`;
+        panel.textContent = output;
+        
+    } catch (err) {
+        panel.style.color = '#f87171';
+        panel.textContent = `❌ 조회 실패\n원인: ${err.message}`;
+    }
+};
+
 // ─── Firebase Initialization ──────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyAQkS9cAd8_ouVlfjjkiz5bQmGlhasd22g",
