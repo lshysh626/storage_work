@@ -376,13 +376,16 @@ async function renderDashboard() {
                         </div>
                     </div>
 
-                    <!-- Right: Shortcuts -->
+                    <!-- Right: How to Use -->
                     <div>
                         <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff;">
-                            <span style="font-size: 1.4rem;">⌨️</span> 단축키 가이드
+                            <span style="font-size: 1.4rem;">📘</span> 사이트 이용방법
                         </h3>
-                        <div class="dashboard-shortcuts-container">
-                            ${shortcutRows}
+                        <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100%; min-height: 180px;">
+                            <p style="color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.6; font-size: 0.95rem;">처음 오셨나요?<br>기출 풀이 사이트의 핵심 기능과 효율적인 학습 방법을 확인해 보세요!</p>
+                            <button onclick="openGuideModal()" style="background: linear-gradient(135deg, var(--primary), #0284c7); color: #fff; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);">
+                                📖 이용방법 가이드 보기
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -3154,5 +3157,85 @@ if (resizer && explanationContainer && sidePanel) {
         }
     });
 }
+
+// ─── Guide Modal ──────────────────────────────────────────────
+window.openGuideModal = function() {
+    let modal = document.getElementById('guide-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'guide-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(10, 14, 23, 0.85)';
+        modal.style.backdropFilter = 'blur(8px)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '10000';
+        modal.style.padding = '2rem';
+        modal.style.opacity = '0';
+        modal.style.transition = 'opacity 0.3s';
+        
+        modal.innerHTML = `
+            <div style="background: #1e293b; width: 100%; max-width: 700px; max-height: 90vh; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s; overflow: hidden;">
+                <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.5);">
+                    <h2 style="margin: 0; color: #fff; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">📘 기출 훈련 시스템 이용 가이드</h2>
+                    <button onclick="closeGuideModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+                </div>
+                <div style="padding: 2rem; overflow-y: auto; color: #cbd5e1; line-height: 1.7; font-size: 1.05rem;">
+                    
+                    <h3 style="color: var(--primary); font-size: 1.2rem; margin-top: 0; margin-bottom: 1rem; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 0.5rem;">1. 개인 API 키 설정하기 (필수)</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.95rem;">좌측 <strong>⚙️ 설정</strong> 메뉴에서 본인의 <strong>Gemini API 키</strong>를 입력해야 AI 자동 채점 및 튜터 기능을 이용할 수 있습니다. (구글 AI Studio에서 무료 발급 가능)</p>
+
+                    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 0.5rem;">2. 3가지 학습 모드</h3>
+                    <ul style="margin-bottom: 1.5rem; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.5rem;"><strong>⚡ 즉시 채점:</strong> 한 문제를 풀 때마다 제출 버튼을 누르면 AI가 즉시 정답 여부를 판별하고 해설을 제공합니다.</li>
+                        <li style="margin-bottom: 0.5rem;"><strong>🎯 실전 모드:</strong> 모든 문제를 다 푼 뒤 마지막에 한 번에 일괄 채점합니다. 실제 시험과 동일한 환경을 연습할 때 유용합니다.</li>
+                        <li style="margin-bottom: 0.5rem;"><strong>📖 학습 모드:</strong> 답안 입력 없이 정답과 해설만 보면서 빠르게 기출을 훑어보는 모드입니다.</li>
+                    </ul>
+
+                    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 0.5rem;">3. AI 튜터 & 상세 해설</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.95rem;">우측 패널의 <strong>"상세 해설 열기"</strong>를 클릭하면 AI가 문제의 핵심을 짚어줍니다. 이해가 안 되는 부분은 아래쪽 <strong>AI 튜터 채팅창</strong>에서 언제든지 추가 질문을 할 수 있습니다.<br>
+                    <span style="font-size: 0.85rem; color: #94a3b8;">* 창의 구분선을 위아래로 드래그하여 패널 크기를 자유롭게 조절할 수 있습니다.</span></p>
+
+                    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 0.5rem;">4. 유용한 단축키</h3>
+                    <ul style="margin-bottom: 0; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <li style="margin-bottom: 0.5rem;"><kbd style="background: #334155; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace;">Ctrl + Enter</kbd> : 정답 제출 / 일괄 채점 제출</li>
+                        <li style="margin-bottom: 0.5rem;"><kbd style="background: #334155; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace;">Ctrl + [</kbd> : 이전 문제로 이동</li>
+                        <li style="margin-bottom: 0.5rem;"><kbd style="background: #334155; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace;">Ctrl + ]</kbd> : 다음 문제로 이동 (건너뛰기)</li>
+                        <li style="margin-bottom: 0.5rem;"><kbd style="background: #334155; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: monospace;">Ctrl + Alt + T</kbd> : 상세 해설 바로 열기</li>
+                    </ul>
+                </div>
+                <div style="padding: 1.5rem 2rem; background: rgba(15, 23, 42, 0.8); border-top: 1px solid rgba(255,255,255,0.05); text-align: right;">
+                    <button onclick="closeGuideModal()" style="background: var(--primary); color: #0f172a; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">닫기</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Trigger reflow
+        void modal.offsetWidth;
+    }
+    
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        modal.style.opacity = '1';
+        modal.querySelector('div').style.transform = 'translateY(0)';
+    }, 10);
+};
+
+window.closeGuideModal = function() {
+    const modal = document.getElementById('guide-modal');
+    if (modal) {
+        modal.style.opacity = '0';
+        modal.querySelector('div').style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+};
 
 initApp();
