@@ -2159,7 +2159,7 @@ window.checkAvailableModels = async function() {
             output += `🔹 ${name}\n`;
         });
         
-        output += `\n💡 껍데기뿐인 모델들을 제외하고, 쿼터(한도)가 열려있는 "진짜" 사용 가능한 모델만 필터링했습니다.\n드롭다운 메뉴가 이 모델들로 갱신되었습니다!`;
+        output += `\n💡 현재 API 키의 사용 한도(Quota)가 정상적으로 남아있는 모델만 필터링하였습니다.\n위 설정창의 [AI 모델 선택] 메뉴에서 해당 모델을 선택해 주세요.`;
         panel.textContent = output;
         
     } catch (err) {
