@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.5.4">
+    <link rel="stylesheet" href="style.css?v=1.5.5">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
@@ -105,27 +105,11 @@
             </div>
             
             <div class="mode-layout">
-                <div class="item-row full-width" onclick="toggleRandomSelection()">
-                    <span class="icon">🎲</span>
+                <div class="item-row full-width" onclick="startMockExamQuiz()">
+                    <span class="icon">📋</span>
                     <div class="text">
-                        <strong>랜덤 풀이</strong>
-                        <span>전체 랜덤 또는 모의고사 형식 랜덤</span>
-                    </div>
-                </div>
-                <div class="row-half">
-                    <div class="item-row" onclick="toggleSessionSelection()">
-                        <span class="icon">📅</span>
-                        <div class="text">
-                            <strong>회차별 풀기</strong>
-                            <span>원하는 회차 선택</span>
-                        </div>
-                    </div>
-                    <div class="item-row" onclick="toggleTypeSelection()">
-                        <span class="icon">📂</span>
-                        <div class="text">
-                            <strong>유형별 풀기</strong>
-                            <span>단답형/서술형/실무형</span>
-                        </div>
+                        <strong>실전 모의고사 풀기</strong>
+                        <span>단답 12, 서술 4, 실무 2 (총 100점 만점)</span>
                     </div>
                 </div>
             </div>
@@ -154,6 +138,9 @@
                         <span class="badge-type" id="q-type">단답형</span>
                         <span class="badge-pts" id="q-points">3점</span>
                     </div>
+                    <div id="q-source" style="font-size: 0.9rem; color: #94a3b8; margin-top: -1rem; margin-bottom: 1.5rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="opacity: 0.7;">📑 출처:</span> <span id="q-source-text"></span>
+                    </div>
                     <div class="question-text" id="q-text"></div>
                     <div id="inputs-container"></div>
                     <div class="quiz-actions">
@@ -166,6 +153,7 @@
                 
                 <div class="quiz-side-panel hidden" id="quiz-side-panel">
                     <div id="explanation-container"></div>
+                    <div class="resizer" id="panel-resizer"></div>
                     <div id="chat-container">
                         <div class="chat-header">AI 튜터</div>
                         <div class="chat-messages" id="chat-messages">
@@ -313,8 +301,9 @@
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 1rem;">
-                            <button type="button" onclick="runAIParsing()" id="admin-parse-btn" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #60a5fa); color: #fff; font-weight: 700; border: none; border-radius: 8px; padding: 0.9rem; cursor: pointer; transition: 0.2s;">⚡ AI 자동 파싱 시작</button>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button type="button" onclick="runAIParsing()" id="admin-parse-btn" style="flex: 1; min-width: 180px; background: linear-gradient(135deg, #3b82f6, #60a5fa); color: #fff; font-weight: 700; border: none; border-radius: 8px; padding: 0.9rem; cursor: pointer; transition: 0.2s;">⚡ AI 자동 파싱 시작</button>
+                            <button type="button" onclick="runLocalRegexParsing()" id="admin-local-parse-btn" style="flex: 1; min-width: 180px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; border-radius: 8px; padding: 0.9rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(16, 185, 129, 0.25)'" onmouseout="this.style.background='rgba(16, 185, 129, 0.15)'">⚡ 로컬 엔진 파싱 (즉시 완료)</button>
                             <button type="button" onclick="resetExamForm()" style="background: rgba(255,255,255,0.05); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); font-weight: 700; border-radius: 8px; padding: 0.9rem 1.5rem; cursor: pointer; transition: 0.2s;">초기화</button>
                         </div>
                     </div>
@@ -346,8 +335,8 @@
         </section>
     </main>
 </div>
-<script src="gemini.js?v=1.5.4"></script>
-<script src="main.js?v=1.5.4"></script>
+  <script src="gemini.js?v=1.5.5"></script>
+  <script src="main.js?v=1.5.5"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();

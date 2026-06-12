@@ -636,55 +636,6 @@ function selectType(type, defaultCount, typeName) {
 }
 window.selectType = selectType;
 
-function toggleRandomSelection() {
-    const sub = document.getElementById('sub-list');
-    if (state.subMode === 'random') {
-        sub.classList.add('hidden');
-        state.subMode = null;
-        return;
-    }
-    state.subMode = 'random';
-    sub.style.display = 'block'; // Block display for custom layouts
-    sub.classList.remove('hidden');
-    sub.innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-            <div class="item-row" style="cursor: pointer; padding: 1.8rem;" onclick="startTotalRandomQuiz()">
-                <span class="icon" style="font-size: 2.2rem; margin-right: 1rem;">🎲</span>
-                <div class="text">
-                    <strong>전체 랜덤 풀기</strong>
-                    <span>전체 문항 중 무작위 30문항 풀기</span>
-                </div>
-            </div>
-            <div class="item-row" style="cursor: pointer; padding: 1.8rem;" onclick="startMockExamQuiz()">
-                <span class="icon" style="font-size: 2.2rem; margin-right: 1rem;">📋</span>
-                <div class="text">
-                    <strong>실전 모의고사 풀기</strong>
-                    <span>단답 12, 서술 4, 실무 2 (총 100점 만점)</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-window.toggleRandomSelection = toggleRandomSelection;
-
-async function startTotalRandomQuiz() {
-    try {
-        const res = await fetch('./data/questions_all.json');
-        const data = await res.json();
-        const shuffled = [...data.questions].sort(() => Math.random() - 0.5);
-        
-        // Select 30 questions for a reasonable random test session
-        const count = Math.min(shuffled.length, 30);
-        const selected = shuffled.slice(0, count);
-        
-        state.isMockExam = false;
-        launchQuiz(selected, `🎲 전체 랜덤 풀기 (${count}문항)`);
-    } catch (e) {
-        console.error('Failed to create random quiz:', e);
-        alert('랜덤 문제를 불러오는 중 오류가 발생했습니다.');
-    }
-}
-window.startTotalRandomQuiz = startTotalRandomQuiz;
 
 async function startMockExamQuiz() {
     try {
@@ -749,39 +700,6 @@ async function toggleSessionSelection() {
     } catch {
         sub.innerHTML = '<div style="color:#f87171;padding:1rem">서버 연결 오류</div>';
     }
-}
-
-async function startRandomQuiz() {
-    let questions = [];
-    try {
-        const res = await fetch('./data/questions_all.json');
-        const data = await res.json();
-        questions = [...(data.questions || [])];
-    } catch (e) {
-        console.error('Failed to load static questions for random quiz:', e);
-    }
-    
-    if (db) {
-        try {
-            const customSnap = await db.collection('custom_questions').get();
-            customSnap.forEach(doc => {
-                const data = doc.data();
-                if (data.questions) {
-                    questions.push(...data.questions);
-                }
-            });
-        } catch (e) {
-            console.error('[Sync] Failed to load custom questions for random quiz:', e);
-        }
-    }
-    
-    if (questions.length === 0) {
-        alert('문제가 없습니다. 동기화를 먼저 해주세요.');
-        return;
-    }
-    
-    const shuffled = questions.sort(() => Math.random() - 0.5);
-    launchQuiz(shuffled, '🎲 랜덤 풀기');
 }
 
 async function startTypeQuiz(type) {
@@ -956,6 +874,21 @@ function renderQuestion() {
         questionText = `[실무형 선택 문제 - 2문항 중 택 1]\n* 안내: Q17과 Q18 중 풀이할 1문항만 선택해서 작성해 주세요. (두 문항 모두 작성하는 경우 더 높은 점수를 획득한 문항만 최종 성적에 합산됩니다.)\n\n` + q.question;
     }
     document.getElementById('q-text').textContent = questionText;
+
+    // Source Info
+    const sourceEl = document.getElementById('q-source');
+    const sourceTextEl = document.getElementById('q-source-text');
+    if (sourceEl && sourceTextEl) {
+        if (q.session && q.id) {
+            sourceEl.style.display = 'flex';
+            sourceTextEl.textContent = `${q.session} - ${q.id}번 문제`;
+        } else if (q.session) {
+            sourceEl.style.display = 'flex';
+            sourceTextEl.textContent = `${q.session}`;
+        } else {
+            sourceEl.style.display = 'none';
+        }
+    }
 
     // Progress
     const pct = ((state.index + 1) / state.questions.length) * 100;
@@ -1940,7 +1873,6 @@ window.setMode = function(mode) {
 };
 
 // Expose to inline onclick
-window.startRandomQuiz = startRandomQuiz;
 window.toggleTypeSelection = toggleTypeSelection;
 window.toggleSessionSelection = toggleSessionSelection;
 window.startTypeQuiz = startTypeQuiz;
@@ -2777,23 +2709,7 @@ ${rawText}
         
         parsedSessionName = examName;
         
-        // Render preview table
-        previewList.innerHTML = '';
-        parsedQuestionsBuffer.forEach(q => {
-            const tr = document.createElement('tr');
-            const typeLabels = { short: '단답형', essay: '서술형', practical: '실무형' };
-            const typeLabel = typeLabels[q.type] || q.type;
-            
-            tr.innerHTML = `
-                <td><strong>${q.id}</strong></td>
-                <td><span class="badge-${q.type === 'short' ? 'num' : (q.type === 'essay' ? 'type' : 'pts')}" style="padding:0.2rem 0.5rem; font-size:0.8rem; border-radius:4px;">${typeLabel}</span></td>
-                <td><div style="white-space:pre-wrap; text-align:left; max-width:400px; font-size:0.85rem; line-height:1.4;">${q.question}</div></td>
-                <td><div style="white-space:pre-wrap; text-align:left; max-width:300px; font-size:0.85rem; line-height:1.4; color:var(--primary); font-weight:700;">${q.answer}</div></td>
-            `;
-            previewList.appendChild(tr);
-        });
-        
-        previewCount.textContent = `${parsedQuestionsBuffer.length}문항`;
+        renderPreviewTable();
         previewContainer.classList.remove('hidden');
         
         alert(`파싱 성공! 총 ${parsedQuestionsBuffer.length}문항을 추출했습니다. 아래 미리보기를 확인하고 파싱 결과가 괜찮다면 최종 업로드 버튼을 눌러주세요.`);
@@ -2807,7 +2723,229 @@ ${rawText}
     }
 }
 
+function renderPreviewTable() {
+    const previewList = document.getElementById('admin-parse-preview-list');
+    const previewCount = document.getElementById('admin-preview-count');
+    if (!previewList || !previewCount) return;
+    
+    previewList.innerHTML = '';
+    
+    parsedQuestionsBuffer.forEach((q, index) => {
+        const tr = document.createElement('tr');
+        tr.dataset.index = index;
+        
+        // 1. 번호 (ID)
+        const tdId = document.createElement('td');
+        tdId.innerHTML = `<strong>${q.id}</strong>`;
+        tr.appendChild(tdId);
+        
+        // 2. 유형 (Type Select)
+        const tdType = document.createElement('td');
+        const select = document.createElement('select');
+        select.className = 'preview-type-select';
+        select.style.cssText = 'background: rgba(15, 23, 42, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 0.2rem; font-size: 0.85rem; outline: none; cursor: pointer;';
+        
+        const optShort = document.createElement('option');
+        optShort.value = 'short';
+        optShort.textContent = '단답형';
+        const optEssay = document.createElement('option');
+        optEssay.value = 'essay';
+        optEssay.textContent = '서술형';
+        const optPractical = document.createElement('option');
+        optPractical.value = 'practical';
+        optPractical.textContent = '실무형';
+        
+        select.appendChild(optShort);
+        select.appendChild(optEssay);
+        select.appendChild(optPractical);
+        select.value = q.type || 'short';
+        
+        tdType.appendChild(select);
+        tr.appendChild(tdType);
+        
+        // 3. 질문 (Question Textarea)
+        const tdQuestion = document.createElement('td');
+        const textareaQ = document.createElement('textarea');
+        textareaQ.className = 'preview-question-textarea';
+        textareaQ.style.cssText = 'width: 100%; min-height: 80px; background: rgba(15, 23, 42, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 0.5rem; font-size: 0.85rem; line-height: 1.4; resize: vertical; font-family: inherit; text-align: left; box-sizing: border-box;';
+        textareaQ.value = q.question || '';
+        tdQuestion.appendChild(textareaQ);
+        tr.appendChild(tdQuestion);
+        
+        // 4. 모범답안 (Answer Textarea)
+        const tdAnswer = document.createElement('td');
+        const textareaA = document.createElement('textarea');
+        textareaA.className = 'preview-answer-textarea';
+        textareaA.style.cssText = 'width: 100%; min-height: 80px; background: rgba(15, 23, 42, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 0.5rem; font-size: 0.85rem; line-height: 1.4; resize: vertical; font-family: inherit; text-align: left; color: var(--primary); font-weight: 700; box-sizing: border-box;';
+        textareaA.value = q.answer || '';
+        tdAnswer.appendChild(textareaA);
+        tr.appendChild(tdAnswer);
+        
+        // 5. 작업 (Delete Button)
+        const tdActions = document.createElement('td');
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.textContent = '삭제';
+        delBtn.style.cssText = 'background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; padding: 0.3rem 0.6rem; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;';
+        delBtn.onmouseover = () => { delBtn.style.background = 'rgba(239, 68, 68, 0.25)'; };
+        delBtn.onmouseout = () => { delBtn.style.background = 'rgba(239, 68, 68, 0.15)'; };
+        delBtn.onclick = () => {
+            parsedQuestionsBuffer.splice(index, 1);
+            // Re-index remaining questions sequentially
+            parsedQuestionsBuffer.forEach((item, idx) => {
+                item.id = idx + 1;
+            });
+            renderPreviewTable();
+        };
+        tdActions.appendChild(delBtn);
+        tr.appendChild(tdActions);
+        
+        previewList.appendChild(tr);
+    });
+    
+    // Add table header cell for action column if missing
+    const tableEl = previewList.closest('table');
+    if (tableEl) {
+        const thead = tableEl.querySelector('thead tr');
+        if (thead && thead.cells.length === 4) {
+            const thActions = document.createElement('th');
+            thActions.style.width = '70px';
+            thActions.textContent = '작업';
+            thead.appendChild(thActions);
+        }
+    }
+    
+    previewCount.textContent = `${parsedQuestionsBuffer.length}문항`;
+}
+
+function runLocalRegexParsing() {
+    const nameInput = document.getElementById('admin-exam-name');
+    const textInput = document.getElementById('admin-exam-raw-text');
+    const previewContainer = document.getElementById('admin-parse-preview-container');
+    const previewCount = document.getElementById('admin-preview-count');
+    
+    if (!nameInput || !textInput || !previewContainer || !previewCount) return;
+    
+    const examName = nameInput.value.trim();
+    const rawText = textInput.value.trim();
+    
+    if (!examName) {
+        alert('회차 이름을 입력해 주세요.');
+        return;
+    }
+    if (!rawText) {
+        alert('기출문제 텍스트 원문을 입력해 주세요.');
+        return;
+    }
+    
+    // Split text by questions using newline boundaries followed by digit+dot/bracket/parenthesis, Q+digit, or [문제 digit]
+    const questionBlocks = rawText.split(/^(?=\d+[\.\)\s]|Q\d+[\.\)\s]|\[\s*문제\s*\d+\s*\])/gm);
+    
+    const tempQuestions = [];
+    questionBlocks.forEach(block => {
+        const trimmed = block.trim();
+        if (!trimmed) return;
+        
+        // Extract ID if possible
+        const idMatch = trimmed.match(/^(\d+)[\.\)\s]|^Q(\d+)[\.\)\s]|^\[\s*문제\s*(\d+)\s*\]/);
+        let qId = tempQuestions.length + 1;
+        if (idMatch) {
+            const parsedId = parseInt(idMatch[1] || idMatch[2] || idMatch[3], 10);
+            if (!isNaN(parsedId)) {
+                qId = parsedId;
+            }
+        }
+        
+        // Extract answer
+        let questionText = trimmed;
+        let answerText = '';
+        const ansMatch = trimmed.match(/[\r\n]+(?:답안|정답|답|정답안|\[\s*(?:답|정답|답안)\s*\])\s*[:：]?\s*([\s\S]+)$/i);
+        if (ansMatch) {
+            answerText = ansMatch[1].trim();
+            questionText = trimmed.substring(0, ansMatch.index).trim();
+        }
+        
+        // Detect type heuristics
+        let qType = 'short';
+        const lowerQ = questionText.toLowerCase();
+        if (lowerQ.includes('설명하시오') || lowerQ.includes('서술하시오') || lowerQ.includes('기술하시오') || lowerQ.includes('배점 12') || lowerQ.includes('배점 10') || lowerQ.includes('약술하시오')) {
+            qType = 'essay';
+        } else if (lowerQ.includes('명령어') || lowerQ.includes('설정 파일') || lowerQ.includes('설정파일') || lowerQ.includes('디렉터리') || lowerQ.includes('배점 16') || lowerQ.includes('/etc/') || lowerQ.includes('iptables') || lowerQ.includes('sysctl.conf') || lowerQ.includes('명령을') || lowerQ.includes('옵션을')) {
+            qType = 'practical';
+        }
+        
+        tempQuestions.push({
+            id: qId,
+            type: qType,
+            question: questionText,
+            answer: answerText,
+            explanation: ''
+        });
+    });
+    
+    if (tempQuestions.length === 0) {
+        alert('로컬 파서가 문제 패턴(예: 1. 또는 Q1 등)을 감지하지 못했습니다. 형식을 확인해 주세요.');
+        return;
+    }
+    
+    const appendMode = document.getElementById('admin-append-mode')?.checked;
+    if (appendMode) {
+        const startId = parsedQuestionsBuffer.length;
+        tempQuestions.forEach((q, idx) => {
+            q.id = startId + idx + 1; // Re-index sequentially
+            parsedQuestionsBuffer.push(q);
+        });
+    } else {
+        parsedQuestionsBuffer = tempQuestions;
+    }
+    
+    // Ensure all question IDs in the cumulative list are sequential starting from 1
+    parsedQuestionsBuffer.forEach((q, idx) => {
+        q.id = idx + 1;
+    });
+    
+    parsedSessionName = examName;
+    
+    renderPreviewTable();
+    
+    previewContainer.classList.remove('hidden');
+    
+    alert(`로컬 엔진 파싱 완료! 총 ${tempQuestions.length}문항을 임포트했습니다. (누적 총 ${parsedQuestionsBuffer.length}문항)`);
+}
+
 async function saveParsedExam() {
+    // Gather final values from preview list DOM elements
+    const previewList = document.getElementById('admin-parse-preview-list');
+    if (previewList) {
+        const rows = previewList.querySelectorAll('tr');
+        const updatedQuestions = [];
+        rows.forEach((row, idx) => {
+            const idText = row.cells[0].textContent.trim();
+            const qId = parseInt(idText, 10) || (idx + 1);
+            
+            const selectEl = row.querySelector('.preview-type-select');
+            const qType = selectEl ? selectEl.value : 'short';
+            
+            const questionTextarea = row.querySelector('.preview-question-textarea');
+            const qText = questionTextarea ? questionTextarea.value : '';
+            
+            const answerTextarea = row.querySelector('.preview-answer-textarea');
+            const qAnswer = answerTextarea ? answerTextarea.value : '';
+            
+            updatedQuestions.push({
+                id: qId,
+                type: qType,
+                question: qText,
+                answer: qAnswer,
+                explanation: parsedQuestionsBuffer[idx]?.explanation || ''
+            });
+        });
+        
+        if (updatedQuestions.length > 0) {
+            parsedQuestionsBuffer = updatedQuestions;
+        }
+    }
+
     if (parsedQuestionsBuffer.length === 0 || !parsedSessionName) {
         alert('저장할 파싱 데이터가 없습니다. 먼저 파싱을 완료해 주세요.');
         return;
@@ -2961,6 +3099,7 @@ window.formatUserAnswer = formatUserAnswer;
 // Expose new Admin Parser tools
 window.switchAdminTab = switchAdminTab;
 window.runAIParsing = runAIParsing;
+window.runLocalRegexParsing = runLocalRegexParsing;
 window.saveParsedExam = saveParsedExam;
 window.resetExamForm = resetExamForm;
 window.handlePDFUpload = handlePDFUpload;
@@ -2977,5 +3116,43 @@ document.querySelectorAll('.nav-links li').forEach(li => {
         }
     });
 });
+
+// --- Panel Resizer Logic ---
+const resizer = document.getElementById('panel-resizer');
+const explanationContainer = document.getElementById('explanation-container');
+const sidePanel = document.getElementById('quiz-side-panel');
+
+let isResizing = false;
+
+if (resizer && explanationContainer && sidePanel) {
+    resizer.addEventListener('mousedown', function(e) {
+        isResizing = true;
+        resizer.classList.add('active');
+        document.body.style.cursor = 'ns-resize';
+        // Prevent text selection during drag
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!isResizing) return;
+        
+        const panelRect = sidePanel.getBoundingClientRect();
+        let newHeight = e.clientY - panelRect.top;
+        
+        if (newHeight < 100) newHeight = 100;
+        if (newHeight > panelRect.height - 150) newHeight = panelRect.height - 150;
+
+        const percentage = (newHeight / panelRect.height) * 100;
+        explanationContainer.style.height = `${percentage}%`;
+    });
+
+    document.addEventListener('mouseup', function(e) {
+        if (isResizing) {
+            isResizing = false;
+            resizer.classList.remove('active');
+            document.body.style.cursor = '';
+        }
+    });
+}
 
 initApp();
