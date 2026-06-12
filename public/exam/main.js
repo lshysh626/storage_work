@@ -2019,18 +2019,10 @@ async function runConnectionTest() {
     const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/${preferredModel}:generateContent?key=${key}`;
     
     const bodyPayload = {
-        contents: [{ parts: [{ text: "Hello, this is a test. Answer with 'OK' in JSON format." }] }],
+        contents: [{ parts: [{ text: "Hello, this is a test. Answer with exactly 'OK'." }] }],
         generationConfig: { 
             temperature: 0.1,
-            responseMimeType: 'application/json',
-            maxOutputTokens: 50,
-            responseSchema: {
-                type: 'OBJECT',
-                properties: {
-                    status: { type: 'STRING' }
-                },
-                required: ['status']
-            }
+            maxOutputTokens: 50
         }
     };
     
