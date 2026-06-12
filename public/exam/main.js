@@ -1663,18 +1663,61 @@ async function requestExplanation(index) {
     
     try {
         let accumulated = '';
-        await geminiExplainStream(
-            q.question, q.answer,
-            (chunk) => {
-                accumulated += chunk;
-                expStream.textContent = accumulated;
-                state.questionStates[index].explanation = accumulated; // Persist
-            },
-            (status) => {
-                expStream.textContent = status;
+        
+        // --- GLOBAL AI CACHE CHECK ---
+        let cachedExplanation = null;
+        let questionHash = null;
+        if (window.db) {
+            try {
+                // Ensure sha256 is available
+                questionHash = typeof sha256 === 'function' ? await sha256(q.question.trim()) : null;
+                if (questionHash) {
+                    const cacheRef = window.db.collection('ai_cache_explanations').doc(questionHash);
+                    const cacheSnap = await cacheRef.get();
+                    if (cacheSnap.exists) {
+                        cachedExplanation = cacheSnap.data().explanation;
+                        console.log("[Cache Hit] Explanation loaded from Firestore global cache.");
+                    }
+                }
+            } catch (ce) {
+                console.warn("[Cache Read Error]", ce);
             }
-        );
-        q.explanation = accumulated;
+        }
+        
+        if (cachedExplanation) {
+            // CACHE HIT: Instantly display the explanation
+            expStream.innerHTML = cachedExplanation + "\n\n<span style='color:#10b981; font-weight:bold; font-size:0.9em;'>(⚡ 글로벌 AI 캐시에서 즉시 불러왔습니다 - API 미호출)</span>";
+            q.explanation = cachedExplanation;
+            state.questionStates[index].explanation = cachedExplanation;
+        } else {
+            // CACHE MISS: Call Gemini API
+            await geminiExplainStream(
+                q.question, q.answer,
+                (chunk) => {
+                    accumulated += chunk;
+                    expStream.textContent = accumulated;
+                    state.questionStates[index].explanation = accumulated; // Persist locally
+                },
+                (status) => {
+                    expStream.textContent = status;
+                }
+            );
+            q.explanation = accumulated;
+            
+            // --- SAVE TO GLOBAL CACHE ---
+            if (window.db && questionHash && accumulated.length > 50) {
+                try {
+                    await window.db.collection('ai_cache_explanations').doc(questionHash).set({
+                        question: q.question,
+                        explanation: accumulated,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log("[Cache Write] Saved new explanation to Firestore global cache.");
+                } catch (ce) {
+                    console.warn("[Cache Write Error]", ce);
+                }
+            }
+        }
     } catch (e) {
         expContainer.innerHTML = buildApiKeyErrorHTML(e.message, `requestExplanation(${index})`);
     }

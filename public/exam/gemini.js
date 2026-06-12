@@ -464,7 +464,21 @@ async function geminiScore(question, correct_answer, user_answer, points) {
         ? window.formatModelAnswer(correct_answer, question)
         : correct_answer;
 
-    // 2. AI 정밀 채점
+    // 2. AI 정밀 채점 (GLOBAL CACHE 확인)
+    let gradingHash = null;
+    if (window.db && typeof window.sha256 === 'function') {
+        try {
+            gradingHash = await window.sha256(question.trim() + correct_answer.trim() + String(user_answer).trim() + String(points));
+            const cacheSnap = await window.db.collection('ai_cache_gradings').doc(gradingHash).get();
+            if (cacheSnap.exists) {
+                console.log("[Cache Hit] Grading loaded from Firestore global cache.");
+                return cacheSnap.data().result;
+            }
+        } catch (ce) {
+            console.warn("[Cache Read Error]", ce);
+        }
+    }
+
     const prompt = `정보보안기사 실기 시험 채점관입니다. 제시된 문제, 정답, 사용자 답변을 바탕으로 채점을 진행해 주세요.
 
 [문제]
@@ -505,7 +519,26 @@ feedback 필드에는 오직 순수한 한국어 피드백 문자열만 작성�
             required: ['score', 'feedback', 'is_correct']
         };
         text = await callGemini(prompt, schema);
-        return parseScoringResponse(text, points);
+        const finalResult = parseScoringResponse(text, points);
+        
+        // SAVE TO GLOBAL CACHE
+        if (window.db && gradingHash && finalResult && typeof window.firebase !== 'undefined') {
+            try {
+                await window.db.collection('ai_cache_gradings').doc(gradingHash).set({
+                    question: question,
+                    correct_answer: correct_answer,
+                    user_answer: user_answer,
+                    points: points,
+                    result: finalResult,
+                    createdAt: window.firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log("[Cache Write] Saved new grading result to Firestore global cache.");
+            } catch (ce) {
+                console.warn("[Cache Write Error]", ce);
+            }
+        }
+        
+        return finalResult;
     } catch (err) {
         console.error("[Gemini API] Single score error:", err, "Raw text was:", text);
         return {
