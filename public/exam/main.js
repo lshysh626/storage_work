@@ -591,13 +591,13 @@ function toggleTypeSelection() {
     sub.innerHTML = `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
             <div class="item-row" id="type-row-short" style="cursor: pointer;" onclick="selectType('short', 12, '단답형')">
-                <div class="text"><strong>단답형</strong><span>3점 문제</span></div>
+                <div class="text"><strong>단답형</strong><span id="count-short">3점 문제 (불러오는 중...)</span></div>
             </div>
             <div class="item-row" id="type-row-essay" style="cursor: pointer;" onclick="selectType('essay', 4, '서술형')">
-                <div class="text"><strong>서술형</strong><span>12점 문제</span></div>
+                <div class="text"><strong>서술형</strong><span id="count-essay">12점 문제 (불러오는 중...)</span></div>
             </div>
             <div class="item-row" id="type-row-practical" style="cursor: pointer;" onclick="selectType('practical', 2, '실무형')">
-                <div class="text"><strong>실무형</strong><span>16점 문제</span></div>
+                <div class="text"><strong>실무형</strong><span id="count-practical">16점 문제 (불러오는 중...)</span></div>
             </div>
         </div>
         
@@ -607,14 +607,38 @@ function toggleTypeSelection() {
                 <div style="margin-bottom: 1.5rem; color: #fff; font-size: 1.15rem;">
                     <strong id="selected-type-name" style="color: var(--primary); font-size: 1.3rem;">유형</strong>
                     <span style="color: #cbd5e1; font-weight: 500;"> 몇 문제를 푸시겠습니까?</span>
+                    <div id="max-count-hint" style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">최대 선택 가능 문제 수: 불러오는 중...</div>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center;">
-                    <input type="number" id="global-type-count" value="" min="1" style="width: 120px; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.8); color: #fff; outline: none; font-size: 1.3rem; text-align: center; font-weight: 800; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
+                    <input type="number" id="global-type-count" value="" min="1" max="100" style="width: 120px; padding: 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.8); color: #fff; outline: none; font-size: 1.3rem; text-align: center; font-weight: 800; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
                     <button id="global-type-start-btn" style="flex: 1; background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: #fff; border: none; border-radius: 10px; font-weight: 800; font-size: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">시작하기</button>
                 </div>
             </div>
         </div>
     `;
+
+    // Asynchronously fetch counts
+    const types = ['short', 'essay', 'practical'];
+    const scores = { short: 3, essay: 12, practical: 16 };
+    window.typeMaxCounts = window.typeMaxCounts || {};
+
+    types.forEach(async t => {
+        try {
+            if (!window.typeMaxCounts[t]) {
+                const res = await fetch(\`./data/questions_type_\${t}.json\`);
+                const data = await res.json();
+                window.typeMaxCounts[t] = data.questions ? data.questions.length : 0;
+            }
+            const countEl = document.getElementById(\`count-\${t}\`);
+            if (countEl) {
+                countEl.textContent = \`\${scores[t]}점 문제 (보유: 총 \${window.typeMaxCounts[t]}문제)\`;
+            }
+        } catch (e) {
+            console.error('Failed to load count for ' + t);
+            const countEl = document.getElementById(\`count-\${t}\`);
+            if (countEl) countEl.textContent = \`\${scores[t]}점 문제\`;
+        }
+    });
 }
 
 function selectType(type, defaultCount, typeName) {
@@ -623,7 +647,7 @@ function selectType(type, defaultCount, typeName) {
         el.style.background = 'rgba(255,255,255,0.03)';
     });
     
-    const row = document.getElementById(`type-row-${type}`);
+    const row = document.getElementById(\`type-row-\${type}\`);
     if (row) {
         row.style.borderColor = 'rgba(56, 189, 248, 0.4)';
         row.style.background = 'rgba(30, 41, 59, 0.7)';
@@ -633,8 +657,27 @@ function selectType(type, defaultCount, typeName) {
     if (actionArea) {
         actionArea.style.display = 'block';
         document.getElementById('selected-type-name').textContent = typeName;
-        document.getElementById('global-type-count').value = defaultCount;
-        document.getElementById('global-type-start-btn').onclick = () => startTypeQuiz(type);
+        
+        const max = window.typeMaxCounts[type] || 100;
+        const countInput = document.getElementById('global-type-count');
+        countInput.max = max;
+        countInput.value = Math.min(defaultCount, max);
+        
+        const hintEl = document.getElementById('max-count-hint');
+        if (hintEl) {
+            hintEl.textContent = \`현재 DB에 파싱 완료된 문제: 총 \${max}문제 (최대 선택 가능)\`;
+        }
+        
+        document.getElementById('global-type-start-btn').onclick = () => {
+            let val = parseInt(countInput.value, 10);
+            if (val > max) {
+                alert(\`해당 유형은 현재 최대 \${max}문제까지만 준비되어 있습니다!\`);
+                countInput.value = max;
+                return;
+            }
+            if (val < 1) val = 1;
+            startTypeQuiz(type);
+        };
     }
 }
 window.selectType = selectType;
