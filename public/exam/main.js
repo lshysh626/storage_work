@@ -2019,10 +2019,18 @@ async function runConnectionTest() {
     const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/${preferredModel}:generateContent?key=${key}`;
     
     const bodyPayload = {
-        contents: [{ parts: [{ text: "Hello, this is a test. Answer with exactly 'OK'." }] }],
+        contents: [{ parts: [{ text: "Hello, this is a test. Answer with 'OK' in JSON format." }] }],
         generationConfig: { 
             temperature: 0.1,
-            maxOutputTokens: 50
+            responseMimeType: 'application/json',
+            maxOutputTokens: 50,
+            responseSchema: {
+                type: 'OBJECT',
+                properties: {
+                    status: { type: 'STRING' }
+                },
+                required: ['status']
+            }
         }
     };
     
@@ -2168,8 +2176,16 @@ async function handleLogin(username, password) {
     const hash = await sha256(password);
 
     const userDocRef = db.collection('users').doc(cleanUsername);
-    const docSnap = await userDocRef.get();
-    if (!docSnap.exists) {
+    let docSnap;
+    try {
+        // First try to fetch from local cache for instant login
+        docSnap = await userDocRef.get({ source: 'cache' });
+    } catch (cacheErr) {
+        // Fallback to server if not in cache (first time login on this device)
+        docSnap = await userDocRef.get({ source: 'server' });
+    }
+
+    if (!docSnap || !docSnap.exists) {
         throw new Error('존재하지 않는 아이디입니다.');
     }
 
