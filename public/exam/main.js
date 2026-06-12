@@ -367,21 +367,21 @@ async function renderDashboard() {
                 <div class="dashboard-top-row">
                     
                     <!-- Left: Features -->
-                    <div>
-                        <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff;">
+                    <div style="display: flex; flex-direction: column; height: 100%;">
+                        <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff; flex-shrink: 0;">
                             <span style="color: var(--primary);">✨</span> 핵심 기능
                         </h3>
-                        <div class="dashboard-features-grid">
+                        <div class="dashboard-features-grid" style="flex: 1; display: grid;">
                             ${featureCards}
                         </div>
                     </div>
 
                     <!-- Right: How to Use -->
-                    <div>
-                        <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff;">
+                    <div style="display: flex; flex-direction: column; height: 100%;">
+                        <h3 style="font-weight: 900; font-size: 1.3rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; color: #fff; flex-shrink: 0;">
                             <span style="font-size: 1.4rem;">📘</span> 사이트 이용방법
                         </h3>
-                        <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 100%; min-height: 180px;">
+                        <div style="flex: 1; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 180px;">
                             <p style="color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.6; font-size: 0.95rem;">처음 오셨나요?<br>기출 풀이 사이트의 핵심 기능과 효율적인 학습 방법을 확인해 보세요!</p>
                             <button onclick="openGuideModal()" style="background: linear-gradient(135deg, var(--primary), #0284c7); color: #fff; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);">
                                 📖 이용방법 가이드 보기

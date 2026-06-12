@@ -353,7 +353,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 2rem;
-    align-items: start;
+    align-items: stretch;
 }
 
 @media (max-width: 1100px) {
