@@ -2847,32 +2847,28 @@ async function runAIParsing() {
         return;
     }
     
-    parseBtn.textContent = '🔄 AI 분석 및 파싱 중... (최대 1~2분 소요)';
     parseBtn.disabled = true;
     parseBtn.style.opacity = '0.7';
     
-    const prompt = `
-[초강력 지시사항]
-당신은 정보보안기사 실기 기출문제를 분석하여 서비스용 JSON 포맷으로 구조화하는 전문 데이터 파서입니다.
-제공된 [기출 원본 텍스트]에 있는 **모든 문제를 단 하나도 빠짐없이 100% 추출**해야 합니다. 임의로 요약하거나 일부 문제를 건너뛰는 행위는 절대 금지됩니다.
-
-[규칙]
-1. 각 문항을 모두 추출하여 questions 배열에 담습니다.
-2. 각 문항은 다음 필드를 가져야 합니다:
-   - "id": 1부터 시작하는 순차적인 문제 번호 (integer)
-   - "type": 문제 유형으로 다음 세 가지 중 하나만 지정해야 합니다:
-     - "short" (단답형): 지문에 괄호 (A), (B)가 있거나, "무엇인지 쓰시오", "명칭을 쓰시오", "알맞은 용어를 쓰시오" 등 **짧은 명사나 단답**을 요구하는 모든 문제. (지문이 길더라도 요구하는 답안의 형태가 단어라면 무조건 short로 분류하세요.)
-     - "essay" (서술형): "원리를 설명하시오", "절차를 3가지 기술하시오", "이유를 쓰시오" 등 **문장형 답변**을 명시적으로 요구하거나 길게 풀어써야 하는 문제에만 엄격하게 지정하세요.
-     - "practical" (실무형): 리눅스/윈도우 명령어 작성, 보안 장비 설정값, 로그 파일 분석 등 실무 설정이나 명령어를 요구하는 문제.
-   - "question": 지문 텍스트. 줄바꿈을 유지하여 가독성 있게 작성하세요.
-   - "answer": 모범 답안 텍스트. 지문에 빈칸 (A), (B) 또는 1), 2) 등이 있다면 답안에도 그에 맞춰 작성해 주세요. (예: "(A) 인증, (B) 인가" 또는 "1) /etc/securetty, 2) 600")
-   - "explanation": 해당 문제에 대한 간단한 개념 해설 또는 설명 (없거나 불확실하면 빈 문자열 ""로 지정)
-3. 출력은 오직 순수한 JSON 데이터여야 합니다.
-4. 다시 한번 강조합니다. 원본 텍스트를 끝까지 읽고 모든 문제를 누락 없이 배열에 포함시키세요.
-
-[기출 원본 텍스트]:
-${rawText}
-`;
+    // --- 텍스트 자동 쪼개기 (Auto Chunking) ---
+    // 빈 줄 기준으로 먼저 나누고, 없으면 일반 줄바꿈 기준으로 나눔
+    let paragraphs = rawText.split(/\n\s*\n/);
+    if (paragraphs.length < 2) paragraphs = rawText.split('\n');
+    
+    const chunks = [];
+    let currentChunk = '';
+    
+    for (const p of paragraphs) {
+        if (currentChunk.length + p.length > 2500 && currentChunk.length > 0) {
+            chunks.push(currentChunk.trim());
+            currentChunk = p;
+        } else {
+            currentChunk += (currentChunk ? '\n\n' : '') + p;
+        }
+    }
+    if (currentChunk.trim()) {
+        chunks.push(currentChunk.trim());
+    }
 
     const parsingSchema = {
         type: "OBJECT",
@@ -2896,26 +2892,66 @@ ${rawText}
                 }
             }
         },
-        required: ["session", "questions"]
+        required: ["questions"]
     };
 
     try {
-        const resultText = await callGeminiForParsing(prompt, parsingSchema);
-        const parsed = JSON.parse(resultText);
+        let allQuestions = [];
         
-        if (!parsed.questions || parsed.questions.length === 0) {
+        for (let i = 0; i < chunks.length; i++) {
+            parseBtn.textContent = `🔄 AI 분석 및 파싱 중... (${i + 1}/${chunks.length} 단계 - 최대 1~2분 소요)`;
+            
+            const prompt = `
+[초강력 지시사항]
+당신은 정보보안기사 실기 기출문제를 분석하여 서비스용 JSON 포맷으로 구조화하는 전문 데이터 파서입니다.
+제공된 [기출 원본 텍스트]에 있는 **모든 문제를 단 하나도 빠짐없이 100% 추출**해야 합니다. 임의로 요약하거나 일부 문제를 건너뛰는 행위는 절대 금지됩니다.
+
+[규칙]
+1. 각 문항을 모두 추출하여 questions 배열에 담습니다.
+2. 각 문항은 다음 필드를 가져야 합니다:
+   - "id": 1부터 시작하는 순차적인 문제 번호 (integer)
+   - "type": 문제 유형으로 다음 세 가지 중 하나만 지정해야 합니다:
+     - "short" (단답형): 지문에 괄호 (A), (B)가 있거나, "무엇인지 쓰시오", "명칭을 쓰시오", "알맞은 용어를 쓰시오" 등 **짧은 명사나 단답**을 요구하는 모든 문제. (지문이 길더라도 요구하는 답안의 형태가 단어라면 무조건 short로 분류하세요.)
+     - "essay" (서술형): "원리를 설명하시오", "절차를 3가지 기술하시오", "이유를 쓰시오" 등 **문장형 답변**을 명시적으로 요구하거나 길게 풀어써야 하는 문제에만 엄격하게 지정하세요.
+     - "practical" (실무형): 리눅스/윈도우 명령어 작성, 보안 장비 설정값, 로그 파일 분석 등 실무 설정이나 명령어를 요구하는 문제.
+   - "question": 지문 텍스트. 줄바꿈을 유지하여 가독성 있게 작성하세요.
+   - "answer": 모범 답안 텍스트. 지문에 빈칸 (A), (B) 또는 1), 2) 등이 있다면 답안에도 그에 맞춰 작성해 주세요. (예: "(A) 인증, (B) 인가" 또는 "1) /etc/securetty, 2) 600")
+   - "explanation": 해당 문제에 대한 간단한 개념 해설 또는 설명 (없거나 불확실하면 빈 문자열 ""로 지정)
+3. 출력은 오직 순수한 JSON 데이터여야 합니다.
+4. 다시 한번 강조합니다. 원본 텍스트를 끝까지 읽고 모든 문제를 누락 없이 배열에 포함시키세요.
+
+[기출 원본 텍스트]:
+${chunks[i]}
+`;
+            
+            // 429 에러 방지를 위해 첫 요청 이후에는 4.2초 대기
+            if (i > 0) await new Promise(r => setTimeout(r, 4200));
+            
+            const resultText = await callGeminiForParsing(prompt, parsingSchema);
+            const parsed = JSON.parse(resultText);
+            
+            if (parsed.questions && parsed.questions.length > 0) {
+                allQuestions = allQuestions.concat(parsed.questions);
+            }
+        }
+        
+        if (allQuestions.length === 0) {
             throw new Error("파싱된 문항이 없습니다. 입력 텍스트를 확인해 주세요.");
         }
         
         const appendMode = document.getElementById('admin-append-mode')?.checked;
         if (appendMode) {
             const startId = parsedQuestionsBuffer.length;
-            parsed.questions.forEach((q, idx) => {
+            allQuestions.forEach((q, idx) => {
                 q.id = startId + idx + 1; // Re-index sequentially
                 parsedQuestionsBuffer.push(q);
             });
         } else {
-            parsedQuestionsBuffer = parsed.questions;
+            // 새 파싱이면 1번부터 인덱싱
+            allQuestions.forEach((q, idx) => {
+                q.id = idx + 1;
+            });
+            parsedQuestionsBuffer = allQuestions;
         }
         
         parsedSessionName = examName;
