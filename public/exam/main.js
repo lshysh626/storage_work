@@ -440,6 +440,11 @@ function renderStats() {
                     <h2 style="color: var(--muted); font-weight: 700; margin-bottom: 1rem;">아직 학습 기록이 없습니다</h2>
                     <p style="color: var(--muted); font-size: 1.1rem;">기출 풀기에서 문제를 풀어보세요!</p>
                 </div>
+                <div style="text-align:center; padding:1rem; margin-top: 2rem;">
+                    <button onclick="clearLearningHistory()" style="background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.3); padding:0.8rem 2rem; border-radius:8px; cursor:pointer; font-weight:700; transition:0.2s;" onmouseover="this.style.background='rgba(248,113,113,0.2)'" onmouseout="this.style.background='rgba(248,113,113,0.1)'">
+                        🗑️ 학습 기록 초기화
+                    </button>
+                </div>
             `;
             return;
         }
