@@ -230,7 +230,7 @@ function switchView(id) {
 // Helper to get combined static and custom Firestore sessions
 async function getCombinedSessions() {
     try {
-        const res = await fetch('./data/sessions.json');
+        const res = await fetch('./data/sessions.json?t=' + Date.now());
         const sessions = await res.json();
         if (db) {
             try {
@@ -709,7 +709,7 @@ window.selectType = selectType;
 
 async function startMockExamQuiz() {
     try {
-        const res = await fetch('./data/questions_all.json');
+        const res = await fetch('./data/questions_all.json?t=' + Date.now());
         const data = await res.json();
         const allQuestions = data.questions;
         
@@ -775,7 +775,7 @@ async function toggleSessionSelection() {
 async function startTypeQuiz(type) {
     let questions = [];
     try {
-        const res = await fetch(`./data/questions_type_${type}.json`);
+        const res = await fetch(`./data/questions_type_${type}.json?t=` + Date.now());
         const data = await res.json();
         questions = [...(data.questions || [])];
     } catch (e) {
