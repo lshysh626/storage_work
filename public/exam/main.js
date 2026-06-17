@@ -2769,24 +2769,35 @@ async function callGeminiForParsing(prompt, schema) {
         bodyPayload.generationConfig.responseSchema = schema;
     }
     
-    const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bodyPayload)
-    });
-    
-    if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        const errMsg = errData.error?.message || `HTTP ${res.status}`;
-        throw new Error(`Gemini API Error: ${errMsg}`);
+    let retries = 3;
+    while (retries >= 0) {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bodyPayload)
+        });
+        
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            const errMsg = errData.error?.message || `HTTP ${res.status}`;
+            
+            // 429 (Too Many Requests) or 503 (Service Unavailable) -> Retry
+            if ((res.status === 429 || res.status === 503) && retries > 0) {
+                console.warn(`[Gemini API] ${res.status} Error. Retrying in 5 seconds... (${retries} retries left)`);
+                await new Promise(r => setTimeout(r, 5000));
+                retries--;
+                continue;
+            }
+            throw new Error(`Gemini API Error: ${errMsg}`);
+        }
+        
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!text) {
+            throw new Error("올바른 응답을 받지 못했습니다. 안전 필터에 의해 차단되었을 수 있습니다.");
+        }
+        return text;
     }
-    
-    const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!text) {
-        throw new Error("올바른 응답을 받지 못했습니다. 안전 필터에 의해 차단되었을 수 있습니다.");
-    }
-    return text;
 }
 
 function switchAdminTab(tabName) {
