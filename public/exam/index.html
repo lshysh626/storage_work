@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.7.12">
+    <link rel="stylesheet" href="style.css?v=1.7.13">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
@@ -349,71 +349,14 @@
 
                         <button onclick="saveParsedExam()" id="admin-save-exam-btn" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 800; font-size: 1.15rem; border: none; border-radius: 10px; padding: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">💾 데이터베이스(Firestore)에 최종 업로드</button>
                     </div>
-                        <span class="badge-type" id="q-type">단답형</span>
-                        <span class="badge-pts" id="q-points">3점</span>
-                    </div>
-                    <div id="q-source" style="font-size: 0.9rem; color: #94a3b8; margin-top: -1rem; margin-bottom: 1.5rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="opacity: 0.7;">📑 출처:</span> <span id="q-source-text"></span>
-                    </div>
-                    <div class="question-text" id="q-text"></div>
-                    <div id="inputs-container"></div>
-                    <div class="quiz-actions">
-                        <button class="btn-prev hidden" id="prev-btn">이전 (Ctrl+[)</button>
-                        <button class="btn-next" id="submit-btn">제출 (Ctrl+Enter)</button>
-                        <button class="btn-prev hidden" id="skip-btn" onclick="nextQuestion()">건너뛰기 (Ctrl+])</button>
-                    </div>
-                    <div class="feedback hidden" id="feedback-area"></div>
                 </div>
-                
-                <div class="quiz-side-panel hidden" id="quiz-side-panel">
-                    <div id="explanation-container"></div>
-                    <div class="resizer" id="panel-resizer"></div>
-                    <div id="chat-container">
-                        <div class="chat-header">AI 튜터</div>
-                        <div class="chat-messages" id="chat-messages">
-                            <div class="chat-message ai-message">문제를 선택하면 해설이 표시되고, 질문을 입력하면 AI가 답변합니다.</div>
-                        </div>
-                        <div class="chat-input-area">
-                            <input type="text" id="chat-input" placeholder="질문을 입력하세요...">
-                            <button id="chat-send-btn">전송</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- NEW: Memo Panel -->
-                <div class="quiz-memo-panel hidden" id="quiz-memo-panel">
-                    <div class="chat-header" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255,255,255,0.05);">나만의 메모장</div>
-                    <textarea id="memo-pad" placeholder="여기에 자유롭게 메모하세요. 세션 동안 유지됩니다..." style="flex: 1; background: transparent; border: none; padding: 1.5rem; color: #cbd5e1; font-size: 1rem; line-height: 1.6; resize: none; outline: none; font-family: 'Inter', sans-serif;"></textarea>
-                </div>
-            </div>
-
-            <!-- Floating Toggle Buttons -->
-            <div class="floating-btn-group">
-                <div id="btn-toggle-ai" class="floating-btn" onclick="togglePanel('ai')">AI 튜터</div>
-                <div id="btn-toggle-memo" class="floating-btn" onclick="togglePanel('memo')">메모장</div>
             </div>
         </section>
-
-        <!-- Bulk Result View -->
-        <section id="bulk-result-view" class="view">
-            <div class="quiz-header">
-                <span class="quiz-badge">채점 결과</span>
-                <span class="timer" id="final-score">총점: 0점</span>
-                <button class="close-btn" onclick="switchView('dashboard')">×</button>
-            </div>
-            <div class="quiz-body" style="max-width: 900px;" id="bulk-result-container">
-                <!-- Results injected here -->
-            </div>
-        </section>
-
-
-
-        <!-- Admin Panel View -->
 
     </main>
 </div>
-  <script src="gemini.js?v=1.7.12"></script>
-  <script src="main.js?v=1.7.12"></script>
+  <script src="gemini.js?v=1.7.13"></script>
+  <script src="main.js?v=1.7.13"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();
