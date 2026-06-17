@@ -2781,10 +2781,12 @@ async function callGeminiForParsing(prompt, schema) {
             const errData = await res.json().catch(() => ({}));
             const errMsg = errData.error?.message || `HTTP ${res.status}`;
             
-            // 429 (Too Many Requests) or 503 (Service Unavailable) -> Retry
+            // 429 (Too Many Requests) -> Wait 65s for quota reset
+            // 503 (Service Unavailable) -> Wait 10s
             if ((res.status === 429 || res.status === 503) && retries > 0) {
-                console.warn(`[Gemini API] ${res.status} Error. Retrying in 5 seconds... (${retries} retries left)`);
-                await new Promise(r => setTimeout(r, 5000));
+                const waitTime = res.status === 429 ? 65000 : 10000;
+                console.warn(`[Gemini API] ${res.status} Error. Retrying in ${waitTime/1000}s... (${retries} retries left)`);
+                await new Promise(r => setTimeout(r, waitTime));
                 retries--;
                 continue;
             }
