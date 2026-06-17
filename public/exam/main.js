@@ -938,7 +938,26 @@ function renderQuestion() {
     if (state.isMockExam && q.type === 'practical') {
         questionText = `[실무형 선택 문제 - 2문항 중 택 1]\n* 안내: Q17과 Q18 중 풀이할 1문항만 선택해서 작성해 주세요. (두 문항 모두 작성하는 경우 더 높은 점수를 획득한 문항만 최종 성적에 합산됩니다.)\n\n` + q.question;
     }
-    document.getElementById('q-text').textContent = questionText;
+    
+    // 이스케이프 및 보기 박스 처리
+    let escaped = questionText.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag])
+    );
+    
+    // 특정 키워드로 시작하는 보기 영역을 감지하여 박스 처리
+    const bogiRegex = /(\[보기\]|&lt;보기&gt;|\[\s*아파치 로그\s*\]|\[\s*로그\s*\]|\[\s*표\s*\]|\[\s*지문\s*\]|\[\s*설정\s*\]|\[\s*조건\s*\]|\[\s*코드\s*\])(.*?)(?=(?:\s1\)|①|$))/g;
+    escaped = escaped.replace(bogiRegex, '<div class="bogi-box">$1$2</div>');
+    
+    // 개행 문자를 <br>로 변환
+    escaped = escaped.replace(/\n/g, '<br>');
+    
+    document.getElementById('q-text').innerHTML = escaped;
 
     // Source Info
     const sourceEl = document.getElementById('q-source');
