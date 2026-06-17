@@ -620,28 +620,44 @@ function toggleTypeSelection() {
         </div>
     `;
 
-    // Asynchronously fetch counts
     const types = ['short', 'essay', 'practical'];
     const scores = { short: 3, essay: 12, practical: 16 };
     window.typeMaxCounts = window.typeMaxCounts || {};
 
-    types.forEach(async t => {
-        try {
-            if (!window.typeMaxCounts[t]) {
-                const res = await fetch(`./data/questions_type_${t}.json`);
-                const data = await res.json();
-                window.typeMaxCounts[t] = data.questions ? data.questions.length : 0;
-            }
+    const updateUI = () => {
+        types.forEach(t => {
             const countEl = document.getElementById(`count-${t}`);
             if (countEl) {
-                countEl.textContent = `${scores[t]}점 문제 (보유: 총 ${window.typeMaxCounts[t]}문제)`;
+                if (window.typeMaxCounts[t] !== undefined) {
+                    countEl.textContent = `${scores[t]}점 문제 (보유: 총 ${window.typeMaxCounts[t]}문제)`;
+                } else {
+                    countEl.textContent = `${scores[t]}점 문제 (불러오는 중...)`;
+                }
             }
-        } catch (e) {
-            console.error('Failed to load count for ' + t);
-            const countEl = document.getElementById(`count-${t}`);
-            if (countEl) countEl.textContent = `${scores[t]}점 문제`;
-        }
-    });
+        });
+    };
+
+    if (Object.keys(window.typeMaxCounts).length === 0 && db) {
+        window.typeMaxCounts = { short: 0, essay: 0, practical: 0 };
+        db.collection('custom_questions').get().then(snap => {
+            snap.forEach(doc => {
+                const data = doc.data();
+                if (data.questions) {
+                    data.questions.forEach(q => {
+                        if (q.type === 'short' || q.type === '단답형') window.typeMaxCounts.short++;
+                        else if (q.type === 'essay' || q.type === '서술형') window.typeMaxCounts.essay++;
+                        else if (q.type === 'practical' || q.type === '실무형') window.typeMaxCounts.practical++;
+                    });
+                }
+            });
+            updateUI();
+        }).catch(e => {
+            console.error('Failed to load counts from firestore', e);
+            updateUI();
+        });
+    } else {
+        updateUI();
+    }
 }
 
 function selectType(type, defaultCount, typeName) {
