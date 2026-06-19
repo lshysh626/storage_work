@@ -517,7 +517,7 @@
       "original_id": 81,
       "type": "essay",
       "question": "네트워크 관리자A 인 A 는 평소 G/W 의 MAC 주소를 잘 기억하는 사람으로 네트워크의 Gateway 주소가175.113.81.1(a1-b1-c1-d1-e1-f1)임을 알고 있다. 다음과 같은 현상을 확인한 경우 어떤 공격인지 판단(A), 공격이라고 추정하는 이유(B)와 공격자(C), 해당 공격을 중지시키기 위해 네트워크 관리자 A 의 시스템에서 어떤 Command(D)를 실행해야 하는지 서술하시오.\n[보기]\nInternet Address      Physical Address        Type\n175.113.81.65         90-9f-5e-00-2f-16        dynamic\n175.113.81.1          90-9f-5e-00-2f-16        dynamic\n175.113.81.55         f4-e1-5e-7f-f0-8f        dynamic\n175.113.81.88         f4-e1-5e-7f-f0-16        dynamic",
-      "answer": "( A ) : ARP Spoofing ( B ) : 175.113.81.65(90-9f-5e-00-2f-16) ( C ) : 동적 ARP 정보를 사용하고 있으므로 ( D ) : arp -s 175.113.81.1 a1-b1-c1-d1-e1-f1 (정적 항목으로 추가)",
+      "answer": "( A ) : ARP Spoofing\n( B ) : 175.113.81.65(90-9f-5e-00-2f-16)\n( C ) : 동적 ARP 정보를 사용하고 있으므로\n( D ) : arp -s 175.113.81.1 a1-b1-c1-d1-e1-f1 (정적 항목으로 추가)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
       "id": 377
