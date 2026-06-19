@@ -1169,7 +1169,7 @@ function renderQuestion() {
 
         // Restore Feedback if scored
         const fb = document.getElementById('feedback-area');
-        const sidePanel = document.getElementById('quiz-side-panel');
+        const feedbackPanel = document.getElementById('quiz-feedback-panel');
         if (qState.scored) {
             fb.innerHTML = `
                 <div style="border-left: 4px solid ${qState.isCorrect ? 'var(--primary)' : '#f87171'}; padding-left: 1rem; animation: fadeIn 0.3s ease;">
@@ -1183,14 +1183,10 @@ function renderQuestion() {
                 </div>
             `;
             fb.classList.remove('hidden');
-            if (sidePanel) sidePanel.classList.remove('hidden');
+            if (feedbackPanel) feedbackPanel.classList.remove('hidden');
         } else {
             fb.classList.add('hidden');
-            // Do not hide sidePanel here because 'study' mode needs it open always!
-            // Actually, if it's NOT study mode, should we hide it?
-            if (state.quizMode !== 'study') {
-                if (sidePanel) sidePanel.classList.add('hidden');
-            }
+            if (feedbackPanel) feedbackPanel.classList.add('hidden');
         }
 
         // Restore Explanation Panel if exists
@@ -1336,8 +1332,8 @@ async function submitAnswer() {
     saveQuizStateForRecovery();
     const fb = document.getElementById('feedback-area');
     fb.classList.remove('hidden');
-    const sidePanel = document.getElementById('quiz-side-panel');
-    if (sidePanel) sidePanel.classList.remove('hidden');
+    const feedbackPanel = document.getElementById('quiz-feedback-panel');
+    if (feedbackPanel) feedbackPanel.classList.remove('hidden');
     const skipBtn = document.getElementById('skip-btn');
     if (skipBtn) skipBtn.classList.add('hidden');
 

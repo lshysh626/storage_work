@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.7.21">
+    <link rel="stylesheet" href="style.css?v=1.7.22">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
@@ -165,9 +165,12 @@
                         <button class="btn-prev hidden" id="skip-btn" onclick="nextQuestion()">건너뛰기 (Ctrl+])</button>
                     </div>
                 </div>
+                <div class="quiz-feedback-panel hidden" id="quiz-feedback-panel">
+                    <div class="chat-header" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255,255,255,0.05);">채점 결과 및 모범 답안</div>
+                    <div class="feedback" id="feedback-area" style="margin-top: 0; padding: 1.5rem; border: none; background: transparent; backdrop-filter: none; flex: 1; overflow-y: auto;"></div>
+                </div>
                 
                 <div class="quiz-side-panel hidden" id="quiz-side-panel">
-                    <div class="feedback hidden" id="feedback-area" style="margin-top: 0; margin-bottom: 1.5rem;"></div>
                     <div id="explanation-container"></div>
                     <div class="resizer" id="panel-resizer"></div>
                     <div id="chat-container">
@@ -355,8 +358,8 @@
 
     </main>
 </div>
-  <script src="gemini.js?v=1.7.21"></script>
-  <script src="main.js?v=1.7.21"></script>
+  <script src="gemini.js?v=1.7.22"></script>
+  <script src="main.js?v=1.7.22"></script>
 <script>
     // Initialize icons if needed (though we will use SVG for main cards)
     if (window.lucide) lucide.createIcons();
