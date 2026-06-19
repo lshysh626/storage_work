@@ -12,7 +12,7 @@
     {
       "original_id": 6,
       "type": "practical",
-      "question": "TCP 헤더에 포함되어 있는 6 비트의 Flag 에 대한 설명이다. ( ) 에 적절한 설명을\n기술하시오.\nURG : 긴급하게 전송할 데이터가 있는 경우 사용하며, 순서에 상관없이 우선순위를 높여\n처리됨\nPSH : 버퍼링된 데이터를 버퍼가 찰 때까지 기다리지 않고 수신 즉시 애플리케이션\n계층으로 전달\nSYN : ( A )\nACK : ( B )\nFIN : ( C )\nRST : ( D )",
+      "question": "TCP 헤더에 포함되어 있는 6 비트의 Flag 에 대한 설명이다. ( ) 에 적절한 설명을\n기술하시오.\n[보기]\nURG : 긴급하게 전송할 데이터가 있는 경우 사용하며, 순서에 상관없이 우선순위를 높여\n처리됨\nPSH : 버퍼링된 데이터를 버퍼가 찰 때까지 기다리지 않고 수신 즉시 애플리케이션\n계층으로 전달\nSYN : ( A )\nACK : ( B )\nFIN : ( C )\nRST : ( D )",
       "answer": "1) 최초 연결 수립을 요청하고, 순서 번호를 동기화할 때 사용됨 \r  \r 2) 상대로부터 패킷을 받았다는 것을 알려주며, 일반적으로 받은 시퀀스 번호에 +1 하여 \r 응답을 보냄 \r  \r 3) 송신 장비가 연결 종료를 요청 시 사용 \r  \r 4) 연결 상의 문제가 발생한 비정상 세션을 강제로 끊을 때 사용 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -129,7 +129,7 @@
     {
       "original_id": 54,
       "type": "practical",
-      "question": "유닉스 계정 패스워드 임곗값 설정에서 다음 옵션의 의미를 설명하시오.\n(deny=5, unlock_time=120, no_magic_root, reset)",
+      "question": "유닉스 계정 패스워드 임곗값 설정에서 다음 옵션의 의미를 설명하시오.\n[보기]\n(deny=5, unlock_time=120, no_magic_root, reset)",
       "answer": "deny= 5 : 인증 실패 임곗값을 5 회로 설정(5 회 실패 시 계정 잠김) \r  \r unlock_time =120 : 계정 잠김 후 마지막 인증 실패 시작으로부터 120 초가 지나면 \r 자동으로 계정 잠금 해제 \r  \r no_magic_root : root 계정은 잠김 설정 예외 \r  \r reset : 접속 시도 성공 시 실패 회수를 초기화함. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -147,7 +147,7 @@
     {
       "original_id": 60,
       "type": "practical",
-      "question": "XSS 공격을 탐지하기 위한 다음의 Snort rule 에 대하여 다음 물음에 답하시오.\nAlert\nany\nanry\n->\nany\n80\n(msg\n\"XSS\";content\n\"GET\";offset:1;depth:3;content:\"/login.php<script>XSS\";distance 1;)\n\n1) content:\"GET\";offset:1 depth:3 의 의미는?\n2) content:\"/login.php<script>XSS\";distance 1; 의 의미는?\n3) 바이너리로 전송된 패킷(L 이 대문자임)을 참고하여 위의 룰로 탐지 안될 경우 어떻게\n수정해야 하는지 기술하시오.",
+      "question": "XSS 공격을 탐지하기 위한 다음의 Snort rule 에 대하여 다음 물음에 답하시오.\n[보기]\nAlert\nany\nanry\n->\nany\n80\n(msg\n\"XSS\";content\n\"GET\";offset:1;depth:3;content:\"/login.php<script>XSS\";distance 1;)\n\n1) content:\"GET\";offset:1 depth:3 의 의미는?\n2) content:\"/login.php<script>XSS\";distance 1; 의 의미는?\n3) 바이너리로 전송된 패킷(L 이 대문자임)을 참고하여 위의 룰로 탐지 안될 경우 어떻게\n수정해야 하는지 기술하시오.",
       "answer": "1) 전송된 패킷의 처음 1 바이트를 띄고 3 바이트를 검사해서 GET 을 찾으라는 의미 \r  \r 2) 이전 메시지(GET)를 찾은 위치에서 1 바이트를 띄고 content 안에 기술된 문자열을 \r 찾으라는 의미 \r  \r 3) offset:1 을 offset:0 으로 변경하거나 offset 옵션을 삭제. 그리고, nocase 옵션을 \r 추가하거나 login 을 Login 으로 변경",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -210,7 +210,7 @@
     {
       "original_id": 83,
       "type": "practical",
-      "question": "HTTP Flooding 공격의 특징은 대부분 웹 서버 공격 트래픽에서 최초 웹 페이지에\n대해 웹 접속 요청을 폭주시켜 세션자원을 소진시키는 방법이다. 이러한 공격에 대한\nsnort 탐지룰(Rule)이다. 이 snort 룰을 보고 각각에 대하여 답하시오.\nalert tcp any any -> any any {msg:\"GET Flooding\"; content:\"GET /HTTP1.\"; nocase;\ndepth 13; threshold: type threshold, track by_dst, count 10, seconds 1; sid: 10000999}\n1) 해당 룰의 이벤트 명은?\n2) nocase 가 의미하는 것은?\n3) content \"GET /HTTP1.\"가 의미하는 것은?\n4) threshold: type threshold, track by_dst, count 10, seconds 1 가 의미하는 것은?",
+      "question": "HTTP Flooding 공격의 특징은 대부분 웹 서버 공격 트래픽에서 최초 웹 페이지에\n대해 웹 접속 요청을 폭주시켜 세션자원을 소진시키는 방법이다. 이러한 공격에 대한\nsnort 탐지룰(Rule)이다. 이 snort 룰을 보고 각각에 대하여 답하시오.\n[보기]\nalert tcp any any -> any any {msg:\"GET Flooding\"; content:\"GET /HTTP1.\"; nocase;\ndepth 13; threshold: type threshold, track by_dst, count 10, seconds 1; sid: 10000999}\n1) 해당 룰의 이벤트 명은?\n2) nocase 가 의미하는 것은?\n3) content \"GET /HTTP1.\"가 의미하는 것은?\n4) threshold: type threshold, track by_dst, count 10, seconds 1 가 의미하는 것은?",
       "answer": "1) Get Flooding \r 2) 대소문자 구분하지 않고 탐지 \r 3) 패킷 페이로드 GET /HTTP1. 이라는 문자열이 있는 경우 탐지 \r 4) 목적지 ip 주소를 기준으로 부터 1 초 동안 10 번째 마다 alert action 수행",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -228,7 +228,7 @@
     {
       "original_id": 90,
       "type": "practical",
-      "question": "다음 내용을 참조하여 질문에 답하시오.\nHTTP 웹 서버에 접속하였지만 로그인이 되지 않는다. 동일한 출발지를 갖는 IP 가 짧은\n시간에 많은 양의 트래픽을 지속적으로 발생시킨다.\n(해당 패킷)\nGET / HTTP/1.1\nHost: 10.10.10.25\nUser-agent: Mozila\nContent-length: 42\n1) 어떤 유형의 공격인가?\n2) 해당 공격으로 어떤 영향을 받는가?",
+      "question": "다음 내용을 참조하여 질문에 답하시오.\n[보기]\nHTTP 웹 서버에 접속하였지만 로그인이 되지 않는다. 동일한 출발지를 갖는 IP 가 짧은\n시간에 많은 양의 트래픽을 지속적으로 발생시킨다.\n(해당 패킷)\nGET / HTTP/1.1\nHost: 10.10.10.25\nUser-agent: Mozila\nContent-length: 42\n1) 어떤 유형의 공격인가?\n2) 해당 공격으로 어떤 영향을 받는가?",
       "answer": "1) HTTP Get Flooding \r  \r 2) 대량의 GET 요청을 지속적으로 전송하므로 서버의 세션을 모두 소진하여 정상적인 \r 사용자가 접속 요청 시 접속이 불가능 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -255,7 +255,7 @@
     {
       "original_id": 107,
       "type": "practical",
-      "question": "웹 서버에서 다음과 같은 SQL SELECT 문이 수행된다고 할 때 아래의 항목에\n대해서 설명하시오.\nSELECT password FROM user WHERE username='qfrankr'\n(1) 쿼리의 결과는 무엇인가?\n(2) 모든 사용자의 정보를 획득하기 위해 'qfrankr' 부분에 들어갈 예시를 작성하시오.\n(3) 위 예시가 가능한 이유는 무엇인가?",
+      "question": "웹 서버에서 다음과 같은 SQL SELECT 문이 수행된다고 할 때 아래의 항목에\n대해서 설명하시오.\n[보기]\nSELECT password FROM user WHERE username='qfrankr'\n(1) 쿼리의 결과는 무엇인가?\n(2) 모든 사용자의 정보를 획득하기 위해 'qfrankr' 부분에 들어갈 예시를 작성하시오.\n(3) 위 예시가 가능한 이유는 무엇인가?",
       "answer": "(1) qfrankr 사용자에 대한 패스워드 정보를 확인한다. \r (2) ' or 'a'='a 또는 ' or '1'='1 등 조건절을 참으로 만드는 다양한 조건값이 가능.\\ \r (3) 조건절이 WHERE username='' or '1'='1'이 되므로 항상 결과가 참이 된다. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -291,7 +291,7 @@
     {
       "original_id": 119,
       "type": "practical",
-      "question": "다음 보기를 보고 주어진 질문에 알맞은 내용을 서술하시오.\n통신 구간 암호화를 위해 많이 사용하는 OpenSSL 라이브러리에서 서버에 저장된 중요\n메모리 데이터가 노출되는 (A) 보고서 명명된 심각한 버그가 발견되어 시스템 및\n소프트웨어에 대한 신속한 취약점 조치를 권고한다.\n(1) 취약점명은 무엇인가?\n(2) 영향을 받는 버전은 무엇인가?\n(3) 대응방법은 무엇인가?",
+      "question": "다음 보기를 보고 주어진 질문에 알맞은 내용을 서술하시오.\n[보기]\n통신 구간 암호화를 위해 많이 사용하는 OpenSSL 라이브러리에서 서버에 저장된 중요\n메모리 데이터가 노출되는 (A) 보고서 명명된 심각한 버그가 발견되어 시스템 및\n소프트웨어에 대한 신속한 취약점 조치를 권고한다.\n(1) 취약점명은 무엇인가?\n(2) 영향을 받는 버전은 무엇인가?\n(3) 대응방법은 무엇인가?",
       "answer": "(1) OpenSSL Heartbleed 취약점 \r (2) OpenSSL 1.0.1 ~ OpenSSL 1.0.1f, OpenSSL 1.0.2.beta ~ OpenSSL 1.0.2-beta1 \r (3) 최신버전 UPDATE \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -300,7 +300,7 @@
     {
       "original_id": 120,
       "type": "practical",
-      "question": "다음은 Crontab 에 대한 설명이다. 주어진 질문에 알맞은 답을 서술하시오.\nCrontab 은 리눅스에서 스케줄링하여 원하는 시간에 작업을 수행할 수 있는 유용한\n유틸리티이다. 각 사용자별로 crontab 파일을 가지게 되며 cron job scheduler 가 지정된\n시간에 주기적으로 지정된 파일을 실행해 준다.\n(1) Cron 으로 현재 작업되어 있는 내용을 보는 명령어는?\n(2) SIS 계정의 crontab 을 편집하는 방법은 무엇인가?\n(3) 매주 일요일 새벽 3 시에 rm -rf 명령어를 이용하여 /home 디렉터리 하위 모든\n파일과 디렉터리를 삭제하는 작업을 등록하라.",
+      "question": "다음은 Crontab 에 대한 설명이다. 주어진 질문에 알맞은 답을 서술하시오.\n[보기]\nCrontab 은 리눅스에서 스케줄링하여 원하는 시간에 작업을 수행할 수 있는 유용한\n유틸리티이다. 각 사용자별로 crontab 파일을 가지게 되며 cron job scheduler 가 지정된\n시간에 주기적으로 지정된 파일을 실행해 준다.\n(1) Cron 으로 현재 작업되어 있는 내용을 보는 명령어는?\n(2) SIS 계정의 crontab 을 편집하는 방법은 무엇인가?\n(3) 매주 일요일 새벽 3 시에 rm -rf 명령어를 이용하여 /home 디렉터리 하위 모든\n파일과 디렉터리를 삭제하는 작업을 등록하라.",
       "answer": "(1) crontab -l \r (2) crontab -u sis -e \r (3) 0 3 * * 0 rm -rf /home/ 1> /dev/null 2> &1*",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -336,7 +336,7 @@
     {
       "original_id": 132,
       "type": "practical",
-      "question": "여행사 업체의 개인정보 이용 약관 동의에 대한 동의서 내용을 보고 정보보안\n법규에 어긋나는 부분 세 가지를 찾아서 기술하시오.\n- 수집·이용 목적: 여행자 멤버십 등록 및 이벤트 업체 정보 제공\n- 보유·이용기간: 멤버십 등록일로부터 탈퇴 시까지\n- 수집항목: 성명, 생년월일, 주민등록번호, 주소, 이메일, 전화번호 ※ 정보의 수집·이용에\n관한 동의는 거부하실 수 있습니다. 개인정보 수집·이용에 동의하십니까? 동의함,\n동의하지 않음",
+      "question": "여행사 업체의 개인정보 이용 약관 동의에 대한 동의서 내용을 보고 정보보안\n법규에 어긋나는 부분 세 가지를 찾아서 기술하시오.\n[보기]\n- 수집·이용 목적: 여행자 멤버십 등록 및 이벤트 업체 정보 제공\n- 보유·이용기간: 멤버십 등록일로부터 탈퇴 시까지\n- 수집항목: 성명, 생년월일, 주민등록번호, 주소, 이메일, 전화번호 ※ 정보의 수집·이용에\n관한 동의는 거부하실 수 있습니다. 개인정보 수집·이용에 동의하십니까? 동의함,\n동의하지 않음",
       "answer": "- 이벤트 업체에 제공한다는 것에 대해 제3 자 제공에 관한 동의를 별도로 받아야 하며, \r 제공하는 항목, 제공 기간 등에 대해 안내해야 함 \r - 멤버십 등록을 위해 주민등록번호를 수집하는 것은 과도하며, 수집근거가 드러나 있지 \r 않음. 정당한 근거에 의해 수집하더라도 별도로 동의 받아야 함 \r - 동의에 거부할 수 있다는 내용과 안내 시 동의 거부에 대한 불이익도 같이 안내해야 함",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -363,7 +363,7 @@
     {
       "original_id": 143,
       "type": "practical",
-      "question": "HeartBleed 취약점 탐지위한 Snort Rule 설정 의미를 설명하시오.\nalert tcp any any < > any (1)[443,465,523] ((2)content:\"|18 03 00|\"; depth: 3;\n(3)content:\"|01|\"; distance: 2; within: 1;\n(4) content:!\"|00|\"; within: 1; (5)msg: \"SSLv3 Malicious Heartbleed Request V2”;\n(6) sid: 1;)",
+      "question": "HeartBleed 취약점 탐지위한 Snort Rule 설정 의미를 설명하시오.\n[보기]\nalert tcp any any < > any (1)[443,465,523] ((2)content:\"|18 03 00|\"; depth: 3;\n(3)content:\"|01|\"; distance: 2; within: 1;\n(4) content:!\"|00|\"; within: 1; (5)msg: \"SSLv3 Malicious Heartbleed Request V2”;\n(6) sid: 1;)",
       "answer": "(1) 탐지 대상 포트 번호를 443, 465, 523 으로 지정 \r  \r (2) Content 에서 첫 3 바이트를 검사하여 바이너리 값으로 \"18 03 00\" \r 이 있는지 검사 \r  \r (3) (2)번이 끝난 위치에서 2 바이트 떨어진 위치에서 1 바이트를 검사하여 바이너리 \r 값으로 \"01\"이 있는지 검사 \r  \r (4) (3)번이 끝난 위치에서 바로 1 바이트를 검사하여 바이너리 값으로 \"00\"이 포함되지 \r 않은 지 여부를 검사 \r  \r (5) (1)~(4)의 탐지 룰에 모두 매칭이 되는 경우 로그에 \"SSLv3 Malicious Heartbleed \r Request V2\"로 기록 \r  \r (6) 해당 룰의 식별자를 1 로 지정 \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -399,7 +399,7 @@
     {
       "original_id": 155,
       "type": "practical",
-      "question": "DB 에 대한 감사 로그 설정과 관련된 문제이다. 아래 결과를 보고 각 질문에\n답하시오.\n#sqlplus / as sysdba\nSQL> show parameter audit\nNAME                        TYPE      VALUE\n---------------------------- ----------   -------------------------------------------\naudit_file_dest            string      /u01/app/oracle/admin/ORCL/adump\naudit_sys_operations boolean  FALSE\naudit_syslog_level      string      LOCAL0.INFO\naudit_trail                    string      NONE\n\n1) 상기 감사 로그 설정이 어떤 의미인지 설명하시오.\n2) 감사 로그를 SYS.AUD$ 테이블에 저장되게 하려면, 감사 로그 설정값을 어떻게\n수정해야 하는지 설명하시오.\n3) 감사 로그는 데이터베이스 내부보다 외부에 남기는 것이 좋은데, 그 이유를 보안\n측면에서 설명하시오.",
+      "question": "DB 에 대한 감사 로그 설정과 관련된 문제이다. 아래 결과를 보고 각 질문에\n답하시오.\n[보기]\n#sqlplus / as sysdba\nSQL> show parameter audit\nNAME                        TYPE      VALUE\n---------------------------- ----------   -------------------------------------------\naudit_file_dest            string      /u01/app/oracle/admin/ORCL/adump\naudit_sys_operations boolean  FALSE\naudit_syslog_level      string      LOCAL0.INFO\naudit_trail                    string      NONE\n\n1) 상기 감사 로그 설정이 어떤 의미인지 설명하시오.\n2) 감사 로그를 SYS.AUD$ 테이블에 저장되게 하려면, 감사 로그 설정값을 어떻게\n수정해야 하는지 설명하시오.\n3) 감사 로그는 데이터베이스 내부보다 외부에 남기는 것이 좋은데, 그 이유를 보안\n측면에서 설명하시오.",
       "answer": "1)  \r - \r audit_file_dest \r : \r audit \r 로그를 \r OS\r 에 \r 남기도록 \r 설정한 \r 경우 \r /u01/app/oracle/admin/ORCL/adump 파일에 저장 \r - audit_sys_operations : SYS 계정에 대한 감사는 수행하지 않음 \r - audit_syslog_leve : syslog 로 감사로그를 전송 시 syslog 등급을 LOCAL0.INFO 로 \r 설정(단, audit_trail 값이 OS 로 설정되어야 하고, syslog config 에 \"LOCAL0.INFO \r @@10.20.2.11:514\" 와 같이 SIEM 로그 수집 서버 정보를 설정해 두어야 함) \r - audit_trail : NONE 으로 설정했으므로, 감사 로그가 남지 않음.  \r  \r 2) audit_trail 을 값을 DB 로 변경. \r  \r 3) 공격자가 DB 를 장악하게 되면, 로그 위변조를 통해 악의적인 행위의 흔적을 지울 수 \r 있음. 로그가 외부에 남는 경우 사고 발생 시 신뢰 가능한 증거 확보가 가능하고 SIEM \r 과 같은 통합 모니터링 툴과 연계하여 중앙에서 통합 관리하는 경우 공격 행위에 대한 \r 실시간 모니터링을 통해 선제적이고 능동적인 대응이 가능해짐.  \r  \r  \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -408,7 +408,7 @@
     {
       "original_id": 156,
       "type": "practical",
-      "question": "리눅스 OS 의 취약점과 관련된 문제이다. 아래 화면에 출력된 정보를 기반으로 각\n질문에 답하시오.\n(A)\n$telnet 192.168.10.20\nTrying 192.168.10.20...\nConnected to 192.168.10.20.\nEscape character is '^]'.\nUbuntu 20.04.6 LTS\nLinux server01 5.15.0-92-generic x86_64\nserver01 login: root\nPassword:\nWelcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.15.0-02-generic x86_64)\nLast login: Mon Jan 6 09:41:12 KST 2026 from 192.168.10.15\nroot@server01:~#\n\n(B)\n$ftp 192.168.10.30\nConnected to 192.168.10.30.\n220 Welcome to vsFTPd 3.0.3\nName (192.168.10.30:root): root\nPassword:\n230 Login successful.\nRemote system type is UNIX.\nUsing binary mode to transfer files.\nftp>\n\n1) A 와 B 에서 확인된 취약점은 무엇인가?\n2) A 취약점에 대한 대응 방안을 설명하시오.\n3) B 취약점에 대한 대응 방안을 설명하시오.\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
+      "question": "리눅스 OS 의 취약점과 관련된 문제이다. 아래 화면에 출력된 정보를 기반으로 각\n질문에 답하시오.\n[보기]\n(A)\n$telnet 192.168.10.20\nTrying 192.168.10.20...\nConnected to 192.168.10.20.\nEscape character is '^]'.\nUbuntu 20.04.6 LTS\nLinux server01 5.15.0-92-generic x86_64\nserver01 login: root\nPassword:\nWelcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.15.0-02-generic x86_64)\nLast login: Mon Jan 6 09:41:12 KST 2026 from 192.168.10.15\nroot@server01:~#\n\n(B)\n$ftp 192.168.10.30\nConnected to 192.168.10.30.\n220 Welcome to vsFTPd 3.0.3\nName (192.168.10.30:root): root\nPassword:\n230 Login successful.\nRemote system type is UNIX.\nUsing binary mode to transfer files.\nftp>\n\n1) A 와 B 에서 확인된 취약점은 무엇인가?\n2) A 취약점에 대한 대응 방안을 설명하시오.\n3) B 취약점에 대한 대응 방안을 설명하시오.\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "answer": "1-1) A 의 경우 OS 와 커널 정보가 출력되므로 취약점(CVE) 정보와 매핑하여 취약점을 \r 악용한 익스플로잇이 가능하고, root 계정 직접 로그인이 허용되어 있어 최고 권한 탈취 \r 위험이 있음. 무엇보다 보안에 취약한 Telnet 서비스가 사용되고 있는 것도 위험함.   \r  \r 1-2) B 의 경우 ftp 데몬명과 버전 정보가 출력되므로 취약점(CVE) 정보와 매핑하여 \r 취약점을 악용한 익스플로잇이 가능하고, root 계정 직접 로그인이 허용되어 있어 최고 \r 권한 탈취를 통해 중요 정보 유출 가능 위험이 있음. 무엇보다 보안에 취약한 ftp \r 서비스가 사용되고 있는 것도 위험함.  \r  \r  \r 2) 가급적 telent 보다는 안전한 프로토콜인 SSH 를 사용하도록 하고, 부득이하게 telnet \r 을 사용해야 하는 경우 root 계정을 통한 직접 로그인은 차단해야 함. (설정 예: \r /etc/securetty 파일내에 pts/* 값은 삭제). 또한 배너 정보(OS 버전, 커널 정보) 가 \r 노출되지 않도록 설정해야 함.(설정 예: /etc/issue.net 파일을 수정하여 접속 시 보여줄 \r 배너 문구를 아래와 같이 입력)  \r  \r **************************************************************** \r  \r *   WARNING: Unauthorized access is prohibited.      * \r  \r *   This system is monitored for security purposes.   * \r  \r **************************************************************** \r  \r  3) 가급적 ftp 보다는 안전한 프로토콜인 sftp 를 사용하도록 하고, 부득이하게 ftp 를 \r 사용해야 하는 경우 root 계정을 통한 직접 로그인은 차단해야 함. (설정 예: /etc/ftpusers \r 파일 내에 root 계정 추가 or /etc/vsftpd/user_list\r 에 root 계정을 등록하고 \r /etc/vsftpd.conf 에서 userlist_enable=YES, userlist_deny=YES 로 설정). 또한 배너 \r 정보(ftp 서비스 종류, 버전 정보) 가 노출되지 않도록 설정해야 함.(설정 예: \r /etc/vsftpd.conf 에서 ftpd_banner=Unauthorized access is prohibited. 와 같이 경고 \r 문구만 \r 출력하도록 \r 수정. \r 또는 \r banner_file=/etc/ftp_banner.txt \r 로 \r 지정하고, \r ftp_banner.txt 에 상세 경고 문구를 등록)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
