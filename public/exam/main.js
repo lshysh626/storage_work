@@ -1195,7 +1195,6 @@ function renderQuestion() {
         }
 
         // Restore Explanation Panel if exists
-        const expContainer = document.getElementById('explanation-container');
         if (qState.explanation && expContainer) {
             const headerHTML = `
                 <div id="exp-header" onclick="toggleExplanation()" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.2rem 0; margin-bottom: 0.8rem; user-select: none;">
@@ -1226,7 +1225,6 @@ function renderQuestion() {
             }, 80);
         }
         saveQuizStateForRecovery();
-    }
 }
 
 function saveAnswerRealtime() {
