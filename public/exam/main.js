@@ -1015,16 +1015,12 @@ function renderQuestion() {
     const savedAns = state.userAnswers[state.index];
 
     if (state.quizMode === 'study') {
-        container.innerHTML = `
-            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 1.5rem; margin-top: 1rem;">
-                <strong style="color: var(--primary); display: block; margin-bottom: 0.8rem; font-size: 1.1rem;">💡 정답 (학습 모드)</strong>
-                <span style="color: #fff; line-height: 1.6; white-space: pre-wrap; display: block;">${formatModelAnswer(q.answer, q.question)}</span>
-            </div>
-        `;
+        // In study mode, inputs will still render below so user can see structure.
         nextBtn.textContent = '다음 문제 → (Ctrl+Enter)';
         nextBtn.style.background = '';
-    } else {
-        let matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+    }
+    // Proceed to render inputs
+    let matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
         let matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
         let matchText3 = q.question.match(/(?:^|[\s\n])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
         
@@ -1167,7 +1163,7 @@ function renderQuestion() {
             }
         }
 
-        // Restore Feedback if scored
+        // Restore Feedback if scored or study mode
         const fb = document.getElementById('feedback-area');
         const feedbackPanel = document.getElementById('quiz-feedback-panel');
         if (qState.scored) {
@@ -1180,6 +1176,15 @@ function renderQuestion() {
                     </div>
                     <p style="margin-top:0.8rem; color:var(--muted); white-space:pre-wrap">${qState.feedback}</p>
                     <button class="btn-next" onclick="nextQuestion()" style="margin-top:1.5rem; width:100%">다음 문제 → (Ctrl+Enter)</button>
+                </div>
+            `;
+            fb.classList.remove('hidden');
+            if (feedbackPanel) feedbackPanel.classList.remove('hidden');
+        } else if (state.quizMode === 'study') {
+            fb.innerHTML = `
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 1.5rem; animation: fadeIn 0.3s ease;">
+                    <strong style="color: var(--primary); display: block; margin-bottom: 0.8rem; font-size: 1.1rem;">💡 정답 (학습 모드)</strong>
+                    <span style="color: #fff; line-height: 1.6; white-space: pre-wrap; display: block;">${formatModelAnswer(q.answer, q.question)}</span>
                 </div>
             `;
             fb.classList.remove('hidden');
