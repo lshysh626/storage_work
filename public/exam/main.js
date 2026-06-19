@@ -956,7 +956,7 @@ function renderQuestion() {
     );
     
     // 특정 키워드로 시작하는 보기 영역을 감지하여 박스 처리
-    const bogiRegex = /(\[보기\]|&lt;보기&gt;|\[\s*아파치 로그\s*\]|\[\s*로그\s*\]|\[\s*표\s*\]|\[\s*지문\s*\]|\[\s*설정\s*\]|\[\s*조건\s*\]|\[\s*코드\s*\])(.*?)(?=(?:\s1\)|\s\(1\)|①|가\.|\[문\]|\(가\)|$))/g;
+    const bogiRegex = /(\[보기\]|&lt;보기&gt;|\[\s*아파치 로그\s*\]|\[\s*로그\s*\]|\[\s*표\s*\]|\[\s*지문\s*\]|\[\s*설정\s*\]|\[\s*조건\s*\]|\[\s*코드\s*\])([\s\S]*?)(?=(?:\s1\)|\s\(1\)|①|가\.|\[문\]|\(가\)|$))/g;
     escaped = escaped.replace(bogiRegex, '<div class="bogi-box"><div class="bogi-badge">$1</div>$2</div>');
     
     // 개행 문자를 <br>로 변환
@@ -1169,6 +1169,7 @@ function renderQuestion() {
 
         // Restore Feedback if scored
         const fb = document.getElementById('feedback-area');
+        const sidePanel = document.getElementById('quiz-side-panel');
         if (qState.scored) {
             fb.innerHTML = `
                 <div style="border-left: 4px solid ${qState.isCorrect ? 'var(--primary)' : '#f87171'}; padding-left: 1rem; animation: fadeIn 0.3s ease;">
@@ -1182,8 +1183,14 @@ function renderQuestion() {
                 </div>
             `;
             fb.classList.remove('hidden');
+            if (sidePanel) sidePanel.classList.remove('hidden');
         } else {
             fb.classList.add('hidden');
+            // Do not hide sidePanel here because 'study' mode needs it open always!
+            // Actually, if it's NOT study mode, should we hide it?
+            if (state.quizMode !== 'study') {
+                if (sidePanel) sidePanel.classList.add('hidden');
+            }
         }
 
         // Restore Explanation Panel if exists
@@ -1329,6 +1336,8 @@ async function submitAnswer() {
     saveQuizStateForRecovery();
     const fb = document.getElementById('feedback-area');
     fb.classList.remove('hidden');
+    const sidePanel = document.getElementById('quiz-side-panel');
+    if (sidePanel) sidePanel.classList.remove('hidden');
     const skipBtn = document.getElementById('skip-btn');
     if (skipBtn) skipBtn.classList.add('hidden');
 
