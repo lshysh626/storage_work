@@ -234,6 +234,8 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
+    height: calc(100vh - 100px);
+    min-height: 650px;
     max-height: calc(100vh - 40px);
     position: sticky;
     top: 20px;
@@ -267,7 +269,11 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
 .floating-btn:hover { background: rgba(30, 41, 59, 1); color: #fff; }
 .floating-btn.active { background: var(--primary); color: #0f172a; border-color: var(--primary); }
 
-#explanation-container { padding: 2rem; overflow-y: auto; height: 45%; min-height: 100px; }
+.quiz-side-panel {
+    overflow: hidden !important;
+}
+
+#explanation-container { padding: 2rem; overflow-y: auto; height: 45%; min-height: 100px; flex-shrink: 0; }
 .resizer { height: 8px; background: rgba(255,255,255,0.05); cursor: ns-resize; transition: background 0.2s; flex-shrink: 0; }
 .resizer:hover, .resizer.active { background: var(--primary); }
 
@@ -275,7 +281,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 300px;
+    min-height: 150px;
     background: rgba(15, 23, 42, 0.4);
 }
 .chat-header { padding: 1rem 2rem; background: rgba(15, 23, 42, 0.8); font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); }

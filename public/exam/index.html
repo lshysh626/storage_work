@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>정보보안기사 실기 마스터</title>
-    <link rel="stylesheet" href="style.css?v=1.7.26">
+    <link rel="stylesheet" href="style.css?v=1.7.27">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Firebase Compat SDK -->
@@ -170,7 +170,7 @@
                     <div class="feedback" id="feedback-area" style="margin-top: 0; padding: 1.5rem; border: none; background: transparent; backdrop-filter: none; flex: 1; overflow-y: auto;"></div>
                 </div>
                 
-                <div class="quiz-side-panel hidden" id="quiz-side-panel">
+                <div class="quiz-side-panel hidden" id="quiz-side-panel" style="height: calc(100vh - 100px); min-height: 650px;">
                     <div id="explanation-container"></div>
                     <div class="resizer" id="panel-resizer"></div>
                     <div id="chat-container">
@@ -186,7 +186,7 @@
                 </div>
 
                 <!-- NEW: Memo Panel -->
-                <div class="quiz-memo-panel hidden" id="quiz-memo-panel">
+                <div class="quiz-memo-panel hidden" id="quiz-memo-panel" style="height: calc(100vh - 100px); min-height: 650px;">
                     <div class="chat-header" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255,255,255,0.05);">나만의 메모장</div>
                     <textarea id="memo-pad" placeholder="여기에 자유롭게 메모하세요. 세션 동안 유지됩니다..." style="flex: 1; background: transparent; border: none; padding: 1.5rem; color: #cbd5e1; font-size: 1rem; line-height: 1.6; resize: none; outline: none; font-family: 'Inter', sans-serif;"></textarea>
                 </div>

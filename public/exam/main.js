@@ -3450,8 +3450,7 @@ if (resizer && explanationContainer && sidePanel) {
         if (newHeight < 100) newHeight = 100;
         if (newHeight > panelRect.height - 150) newHeight = panelRect.height - 150;
 
-        const percentage = (newHeight / panelRect.height) * 100;
-        explanationContainer.style.height = `${percentage}%`;
+        explanationContainer.style.height = `${newHeight}px`;
     });
 
     document.addEventListener('mouseup', function(e) {
