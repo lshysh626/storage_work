@@ -10,7 +10,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: var(--bg); color: var(--text); font-family: 'Inter','Noto Sans KR',sans-serif; zoom: 0.8; }
 
-#app { display: flex; height: 100vh; }
+#app { display: flex; height: calc(100vh / 0.8); width: calc(100vw / 0.8); }
 
 /* Sidebar */
 aside#sidebar {
@@ -121,7 +121,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
 .hidden { display: none !important; }
 
 /* Quiz View */
-#quiz-view { padding: 0; background: radial-gradient(circle at center top, rgba(56, 189, 248, 0.03) 0%, transparent 60%); min-height: 100vh; }
+#quiz-view { padding: 0; background: radial-gradient(circle at center top, rgba(56, 189, 248, 0.03) 0%, transparent 60%); min-height: calc(100vh / 0.8); }
 
 .quiz-header {
     display: flex; justify-content: space-between; align-items: center;
@@ -234,14 +234,14 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
-    max-height: calc(100vh - 40px);
+    max-height: calc((100vh - 40px) / 0.8);
     position: sticky;
     top: 20px;
 }
 
 .quiz-side-panel, .quiz-memo-panel {
-    height: calc(100vh - 100px);
-    min-height: 650px;
+    height: calc((100vh - 100px) / 0.8);
+    min-height: calc(650px / 0.8);
 }
 
 .floating-btn-group {
