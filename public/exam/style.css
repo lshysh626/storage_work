@@ -561,8 +561,8 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: calc(100vw / 0.8);
+    height: calc(100vh / 0.8);
     background: #0a0e17;
     display: flex;
     flex-direction: column;
