@@ -1083,7 +1083,9 @@ function renderQuestion() {
             }
         }
 
-        if (blanks.length > 0) {
+        if (state.quizMode === 'study') {
+            container.innerHTML = '';
+        } else if (blanks.length > 0) {
             // Sort blanks in dictionary order only if they are not custom list labels (e.g. 1, 2, 3 or 가, 나, 다 or ①, ②, ③)
             if (!isCustomLabels) {
                 blanks.sort((a, b) => a.localeCompare(b, 'ko', { numeric: true }));
