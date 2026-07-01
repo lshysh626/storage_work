@@ -431,7 +431,8 @@ function renderStats() {
     if (!container) return;
 
     try {
-        const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
+        let history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
+        history = history.filter(h => h.mode !== 'study');
 
         if (history.length === 0) {
             container.innerHTML = `
@@ -892,6 +893,7 @@ function launchQuiz(questions, title) {
             date: new Date().toISOString(),
             totalScore: 0,
             maxScore: 0,
+            mode: state.quizMode,
             details: questions.map((q, idx) => {
                 const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
                 return {
@@ -1381,6 +1383,7 @@ async function submitAnswer() {
                 date: new Date().toISOString(),
                 totalScore: 0,
                 maxScore: 0,
+                mode: state.quizMode,
                 details: []
             };
             history.push(session);
@@ -1546,6 +1549,7 @@ async function submitBulkAnswers() {
             date: new Date().toISOString(),
             totalScore: 0,
             maxScore: 0,
+            mode: state.quizMode,
             details: []
         };
 
@@ -2439,6 +2443,9 @@ async function syncStatsFromFirestore(username) {
 
 // Save quiz session to both LocalStorage and Firestore
 function saveQuizSessionToStorage(session) {
+    if (state.quizMode === 'study' || (session && session.mode === 'study')) {
+        return;
+    }
     // 1. Save to LocalStorage
     const history = JSON.parse(localStorage.getItem('quiz_sessions') || '[]');
     const idx = history.findIndex(h => h.id === session.id);
