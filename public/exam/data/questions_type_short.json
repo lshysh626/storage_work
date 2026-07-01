@@ -2073,7 +2073,7 @@
     {
       "original_id": 232,
       "type": "short",
-      "question": "다음 보기 실행시 물음에 답하시오.\n1) getresuid() 호출 시 ruid, euid (A), suid\n(A)\n2) setuid(600) 이후 getresuid() 호출 시 ruid (B), euid (C), suid (C)",
+      "question": "다음 보기 실행시 물음에 답하시오.\n\n[보기]\n- 파일 소유자: root (UID 0)\n- 실행 파일 권한: SetUID가 설정됨 (-rwsr-xr-x)\n- 파일을 실행하는 일반 사용자: user1 (UID 600)\n\n1) getresuid() 호출 시 ruid, euid (A), suid\n(A)\n2) setuid(600) 이후 getresuid() 호출 시 ruid (B), euid (C), suid (C)",
       "answer": "0, 600, 600",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",

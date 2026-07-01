@@ -58,7 +58,7 @@ function formatModelAnswer(answer, question = '') {
     // Try to extract blanks from question
     let blanks = [];
     if (question) {
-        let matchText1 = question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+        let matchText1 = question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]{1,2})\s*\)/g) || [];
         let matchText2 = question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
         let matchText3 = question.match(/(?:^|[\s\n])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
         
@@ -77,7 +77,7 @@ function formatModelAnswer(answer, question = '') {
         if (customLabels.length > 0) {
             blanks = customLabels;
         } else {
-            let matchAns1 = String(answer).match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+            let matchAns1 = String(answer).match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]{1,2})\s*\)/g) || [];
             let matchAns2 = String(answer).match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
             let matchAns3 = String(answer).match(/^[ \t]*(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/gm) || [];
             
@@ -1017,7 +1017,7 @@ function renderQuestion() {
         nextBtn.style.background = '';
     }
     // Proceed to render inputs
-    let matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+    let matchText1 = q.question.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]{1,2})\s*\)/g) || [];
         let matchText2 = q.question.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
         let matchText3 = q.question.match(/(?:^|[\s\n])(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/g) || [];
         
@@ -1038,7 +1038,7 @@ function renderQuestion() {
                 blanks = customLabels;
                 isCustomLabels = true;
             } else {
-                let matchAns1 = q.answer.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]+)\s*\)/g) || [];
+                let matchAns1 = q.answer.match(/\(\s*([A-Za-z가-힣ㄱ-ㅎ]|[0-9]{1,2})\s*\)/g) || [];
                 let matchAns2 = q.answer.match(/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳]/g) || [];
                 let matchAns3 = q.answer.match(/^[ \t]*(\d{1,2}|[A-Za-z가-힣ㄱ-ㅎ])\)/gm) || [];
                 
