@@ -606,7 +606,7 @@
     {
       "original_id": 94,
       "type": "essay",
-      "question": "다음 로그에서 나타나는 공격을 보고 물음에 답하시오.\n\n(1) 어떤 공격 기법이 사용되었는가?\n(2) 해당 공격 기법의 특징에 대해서 설명하시오.\n(3) 공격의 결과에 대해 설명하시오.",
+      "question": "다음 로그에서 나타나는 공격을 보고 물음에 답하시오.\n\n[보기]\n웹 서버 액세스 로그 (Access Log):\nGET /view.php?id=1' and substr(password,1,1)='a'# HTTP/1.1  => HTTP 200 OK (성공)\nGET /view.php?id=1' and substr(password,1,1)='b'# HTTP/1.1  => HTTP 404 Not Found (실패)\nGET /view.php?id=1' and substr(password,2,1)='0'# HTTP/1.1  => HTTP 200 OK (성공)",
       "answer": "(1) Blind SQL Injection 공격\n\n(2) 단순히 SQL 문을 조작하여 인증을 우회하거나 특정 명령을 수행하는 것 외에 DB 에 저장된 값을 추정 가능\n\n(3) id 가 1 인 사용자의 password 컬럼 값에 대해 substr() 함수를 이용하여 1 부터 순차적으로 한 문자씩 비교를 수행한다.\n\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
@@ -678,7 +678,7 @@
     {
       "original_id": 104,
       "type": "essay",
-      "question": "다음 결과에 대해 답하시오.\n\n(1) 어떤 유형의 공격인가?\n(2) 공격대상은 무엇인가?\n(3) HTTP 상태코드 값이 200 으로 출력되었다. 공격은 성공했는지 여부와 성공의 판단 근거를 서술하시오.",
+      "question": "다음 결과에 대해 답하시오.\n\n[보기]\nHTTP Request:\nGET /images/ HTTP/1.1\nHost: 192.168.0.10\n\nHTTP Response:\nHTTP/1.1 200 OK\nContent-Type: text/html\n...\n<h1>Index of /images</h1>\n[DIR] Parent Directory\n[IMG] logo.png               2026-06-15 10:20   45k\n[TXT] config.txt             2026-06-20 14:30    2k",
       "answer": "(1) 디렉터리 리스팅\n\n(2) 웹 서버 (192.168.0.10)\n\n(3) 공격은 성공으로 판단됨. HTTP 200 OK 응답 코드를 통해 정상적으로 브라우저에 디렉터리 리스팅 정보가 출력된 것을 알 수 있다.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
@@ -705,7 +705,7 @@
     {
       "original_id": 109,
       "type": "essay",
-      "question": "다음은 공격상황의 패킷을 캡처한 결과이다. 그림을 보고 다음 물음에 답하시오.\n\n(1) 어떤 공격인가?\n(2) 어떤 현상이 발생하며, 그 이유는 무엇인가?\n(3) 대응 방법은 무엇인가?",
+      "question": "다음은 공격상황의 패킷을 캡처한 결과이다. 그림을 보고 다음 물음에 답하시오.\n\n[보기]\n공격자 HTTP 요청 흐름:\nGET / HTTP/1.1\\r\\n\nHost: target.com\\r\\n\nUser-Agent: Mozilla/5.0\\r\\n\nX-a: a\\r\\n\n(10초 대기...)\nX-b: b\\r\\n\n(10초 대기...)\nX-c: c\\r\\n\n(헤더 전송의 끝을 알리는 빈 라인(\\r\\n\\r\\n)을 지속적으로 보내지 않고 긴 세션 유지)",
       "answer": "(1) Slow HTTP Header DoS(Slowloris) 공격\n\n(2) 서비스가 느려지고 새로운 정상 접속요청이 거부된다.\n- 요청 헤더 부분을 비정상적으로 조작, 불필요한 헤더정보를 천천히 지속적으로 전달하여 웹서버가 헤더 정보를 완전히 수신할 때까지 연결을 장시간 유지한다.\n- 웹서버가 동시에 연결상태(HTTP 연결상태)를 유지할 수 있는 자원은 제한적이며, 다수의 연결상태가 비정상적으로 지속되면 정상적인 사용자의 서비스 접속이 어려워진다.\n\n(3) 공격자가 동시에 많은 연결상태(세션)를 유지하므로 이를 차단하기 위해 서버방화벽 등을 이용하여 동시 연결에 대한 임계치 제한을 설정한다.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
@@ -804,7 +804,7 @@
     {
       "original_id": 124,
       "type": "essay",
-      "question": "다음 이미지를 보고 질문에 답하시오.\n\n(1) 다음 FTP 동작 모드는 무엇인가?\n(2) 서버의 20, 21 포트의 역할은 무엇인가?\n(3) 클라이언트에서 서버의 파일이 보이지 않는 이유는 무엇인가?\n(4) 3 번과 같은 경우 클라이언트 단에서 해주어야 할 조치는 무엇인가?",
+      "question": "다음 이미지를 보고 질문에 답하시오.\n\n[보기]\nFTP 액티브 모드 (Active Mode) 흐름도:\nClient (Port 1024) -------- TCP SYN --------> Server (Port 21)\nClient (Port 1024) <------- SYN/ACK -------- Server (Port 21)\nClient (Port 1024) -------- TCP ACK --------> Server (Port 21)\n(제어 채널 연결 완료)\n\nClient (Port 1024) ------- PORT 192,168,1,10,4,1 (1025번 데이터 포트) -------> Server (Port 21)\nClient (Port 1024) <------ 200 PORT command successful ---------------------- Server (Port 21)\n\nServer (Port 20)   -------- TCP SYN --------> Client (Port 1025) [방화벽에서 SYN 패킷 차단됨]",
       "answer": "(1) Active Mode\n\n(2) 21 번 포트로 초기 접속 후 클라이언트가 사용할 포트를 서버 측에 알려준다. 서버측 20 번 포트가 클라이언트의 포트에 접속한다.\n\n(3) 서버측 20 번 포트와의 통신이 차단되어서 파일리스트를 볼 수 없다.\n\n(4) FTP 서버(20/tcp)가 FTP 클라이언트(1024/tcp)로 데이터채널을 생성하기 위한 연결을 허용하거나(방화벽 허용 등) 수동모드(Passive Mode)로 FTP 연결을 생성한다.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
@@ -822,7 +822,7 @@
     {
       "original_id": 128,
       "type": "essay",
-      "question": "아래는 하나의 발신지에서 브로드캐스트로 ICMP echo Request 요청을 보내는 패킷 캡쳐 화면이다. 해당 공격명과 원리 및 대응방법에 대한 설명을 쓰시오.",
+      "question": "아래는 하나의 발신지에서 브로드캐스트로 ICMP echo Request 요청을 보내는 패킷 캡쳐 화면이다. 해당 공격명과 원리 및 대응방법에 대한 설명을 쓰시오.\n\n[보기]\nWireshark 패킷 캡쳐:\nNo.   Time       Source         Destination   Protocol  Info\n1     0.000000   192.168.1.10   192.168.1.255 ICMP      Echo (ping) request\n2     0.000120   192.168.1.20   192.168.1.10  ICMP      Echo (ping) reply\n3     0.000135   192.168.1.30   192.168.1.10  ICMP      Echo (ping) reply\n(192.168.1.10 은 공격 대상자 IP이며, 192.168.1.255 는 브로드캐스트 주소임)",
       "answer": "(1) 공격명: Smurf 공격\n\n(2) 원리:\n한 클라이언트에서 서버로 ICMP_echo_request 를 보내면 서버에서 클라이언트로 ICMP_echo_reply 를 보내는데 ICMP_echo_request 패킷이 네트워크의 Broadcast 로 보내지는 경우 네트워크상의 모든 호스트가 echo_reply 를 보내게 되어 네트워크 트래픽을 증가시켜 정상적인 서비스가 이루어지지 않도록 하는 공격 기법이다.\n\n(3) 대응방법: 다른 네트워크로부터 자신의 네트워크로 들어오는 Directed Broadcast 패킷을 허용하지 않도록 라우터 설정을 한다.\n브로드캐스트 주소로 전송된 ICMP Echo Request 메시지에 대해 응답하지 않도록 시스템 설정을 한다.\n\n\n\n\n1-12 회 https://information-security.tistory.com/",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
@@ -831,7 +831,7 @@
     {
       "original_id": 129,
       "type": "essay",
-      "question": "CENT OS 6.5 에서 무차별 모드(PROMISCUOUS MODE)로 동작하고 있는 인터페이스 정보를 보고, 예상되는 공격명과 이유를 쓰시오. 또한, 해당 공격을 해결하려면 어떤 명령어를 써야 하는지, 해당 공격의 발생 시점을 찾기 위한 정확한 경로를 쓰시오.",
+      "question": "CENT OS 6.5 에서 무차별 모드(PROMISCUOUS MODE)로 동작하고 있는 인터페이스 정보를 보고, 예상되는 공격명과 이유를 쓰시오. 또한, 해당 공격을 해결하려면 어떤 명령어를 써야 하는지, 해당 공격의 발생 시점을 찾기 위한 정확한 경로를 쓰시오.\n\n[보기]\n# ifconfig eth0\neth0      Link encap:Ethernet  HWaddr 00:0C:29:XX:XX:XX  \n          inet addr:192.168.1.10  Bcast:192.168.1.255  Mask:255.255.255.0\n          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1\n          RX packets:10204 errors:0 dropped:0 overruns:0 frame:0\n          TX packets:8420 errors:0 dropped:0 overruns:0 carrier:0\n          collisions:0 txqueuelen:1000 \n          RX bytes:10420042 (9.9 MiB)  TX bytes:1052042 (1.0 MiB)",
       "answer": "(1) 공격명: 스니핑 공격\n(2) 명령어: ifconfig eth0 -promisc\n(3) 경로명: /var/log/messages",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",

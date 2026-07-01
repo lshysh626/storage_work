@@ -1,0 +1,2668 @@
+{
+  "questions": [
+    {
+      "original_id": 1,
+      "type": "short",
+      "question": "개인정보보호위원회와 한국인터넷진흥원에서 발간한 \"개인정보영향평가 수행 안내서\"에 따르면 위험도 산정 공식을 다음과 같이 제시하고 있다. ( )에 들어갈 항목명을 기술하시오.\n[보기]\n[위험도 산정 공식] 위험도 =\n자산가치(영향도) + ((A) * (B)) * (C)",
+      "answer": "침해요인 발생 가능성, 법적 준거성, 2",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 1
+    },
+    {
+      "original_id": 2,
+      "type": "short",
+      "question": "DB 암호화 기법에 대한 설명이다. ( )에 해당하는 기법의 명칭을 기술하시오.\n[보기]\n( A ) : 암복호화 모듈이 API 라이브러리 형태로 각 애플리케이션 서버에 설치되고, 응용프로그램에서 암복화 모듈을 호출하는 방식\n( B ) : 암복호화 모듈이 DB 서버에 설치되고 DBMS 에서 플러그인으로 연결된 암복화 모듈을 호출하는 방\n( C ) : DBMS 에 내장되어 있는 암호화 기능을 이용하여 암복호화 처리를 수행하는 방식",
+      "answer": "API, Plug-in, TDE(Transparent Data Encryption)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 2
+    },
+    {
+      "original_id": 3,
+      "type": "short",
+      "question": "LAN 스위칭 기법에 대한 설명이다. ( )에 해당하는 기법의 명칭을 기술하시오.\n[보기]\n( A ) : 프레임의 헤더(목적지 주소)만을 보고 경로를 결정해 주는 방식\n( B ) : 프레임의 앞 64 바이트만을 읽어 에러를 처리하고, 목적지 포트로 포워드 하는 방식\n( C ) : 전체 프레임을 다 받은 다음에 경로를 결정하는 방식",
+      "answer": "Cut through, Modified Cut through (Fragment Free), Store and Forward",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 3
+    },
+    {
+      "original_id": 4,
+      "type": "short",
+      "question": "EAP 를 통해 인증을 수행하고 AES-CCMP 기반 암호화를 지원하는 무선랜 보안 표준은?",
+      "answer": "WPA2",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 4
+    },
+    {
+      "original_id": 5,
+      "type": "short",
+      "question": "VLAN(Virtual LAN) 의 주소 할당 방법에 대한 설명이다. ( ) 에 해당하는 방식명을 기술하시오.\n[보기]\n( A ) : VLAN 할당을 관리자가 각 스위치에서 직접 할당하는 방식\n( B ) : MAC 주소 등을 기반으로 VLAN 할당이 자동으로 이루어지는 방식",
+      "answer": "정적 VLAN(포트 주소 기반), 동적 VLAN(MAC 주소 기반)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 5
+    },
+    {
+      "original_id": 6,
+      "type": "short",
+      "question": "검색로봇에게 웹사이트의 페이지를 수집할 수 있도록 허용/제한하는 국제 권고안으로 웹사이트의 루트 디렉터리에 위치해야 하며, 로봇 배제 표준을 따르는 일반 텍스트 파일(text/plain)로 작성해야 하는 파일명은 무엇인가?",
+      "answer": "robots.txt",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 6
+    },
+    {
+      "original_id": 7,
+      "type": "short",
+      "question": "ISO 31000 위험평가 방법론에 따른 위험평가 절차에 대한 설명이다. ( )에 들어갈 위험평가 단계명을 기술하시오.\n[보기]\n( A ) : 운영 실패, 공급망 중단 또는 인재 격차와 같은 외부 및 내부 위험을 고려하여 잠재된 위험 식별\n( B ) : 확인된 위험이 조직의 목표 및 운영에 미칠 가능성과 잠재적 영향을 분석\n( C ) : 조직의 위험 감수성(Risk Appetite), 수용 능력, 위험과 보상 간의 균형을 고려하여 위험 허용 수준(DoA) 결정하고, 위험의 중요성에 따라 위험 처리 필요성을 결정",
+      "answer": "위험식별, 위험분석, 위험평가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 7
+    },
+    {
+      "original_id": 8,
+      "type": "short",
+      "question": "다음과 같은 기능을 수행하는 정보보호 솔루션의 이름은 무엇인가?\n[보기]\n- PC 에 설치된 에이전트, 네트워크 센서를 통하여, 이동식 디스크, 이메일, 메신저, 웹사이트 파일 업로드를 이용한 내부 문서 이동 탐지\n- HTTPS 와 같은 암호화 통신에서도 중요 내부 문서 이동 탐지 가능\n- 일부 솔루션에서는 파일 암호화, 파일 삭제와 같은 부가 기능 탑재",
+      "answer": "DLP(Data Loss Prevention)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 8
+    },
+    {
+      "original_id": 9,
+      "type": "short",
+      "question": "유닉스에서 현재 실행되고 있는 프로세스 정보가 기록되며, 숨겨진 프로세스를 찾기 위해 참조하는 경로는 ( A )이다.",
+      "answer": "/proc",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 9
+    },
+    {
+      "original_id": 10,
+      "type": "short",
+      "question": "개인정보 가명처리 기법 중 수치 데이터를 임의의 수인 자리 수, 실제 수 기준으로 올림 또는 내림 처리하는 기법의 명칭은 무엇인가?",
+      "answer": "랜덤 라운딩",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 10
+    },
+    {
+      "original_id": 11,
+      "type": "short",
+      "question": "아파치 SW 재단에서 개발한 JAVA 기반의 오픈소스 프로그램으로 자바기반 프로그램을 개발할 때 로그를 쉽고 편하게 남기기 위한 목적으로 사용된다. 2021 년말 이 프로그램의 JNDI Lookup 메소드를 호출할 때 입력 값에 대한 검증 없이, 임의의 코드가 실행되는 취약점이 발견되어 전세계를 떠들썩하게 만들었던 프로그램의 이름은 무엇인가?",
+      "answer": "Log4J",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 11
+    },
+    {
+      "original_id": 12,
+      "type": "short",
+      "question": "A 기업에서는 다양한 유닉스 계열 서버를 운영하고 있다. Solaris, Linux, AIX, HP-UX 서버에서 패스워드 최소 길이를 8 자리 이상으로 강화하기 위한 설정 방법을 기술하시오.",
+      "answer": "1) Solaris\n- 설정대상 파일 : /etc/default/passwd\n- 설정값 : PASSLENGTH = 8\n\n\n2) Linux\n- 설정대상 파일 : /etc/login.defs\n- 설정값 : PASS_MIN_LEN 8\n\n\n3) AIX\n- 설정대상 파일 : /etc/security/user\n- 설정값 : minlen = 8\n\n\n4) HP-UX\n- 설정대상 파일 : /etc/default/security\n- 설정값 : MIN_PASSWORD_LENGTH = 8",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 12
+    },
+    {
+      "original_id": 13,
+      "type": "short",
+      "question": "xinetd 서비스에 대한 환경설정 파일에서\n(1) ~(4)에 적절한 값을 기술하시오.\n[보기]\n# cd /etc/xinetd.d/\n# cat telnet service telnet { flags = REUSE # 서비스 포트가 사용중인 경우 해당포트 재사용 허용 socket_type = stream #TCP 프로토콜 선택 wait = no # 한 번에 다중사용자에게 서비스 제공 user = root # root 권한으로 실행 server = /usr/sbin/in.telnetd #실행할 데몬 파일 log_on_failure += USERID #서버 접속 실패시 USERID 를 로그에 기록 disable = no # 서비스 사용\n( 1 ) = 10.0.0.0/8 # 10.0.0.0/8 대역은 서비스 미허용\n( 2 ) = 192.168.10.0/24 # 192.168.10.0/24 대역은 서비스 허용\n( 3 ) = 3 # 동시에 접속가능한 최대 세션 수 3 개 access_time = ( 4 ) #접속을 허용할 시간 (9 시 ~ 18 시) }",
+      "answer": "1) no_access\n2) only_from\n3) instances\n4) 09:00~18:00",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 13
+    },
+    {
+      "original_id": 14,
+      "type": "short",
+      "question": "윈도우 OS 환경에서 특정 서비스의 로그 파일 저장 경로에 대한 문제이다. ( )에 들어갈 로그 파일 경로명을 기술하시오.\n[보기]\n[IIS 로그]\nC:\\Windows\\inetpub\\logs\\Logfiles\\W3SVC 1\nC:\\Windows\\inetpub\\logs\\Logfiles\\MSFTPS VC1\nC:\\Windows\\System32\\Logfiles\\ ( A )\n\n[DHCP 로그]\nC:\\Windows\\System32\\Logfiles\\ ( B )",
+      "answer": "HTTPERR, DHCP",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 14
+    },
+    {
+      "original_id": 15,
+      "type": "short",
+      "question": "64 비트 리눅스에서 아래 프로그램 코드를 실행하려고 한다. printf 를 통해 함수가 호출될 때 A, B, C 각 파라미터가 저장되는 레지스터 명을 기술하시오.\n[보기]\nint main() { printf (\"%c, %c, %c\\n\", 'A','B','C'); }",
+      "answer": "RSI, RDX, RCX",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 15
+    },
+    {
+      "original_id": 16,
+      "type": "short",
+      "question": "리눅스 환경에서 컴파일 과정에 관한 설명이다. ( )에 들어갈 용어를 기술하시오.\n[보기]\n- 리눅스 환경에서 ( A ) 방식으로 컴파일 하는 경우, 외부 라이브러리 함수를 사용할 수 있도록 주소를 프로그램에 연결시켜주는 테이블인 ( B ) 를 참조한다.\n- ( B ) 는 실제 해당 함수의 주소가 들어 있는\n( C )를 참조하여 함수 주소를 얻어 온다.",
+      "answer": "Dynamic Linking, PLT(Procedure Linkage Table), GOT(Global Offset Table)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 16
+    },
+    {
+      "original_id": 17,
+      "type": "short",
+      "question": "정보보호 및 개인정보 관리체계 인증(ISMS-P)은 인증 기준이 3 개 영역, 102 개 항목으로 세분화되어 있다. 이 중 3 개 영역을 기술하시오.",
+      "answer": "관리체계 수립 및 운영, 보호대책 요구사항, 개인정보 처리 단계별 요구사항",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 17
+    },
+    {
+      "original_id": 18,
+      "type": "short",
+      "question": "유닉스의 /var/log/message 로그가 다음과 같이 기록되어 있다. 로그의 내용을 5 개 항목으로 나누었을 때 ( ) 가 의미하는 바를 기술하시오.\n[보기]\n[/var/log/message 샘플]\nMar 29 14:23:57 alex kernel:(A)\n[295087,236116](B) Call Trace:(C)\nMar 29 14:23:57 alex kernel:\n[295087,236131] do_idle+0x83/0xf0\nMar 29 14:23:57 alex systemd [1] apt-daily-\nupgrade.service: Consumed 50.187s CPU time",
+      "answer": "로그를 생성한 프로세스명, 로그를 생성한 프로세스의 프로세스 번호, 상세 로그 메시지",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 18
+    },
+    {
+      "original_id": 19,
+      "type": "short",
+      "question": "SQL Injection 취약점을 대응하는 방법을 설명하시오.\n[보기]\n[공격 대상 SQL 구문]\nstring query = \"select * from member a where gubun = '\" + a.gubun \"'\"\n[대응 방법]",
+      "answer": "Prepared Statement",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 19
+    },
+    {
+      "original_id": 20,
+      "type": "short",
+      "question": "리눅스의 PAM(Pluggable Authentication Module) 모듈의 종류에 대한 설명이다. ( )에 들어갈 모듈명을 기술하시오.\n1) ( A ) : 실질적인 인증기능, 패스워드 확인을 담당하는 모듈\n2) ( B ) : 사용자의 시스템 사용 권한을 확인하는 모듈\n3) ( C ) : 사용자가 인증 성공 시 세션을 맺어주는 모듈",
+      "answer": "auth, account, session",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 20
+    },
+    {
+      "original_id": 21,
+      "type": "short",
+      "question": "Salvatore Sanfilippo 가 개발한 보안 테스트 툴로 ICMP, TCP, UDP 등과 같은 다양한 프로토콜을 지원한다. 다량의 공격용 패킷을 생성하여 DDoS 훈련 목적으로도 사용하는 이 툴의 이름은 무엇인가?",
+      "answer": "hping3",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 21
+    },
+    {
+      "original_id": 22,
+      "type": "short",
+      "question": "보안 점검 도구에 대하여 ( )에 들어갈 명칭을 기술하시오.\n[보기]\n- Tripwire 은 ( A ) 을 점검하는 도구이다.\n- ( B ) 는 미국 Tenable 사가 개발하였고, 네트워크에 연결된 다양한 종류의 시스템에 대하여 자동화된 취약점 스캔을 지원하며 광범위한 취약점 DB 를 가지고 있다.",
+      "answer": "무결성, NESSUS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 22
+    },
+    {
+      "original_id": 23,
+      "type": "short",
+      "question": "CVE-2014-0160 으로 알려진 오픈 SSL 취약점이다. 오픈 SSL 의 하트비트 체크 로직의 취약점을 악용하여 시스템 메모리에서 중요 데이터를 탈취할 수 있는 이 취약점의 이름은 무엇인가?",
+      "answer": "하트블리드 (HeartBleed)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 23
+    },
+    {
+      "original_id": 24,
+      "type": "short",
+      "question": "위험관리 3 단계에 대한 설명이다. ( )에 들어갈 단계명을 기술하시오.\n[보기]\n( A ) : 자산의 위협과 취약점을 분석하여 보안 위험의 종류와 규모를 결정하는 과정\n( B ) : 식별된 자산, 위협 및 취약점을 기준으로 위험도를 산출하여 기존의 보호대책을 파악하고 위험의 대응 여부와 우선 순위를 결정하기 위한 평가 과정 (대책 선정) : 허용가능 수준으로 위험을 줄이기 위해 적절하고 정당한 정보보호 대책을 선정하고 이행 계획을 수립하는 과정",
+      "answer": "위험분석, 위험 평가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 24
+    },
+    {
+      "original_id": 25,
+      "type": "short",
+      "question": "위험관리를 위한 정보자산 분석 절차에 대한 설명이다. ( )에 들어갈 단계명을 기술하시오.\n[보기]\n( A ) : 보호받을 가치가 있는 자산을 식별하고, 이를 정보자산의 형태, 소유자, 관리자, 특성 등을 포함하여 자산 목록을 작성 (자산 관리자 지정) : 식별된 정보자산에 대하여 책임자 및 관리자 지정\n( B ) : 식별된 자산에 대해 침해 사고가 발생할 경우 그 영향을 기밀성, 무결성, 가용성 측면에서 파악하여 자산의 중요도를 산정",
+      "answer": "정보자산 식별, 정보자산 중요도 평가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 25
+    },
+    {
+      "original_id": 26,
+      "type": "short",
+      "question": "라우팅 프로토콜에 대한 설명이다. ( )에 들어갈 프로토콜명을 기술하시오.\n1) ( A ) : 거리 벡터 알고리즘을 사용하며, 가장 오래되고 널리 사용되는 내부 라우팅 프로토콜\n2) ( B ) : 링크 상태 알고리즘을 사용하며, 링크 상태 변화시에만 라우팅 정보를 교환하는 내부 라우팅 프로토콜\n3) ( C ) : 시스코에서 제안하였으며, 거리벡터와 링크 상태 알고리즘의 장점을 수용한 하이브리드 라우팅 프로토콜. 효율성과 수렴 속도가 개선되어 안정적인 라우팅을 지원함.",
+      "answer": "RIP, OSPF, EIGRP",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 26
+    },
+    {
+      "original_id": 27,
+      "type": "short",
+      "question": "다음 ( ) 에 들어갈 유닉스 로그 파일명을 기술하시오(경로는 생략해도 됨)\n1) ( A ) : 사용자의 가장 최근 로그인 시각, 접근 호스트 정보 기록\n2) ( B ) : SU(Swift User) 권한 변경(성공 or 실패) 로그 기록\n3) ( C ) : 시스템에 로그인한 모든 사용자가 실행한 명령어 정보 기록",
+      "answer": "lastlog, sulog, acct/pacct",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 27
+    },
+    {
+      "original_id": 28,
+      "type": "short",
+      "question": "유닉스의 /etc/passwd 에 등록된 정보이다. 밑줄 친 값의 의미를 설명하시오.\n[보기]\n(정보) test01:x:100:1000:/home/exam:/bin/bash\n1) 1000 : ( A )\n2) /home/exam : ( B )\n3) /bin/bash : ( C )",
+      "answer": "GID(그룹ID), 사용자 홈디렉토리, 로그인쉘",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 28
+    },
+    {
+      "original_id": 29,
+      "type": "short",
+      "question": "HTTP Request 입력값에 개행문자가 포함되면 HTTP 응답이 2 개 이상으로 분리되어, 공격자는 첫 응답을 종료시킨 후 다음 응답에 악의적인 코드를 삽입/실행할 수 있는 HTTP 응답 분할 공격이 가능해진다.\n위에서 언급한 개행 문자 2 가지를 기술하시오.",
+      "answer": "CR(Carriage Return, \\r, %0D), LF(Line Feed, \\n, %0A)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 29
+    },
+    {
+      "original_id": 30,
+      "type": "short",
+      "question": "파일 삽입 취약점은 공격자가 악성 스크립트를 서버에 전달하여 해당 코드가 실행되도록 할 수 있다. PHP 를 사용하는 경우 이에 대한 대응책에 대하여 ( )에 들어갈 값을 기술하시오.\n1) PHP 소스 코드에 ( A ) 함수가 존재하는지 확인\n2) PHP 설정 파일 ( B )에서 allow_url_fopen 값을 ( C )로 설정",
+      "answer": "require or include, PHP.ini, Off",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 30
+    },
+    {
+      "original_id": 31,
+      "type": "short",
+      "question": "Snort 에서는 대량의 패킷에 대응하기 위하여 Threshold 옵션을 type(action 수행 유형), track(소스/목적지 IP), count(횟수), second(시간)으로 설정할 수 있다. 이 중 thresholod type 3 가지를 기술하시오.\n[보기]\n(예) threshold type <(1)|(2)|(3)>, track<by_src|by_dst>, count <c>, seconds\n<s>",
+      "answer": "threshold, limit, both",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 31
+    },
+    {
+      "original_id": 32,
+      "type": "short",
+      "question": "ARP request 요청을 보내는 경우 목적지 주소를 형식에 맞춰서 기술하시오.",
+      "answer": "FF:FF:FF:FF:FF:FF",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 32
+    },
+    {
+      "original_id": 33,
+      "type": "short",
+      "question": "DNS 서비스와 관련하여 ( )안에 들어갈 용어를 기술하시오.\n1) DNS 서비스는 53 번 포트를 사용하고 전승 계층 프로토콜로 ( A ) 를 사용한다.\n2) DNS 서버는 반복적인 질의로 상위 DNS 에 가해지는 부하를 줄이기 위해 ( B )를 사용하는데, 해당 정보가 유지되는 기간을\n( C ) 이라고 한다.",
+      "answer": "UDP/TCP, Cache(DNS 캐시), TTL(Time To Live)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 33
+    },
+    {
+      "original_id": 34,
+      "type": "short",
+      "question": "애플리케이션의 소스 코드를 보지 않고 외부 인터페이스나 구조를 분석하여 취약점을 발견하는 방식을 (A )라 하고, 개발된 소스 코드를 살펴봄으로써 코딩 상의 취약점을 찾는 방식을 (B ) 라고 한다.",
+      "answer": "Blackbox 테스트, Whitebox 테스트",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 34
+    },
+    {
+      "original_id": 35,
+      "type": "short",
+      "question": "SW 개발과정에서 DBMS 조회를 위한 질의문 생성 시 사용되는 입력값과 조회 결과에 대한 검증방법(필터링 등)을 설계하는 경우 고려해야 할 사항이다. ( ) 에 들어갈 용어를 기술하시오.\n1) 애플리케이션에서 DB 연결을 통해 데이터를 처리하는 경우 ( A )이 설정된 계정을 사용해야 한다.\n2) 외부 입력값이 삽입되는 SQL 쿼리문을\n( B )으로 생성해서 실행하지 않도록 해야 한다.\n3) 외부 입력값을 이용해 동적으로 SQL 쿼리문을 생성해야 하는 경우, ( C )에 대한 검증을 수행한 뒤 사용해야 한다.",
+      "answer": "최소권한, 동적, 입력값",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 35
+    },
+    {
+      "original_id": 36,
+      "type": "short",
+      "question": "개인정보의 안전성 확보조치 기준에 대하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n[제8 조(접속기록의 보관 및 점검)] ①\n개인정보처리자는 개인정보취급자가 개인정보처리시스템에 접속한 기록을 ( A ) 년 이상 보관·관리하여야 한다. 다만, ( B ) 명 이상의 정보주체에 관하여 개인정보를 처리하거나, 고유식별정보 또는 ( C ) 를 처리하는 개인정보처리시스템의 경우에는 2 년 이상 보관·관리하여야 한다.",
+      "answer": "1 년, 5 만명, 민감정보",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 36
+    },
+    {
+      "original_id": 37,
+      "type": "short",
+      "question": "위험관리와 관련하여 ( )에 들어갈 용어를 기술하시오.\n1) ( A ) : 내외부 위협과 취약점으로 인해 자산에서 발생 가능한 위험을 감소시키기 위한 관리적, 물리적, 기술적 대책\n2) ( B ) : ( A )을 적용한 이후에 잔재하는 위험\n3) ( C ) : 조직에서 수용 가능한 목표 위험 수준을 의미하며 경영진의 승인을 받아 관리해야 함",
+      "answer": "정보보호대책, 잔여 리스크(위험), DoA(수용 가능한 위험 수준)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 37
+    },
+    {
+      "original_id": 38,
+      "type": "short",
+      "question": "Sendmail 에서 스팸메일 릴레이 제한 설정 후 access db 를 생성하려고 한다. ( )에 들어갈 명령어를 기술하시오.\n[보기]\n# ( A ) ( B ) etc/mail/access.db < etc/mail/access",
+      "answer": "makemap, hash",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 38
+    },
+    {
+      "original_id": 39,
+      "type": "short",
+      "question": "라우터에서 snmp 프로토콜을 비활성화 하려고 한다. ( )에 들어갈 명령어를 기술하시오.\n[보기]\nRouter# configure terminal\nRouter(config)# ( A ) ( B )",
+      "answer": "no, snmp-server",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 39
+    },
+    {
+      "original_id": 40,
+      "type": "short",
+      "question": "위험분석 관련하여 다음 물음에 답하시오.\n1) 위험을 모두 제거하는 것은 현실적으로 불가능하므로, 수용가능한 수준으로 경감시키기 위한 보호대책을 마련하는 것이 중요하다. 이 경우, 수용가능한 수준의 위험을 지칭하는 용어를 기술하시오.\n2) 위험이 낮으면 원칙적으로 비용절감을 위해 그냥 두는 것이 맞나? O, X 로 답하시오.",
+      "answer": "1) DoA (Degree of Assurance, 위험 허용(수용) 수준)\n\n2) X (보호대책의 효과성을 주기적으로 평가하여, 위험수준을 지속적으로 모니터링 해야 함)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 40
+    },
+    {
+      "original_id": 41,
+      "type": "short",
+      "question": "업무 연속성 계획(BCP) 5 단계 중 2~4 단계의 명칭을 기술하시오.",
+      "answer": "BIA(Business Impact Analysis, 사업영향평가), 복구전략개발, 복구계획 수립",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 41
+    },
+    {
+      "original_id": 42,
+      "type": "short",
+      "question": "특정 대상을 겨냥해 다양한 공격 기법(특히 알려지지 않은 취약점을 이용)을 동원하여 장기간 지속적으로 공격하는 기법을 무엇이라고 하나?",
+      "answer": "APT(Advance Persistent Threat, 지능형지속위협)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 42
+    },
+    {
+      "original_id": 43,
+      "type": "short",
+      "question": "불완전한 암호화 저장 취약점이 있는 웹 어플리케이션은 데이터와 자격 증명을 적절히 보호하기 위한 암호화 기능을 거의 사용하지 않아서, 보호되지 않은 데이터를 이용하여 신원 도용이나 신용카드 사기와 같은 범죄가 이루어질 수 있다. 해당 취약점을 점검하는 방법에 대하여 ( ) 에 들어갈 용어를 설명하시오.\n1) DB 에 저장된 중요정보가 (A) 로 열람가능한지 확인한다\n2) (B) 또는 암호화된 쿠키 값이 명백하게 랜덤으로 생성되는지 확인한다\n3) 적절한 (C) 이 제대로 적용되었는지 검증한다.",
+      "answer": "SQL Query, 세션ID, 암호화알고리즘",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 43
+    },
+    {
+      "original_id": 44,
+      "type": "short",
+      "question": "TCP/IP 의 인터넷계층에서 동작하는 프로토콜에 대하여 ( )에 들어갈 용어를 기술하시오.\n1) ( A ) : 인터넷 계층에서 동작하는 대표적인 VPN 프로토콜\n2) ( B ) : ( A )의 세부 프로토콜로 무결성 보장, 메시지 인증 가능\n3) ( C ) : ( A )의 세부 프로토콜로 암호화를 통한 기밀성 유지 가능",
+      "answer": "IPSec, AH, ESP",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 44
+    },
+    {
+      "original_id": 45,
+      "type": "short",
+      "question": "위험분석 방법과 관련하여 ( )안에 들어갈 명칭을 기술하시오.\n[보기]\n( A ) : 시스템에 관한 전문적인 지식을 가진 전문가의 집단을 구성하고 위험을 분석 및 평가하여 정보시스템이 직면한 다양한 위험과 취약성을 토론을 통해 분석하는 방법\n( B ) : 어떤 사건도 기대대로 발생하지 않는다는 사실에 근거하여 일정 조건하에서 위험에 대한 발생가능한 결과들을 추정하는 방법\n( C ) : 자산, 위협, 보안체계 등 위험분석 요인들을 정성적 언어로 표현된 값을 사용하여 기대손실을 평가하는 방법",
+      "answer": "델파이법, 시나리오법, 퍼지행렬법",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 45
+    },
+    {
+      "original_id": 46,
+      "type": "short",
+      "question": "익스플로잇 코드와 관련되어 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) 어셈블리어/기계어로 구성되어 있는 익스플로잇 코드의 본체에 해당하는 프로그램\n( B ) NOP(No Operation)에 해당하는 x86 Hex Code\n( C ) ESP(Extended Stack Pointer) 레지스터에 있는 값을 EIP(Extended Instruction Pointer) 레지스터로 옮기는 어셈블리 명령",
+      "answer": "Shell Code, 0x90, RET EIP ESP or JUMP ESP",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 46
+    },
+    {
+      "original_id": 47,
+      "type": "short",
+      "question": "httpd.conf 파일에서 디렉토리에 업로드 가능한 최대파일사이즈를 제한하는 명령어는?",
+      "answer": "LimitRequestBody",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 47
+    },
+    {
+      "original_id": 48,
+      "type": "short",
+      "question": "MASTER 와 SLAVE DNS 서버의 존 파일 설정과 관련하여 다음 물음에 답하시오.\n[보기]\n- master name 서버 : ns1.korea.co.kr (192.168.1.1)\n- slave name 서버 : ns2.korea.co.kr (192.168.1.2)\n1) Master DNS 서버의 zone 파일 설정을 위하여 다음 ( )에 들어갈 설정 값을 쓰시오.\n/etc/named.conf zone \"korea.co.kr\" IN { type ( A );\nfile \"korea.co.kr.db\";\nallow-update { (B) }' };\n\n/var/named/korea.co.kr.db\n$TTL 1000 @ IN SOA ns1.korea.co.kr master.korea.co.kr. ( 2022113001 ; serial 21600 ; refresh 3600 ; retry 604800 ; expire 3600 ) ; minimum IN NS ns1.korea.co.kr.\nIN NS ns2.korea.co.kr.\nns1 IN A ( C ) ns2 IN A ( D )",
+      "answer": "master, 192.168.1.2;, 192.168.1.1,\n192.168.1.2\n\n\n\n\n\n\n2) Slave DNS 서버의 zone 파일 설정을 위하여, 다음 ( ) 에 들어갈 설정값을 쓰시오.\n/etc/named.conf zone \"korea.co.kr\" IN { type ( E );\nfile \"slave/korea.co.kr.db\";\nmasters { ( F ) }' };\n(답) slave, 192.168.1.1;",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 48
+    },
+    {
+      "original_id": 49,
+      "type": "short",
+      "question": "다음은 특정 명령어를 수행한 결과이다.\n[보기]\n( )에 들어갈 명령어를 기술하시오.\nroot@kali:~#Telnet webserver.com 80 Trying 192.168.1.2… Connect to webserver.com.\nEscape character is '^]'.\n( ) * HTTP/1.0\n\nHTTP/1.1 200 OK Date: Sat, 6 Aug 2022 09:01:01 KST Server: Microsoft-IIS/5.0 Allow: GET,HEAD,POST,OPTIONS,TRACE Content-Length:0 Connection: close Content-Type: text/plain; charset-euc-kr\n\nConnection closed by foreign host.",
+      "answer": "OPTIONS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 49
+    },
+    {
+      "original_id": 50,
+      "type": "short",
+      "question": "위험분석과 관련하여 ( )안에 들어갈 명칭을 기술하시오.\n[보기]\n( A ) : 시스템에 관한 전문적인 지식을 가진 전문가의 집단을 구성하고 위험을 분석 및 평가하여 정보시스템이 직면한 다양한 위험과 취약성을 토론을 통해 분석하는 방법\n( B ) : 어떤 사건도 기대대로 발생하지 않는다는 사실에 근거하여 일정 조건하에서 위험에 대한 발생가능한 결과들을 추정하는 방법\n( C ) : 비교 우위 순위결정표에 따라 위험 항목들의 서술적 순위를 결정하는 방법",
+      "answer": "델파이법, 시나리오법, 순위결정법",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 50
+    },
+    {
+      "original_id": 51,
+      "type": "short",
+      "question": "위험분석 접근법과 관련하여 ( )안에 들어갈 명칭을 기술하시오.\n[보기]\n( A ) : 모든 시스템에 대하여 보호의 기본 수준을 정하고 이를 달성하기 위하여 일련의 보호대책을 표준화된 체크리스트를 기반으로 선택하는 방식\n( B ) : 정립된 모델에 기초하여 자산 분석, 위협 분석, 취약성 분석의 각 단계를 수행하여 위험을 평가하는 방식\n( C ) : 고위험(high risk) 영역을 식별하여 상세 위험분석을 수행하고 다른 영역은 베이스라인 접근법을 사용하는 방식",
+      "answer": "베이스라인(기준) 접근법, 상세 위험 분석, 복합 접근법",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 51
+    },
+    {
+      "original_id": 52,
+      "type": "short",
+      "question": "접근통제 정책에 대하여 다음 ( ) 에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : 사용자나 사용자 그룹에 근거한 사용자 중심의 접근 제어를 수행하는 방법\n( B ) : 모든 객체는 정보의 비밀수준에 근거하여 보안 레벨이 주어지고 허가된 사용자만 접근 가능하도록 제어하는 방법\n( C ) : 사용자와 객체 상호관계를 역할을 기반으로 접근 권한을 부여하는 방법",
+      "answer": "DAC, MAC, RBAC",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 52
+    },
+    {
+      "original_id": 53,
+      "type": "short",
+      "question": "침입탐지시스템(IDS)과 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : 정상적인 행위를 이상행위로 판단하여 탐지하는 상황\n( B ) : 이상행위를 탐지하지 못하는 상황",
+      "answer": "오탐(False Positive), 미탐(False Negative)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 53
+    },
+    {
+      "original_id": 54,
+      "type": "short",
+      "question": "IPSec 에서 지원하는 기능(서비스)을 3 가지만 기술하시오.",
+      "answer": "기밀성, 제한된 트래픽 흐름의 기밀성, 데이터 근원지 인증, 접근제어, 비연결형 무결성, 재전송 공격 방지",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 54
+    },
+    {
+      "original_id": 55,
+      "type": "short",
+      "question": "다음의 설명에서 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A )는 사토시 나카모토가 개발한 가상화폐로, 거래 데이터를 기록하는 저장소(DB)로 ( B )를 이용한다. Hash 연산을 수행하여 발생된 거래(작업)을 증명한 대가로 ( A )를 획득하는 행위를 ( C )이라 한다.",
+      "answer": "비트코인, 블록체인, 채굴(마이닝)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 55
+    },
+    {
+      "original_id": 56,
+      "type": "short",
+      "question": "다음 설정 파일에서 디렉터리 인덱싱 취약점을 대응하기 위하여 삭제해야 하는 지시자를 기술하시오.\n[보기]\n<Directory /var/www>\nOptions indexes FollowSymLinks AllowOverride none Require all granted\n</Directory>",
+      "answer": "indexes",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 56
+    },
+    {
+      "original_id": 57,
+      "type": "short",
+      "question": "클라우드 서비스 이용을 위해 서브 도메인에 CNAME 을 설정하여 사용 중, 서비스 이용을 중지했지만 DNS 의 CNAME 설정은 삭제하지 않아 공격자가 피싱 사이트로 악용하는 공격을 무엇이라고 하나?",
+      "answer": "서브도메인 하이재킹 or 서브도메인 테이크오버(Takeover)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 57
+    },
+    {
+      "original_id": 58,
+      "type": "short",
+      "question": "정보보호 및 개인정보관리체계 인증 기준 중 '물리적 정보보호 대책’에 해당하는 사항을 3 가지 기술하시오.",
+      "answer": "보호구역 지정(통제구역,제한구역 등), 출입통제(출입 이력 검토), 정보시스템 보호(중요도 고려한 배치, 케이블 손상 방지 등), 보호설비 운영(UPS, 화재감지 등), 보호구역내 작업(작업 기록 검토), 반출입 기기 통제(정보시스템, 모바일 기기, 저장 매체 등), 업무환경 보안(클린데스크 등)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 58
+    },
+    {
+      "original_id": 59,
+      "type": "short",
+      "question": "개인정보 최소수집 원칙에 의거하여 개인정보 수집이 가능한 경우 4 가지를 기술하시오",
+      "answer": "1. 정보주체의 동의를 받은 경우",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 59
+    },
+    {
+      "original_id": 2,
+      "type": "short",
+      "question": "법률에 특별한 규정이 있거나 법령상 의무 를 준수하기 위하여 불가피한 경우\n3. 공공기관이 법령 등에서 정하는 소관 업무 의 수행을 위하여 불가피한 경우\n4. 정보주체와 체결한 계약을 이행하거나 계약 을 체결하는 과정에서 정보주체의 요청에 따른 조치를 이행하기 위하여 필요한 경우\n5. 명백히 정보주체 또는 제3자의 급박한 생 명, 신체, 재산의 이익을 위하여 필요하다고 인정되는 경우\n6. 개인정보처리자의 정당한 이익을 달성하기 위하여 필요한 경우로서 명백하게 정보주체의 권리보다 우선하는 경우. 이 경우 개인정보처 리자의 정당한 이익과 상당한 관련이 있고 합 리적인 범위를 초과하지 아니하는 경우에 한한\n다.\n7. 공중위생 등 공공의 안전과 안녕을 위하여 긴급히 필요한 경우\n60. 스팸메일 릴레이 제한 설정과 관련하여 다음 ( )에 들어갈 명칭을 기술하시오.\n[보기]\n# cat /etc/mail/( 1 ) | grep \"R$\\*\" | grep \"Relaying denied\" R$* $#error $@ 5.7.1 $ : \"550 Relaying denied\"\n# cat /etc/mail/access localhost.localdomain RELAY localhost RELAY\n127.0.0.1 RELAY spam.com ( 2 ) # Relay 를 허용하지 않음\n# ( 3 ) hash etc/mail/( 4 ) < etc/mail/access",
+      "answer": "sendmail.cf, REJECT, makemap, access.db (or access)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 60
+    },
+    {
+      "original_id": 61,
+      "type": "short",
+      "question": "Smurf attack 을 방지하기 위하여, 신뢰할 수 있는 네트워크 범위(192.168.1.0/24)에서 시작하는 UDP 패킷으로 ip directed broadcast 를 제한 설정하는 라우터 명령어를 기술하시오.\n[보기]\n(config)# ( A )\n(config)# ( B ) (config-if)# ( C ) ^z\nRouter#",
+      "answer": "(A) : access-list 100 permit udp\n192.168.1.0 0.0.0.255 any\n(B) : interface FastEthernet 0/0\n(C) : no ip directed-broadcast 100",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 61
+    },
+    {
+      "original_id": 62,
+      "type": "short",
+      "question": "위험관리와 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : ( B )로 부터 보호해야 할 대상\n( B ) : ( A ) 에 손실을 발생시키는 원인이나 행위\n( C ) : ( B ) 에 의하여 손실이 발생하게 되는\n( A )에 내재된 약점",
+      "answer": "자산, 위협, 취약점",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 62
+    },
+    {
+      "original_id": 63,
+      "type": "short",
+      "question": "네트워크 진입 시 단말과 사용자를 인증하고, 단말에 대한 지속적인 보안 취약점 점검과 통제를 통해 내부 시스템을 보호하는 솔루션을 무엇이라고 하나?",
+      "answer": "NAC(Network Access Control)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 63
+    },
+    {
+      "original_id": 64,
+      "type": "short",
+      "question": "여러 개의 프로세스가 공유자원에 동시에 접근할 때 접근하는 순서에 따라 비정상적인 결과가 발생하는 상황을 악용하는 공격기법을 무엇이라고 하나?",
+      "answer": "Race Condition 공격",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 64
+    },
+    {
+      "original_id": 65,
+      "type": "short",
+      "question": "Victim 의 MAC 주소를 위조하여 해당 IP 로 전달되는 데이터를 중간에서 가로채기 하는 공격 기법을 무엇이라고 하나?",
+      "answer": "ARP 스푸핑",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 65
+    },
+    {
+      "original_id": 66,
+      "type": "short",
+      "question": "IDS 와 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\nIDS 는 네트워크의 패킷만 보고 공격을 탐지하는 ( A ) IDS 와 서버에 직접 설치되어 관리자 권한 탈취 등으로 인해 발생되는 공격을 탐지하는 ( B ) IDS 로 구분된다.",
+      "answer": "네트워크, 호스트",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 66
+    },
+    {
+      "original_id": 67,
+      "type": "short",
+      "question": "BCP(업무연속성 계획) 수립 시 장애나 재해 발생으로 업무 프로세스가 중단되는 경우 예상되는 재무적 손실, 외부 규제 요건 등을 고려하여 업무 중요도를 평가하고 이에 따른 RTO(목표 복구 시간), RPO(목표 복구 지점)를 결정하는 절차를 무엇이라고 하나?",
+      "answer": "BIA(Business Impact Analysis, 업무영향도 분석)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 67
+    },
+    {
+      "original_id": 68,
+      "type": "short",
+      "question": "Apache 로그와 관련하여 ( ) 에 들어갈 용어를 기술하시오.\n[보기]\nApache 서버의 로그파일은 정상적인 접속 로그가 기록되는 ( A ) 로그, 접속 에러가 기록되는 ( B ) 로그가 존재한다. 로그 파일의 경로를 확인할 수 있는 파일은 ( C ) 이다.",
+      "answer": "Access, Error, httpd.conf",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 68
+    },
+    {
+      "original_id": 69,
+      "type": "short",
+      "question": "필 짐머만에 의해 개발되었으며 PEM 에 비해 보안성은 떨어지나, 이것을 실장한 프로그램이 공개되어 있어서 현재 가장 많이 사용되고 있는 이메일 보안 기술을 무엇이라 하나?",
+      "answer": "PGP(Pretty Good Privacy)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 69
+    },
+    {
+      "original_id": 70,
+      "type": "short",
+      "question": "( ) 에 들어갈 용어를 기술하시오.\n[보기]\n위험 평가 수행 시 자산을 식별하고, 식별된 자산의 가치를 평가하는 기준으로 CIA(기밀성, 무결성, 가용성) 측면을 고려하여 자산의 ( ) 를 산정한다.",
+      "answer": "중요도",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 70
+    },
+    {
+      "original_id": 71,
+      "type": "short",
+      "question": "공격 대상이 이미 시스템에 접속되어 세션이 연결되어 있는 상태를 가로채는 공격 기법을 무엇이라고 하나?",
+      "answer": "세션 하이재킹",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 71
+    },
+    {
+      "original_id": 72,
+      "type": "short",
+      "question": "EAP 를 통해 인증을 수행하고 AES- CCMP 기반 암호화를 지원하는 무선랜 보안 표준은?",
+      "answer": "WPA2",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 72
+    },
+    {
+      "original_id": 73,
+      "type": "short",
+      "question": "바이러스 토탈(Virustotal)에서 제작하였고, 악성코드의 특성과 행위에 포함된 패턴을 이용하여 악성코드를 분류하는 툴의 이름은?",
+      "answer": "YARA",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 73
+    },
+    {
+      "original_id": 74,
+      "type": "short",
+      "question": "SW 개발 보안과 관련하여 ( )에 들어갈 취약점명(공격기법)을 기술하시오.\n[보기]\n( A ) : DB 와 연결되어 있는 애플리케이션의 입력값을 조작하여 의도하지 않은 결과를 반환하도록 하는 공격 기법\n( B ) : 게시판, 웹, 메일 등에 삽입된 악의적인 스크립트에 의해 쿠키 및 기타 개인정보를 특정 사이트로 전송시키는 공격 기법\n( C ) : 적절한 검증 절차를 수행하지 않은 사용자 입력값이 운영체제 명령어의 일부로 전달되어 의도하지 않은 시스템 명령어가 실행되도록 하는 공격 기법",
+      "answer": "SQL Injection, XSS, 운영체제 명령어 삽입",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 74
+    },
+    {
+      "original_id": 75,
+      "type": "short",
+      "question": "마이크로소프트 오피스와 애플리케이션 사이 데이터를 전달하는 프로토콜로 엑셀에서 이 기능이 활성화될 시 악용될 수 있다. 해당 프로토콜의 이름을 기술하시오.",
+      "answer": "DDE(Dynamic Data Exchange)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 75
+    },
+    {
+      "original_id": 76,
+      "type": "short",
+      "question": "위험관리와 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : ( B )로 부터 보호해야 할 대상\n( B ) : ( A ) 에 손실을 발생시키는 원인이나 행위\n( C ) : ( B ) 에 의하여 손실이 발생하게 되는\n( A )에 내재된 약점",
+      "answer": "자산, 위협, 취약점",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 76
+    },
+    {
+      "original_id": 77,
+      "type": "short",
+      "question": "정보의 무결성, 서비스의 연속성, 정보자산의 보호를 위한 것으로 기업 거버넌스의 부분집합으로서 전략적 방향을 제시하며 목적 달성, 적절한 위험관리, 조직 자산의 책임 있는 사용, 기업 보안 프로그램의 성공과 실패가 모니터링됨을 보장하는 것을 무엇이라고 하나?",
+      "answer": "정보보안 거버넌스",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 77
+    },
+    {
+      "original_id": 78,
+      "type": "short",
+      "question": "DDoS, APT 등 공격 수행 시 C&C 서버와 접속하기 위한 도메인명을 지속적으로 변경하여 보안장비의 탐지를 우회하기 위한 기법을 무엇이라고 하는가?",
+      "answer": "DGA(Domain Generation Algorithm)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 78
+    },
+    {
+      "original_id": 79,
+      "type": "short",
+      "question": "위험분석절차 중 다음 ( )안에 들어갈 절차명을 기술하시오.\n1) ( A ) 2) ( B ) 3) 기존 보안대책 평가\n4) 취약성 평가 5) 위험평가",
+      "answer": "자산식별, 자산 가치 및 의존도 평가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 79
+    },
+    {
+      "original_id": 80,
+      "type": "short",
+      "question": "HTTP 관련 공격 중 헤더의 CRLF(개행문자) 필드 부분을 조작함으로써 웹서버로 조작된 HTTP 헤더를 지속적으로 보내 서비스의 가용성을 떨어뜨리는 공격은?",
+      "answer": "Slow HTTP Header DoS 공격(Slowloris)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 80
+    },
+    {
+      "original_id": 81,
+      "type": "short",
+      "question": "모바일 앱의 특정화면으로 바로 이동할 수 있도록 지원하는 기능으로 공격자에 의하여 악용되는 경우 앱내 민감한 개인정보(카드정보, 주소 등)가 노출될 수 있는 취약점이 있다. 이 기능의 이름은 무엇인가?",
+      "answer": "모바일 딥링크",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 81
+    },
+    {
+      "original_id": 82,
+      "type": "short",
+      "question": "mimikaz 와 같은 툴로 메모리에 저장된 NTLM, LanMan 해시를 탈취하여 원격 서버 인증을 시도하는 공격 기법명을 기술하시오.",
+      "answer": "pass the hash",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 82
+    },
+    {
+      "original_id": 83,
+      "type": "short",
+      "question": "DNS 의 캐시 정보를 조작하여 가짜 사이트로 접속을 유도하는 공격 기법명을 기술하시오.",
+      "answer": "DNS 캐시 포이즈닝",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 83
+    },
+    {
+      "original_id": 84,
+      "type": "short",
+      "question": "사이버 공격의 흐름을 분류하는 기준으로 사이버 킬 체인의 7 단계를 확장하여 14 단계로 구성된 모델명을 기술하시오.",
+      "answer": "MITRE ATT&CK",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 84
+    },
+    {
+      "original_id": 85,
+      "type": "short",
+      "question": "공격자가 미리 확보해 놓은 로그인 자격증명(*ID, 패스워드)을 이용하여 사용자가 이용할만한 다른 사이트에 무작위로 대입하여 비인가 접속을 시도하는 공격기법명을 기술하시오.",
+      "answer": "크리덴셜 스터핑(Credential Stuffing)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 85
+    },
+    {
+      "original_id": 86,
+      "type": "short",
+      "question": "취약점의 여러 가지 요소(코드베이스, 시간성(유효성), 악영향, 환경적 요소)를 고려하여 공격의 난이도와 피해 규모를 평가하고 점수화하는 보안 취약점 평가 기준을 무엇이라 하는가?",
+      "answer": "CVSS(Common Vulnerability Scoring System)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 86
+    },
+    {
+      "original_id": 87,
+      "type": "short",
+      "question": "정보보호 관련 법령과 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : 정보통신서비스 제공자 등이 개인정보의 안전한 처리를 위하여 개인정보보호 조직의 구성, 개인정보취급자의 교육, 개인정보 보호조치 등을 규정한 계획\n( B ) : 정상적인 보호,인증 절차를 우회하여 정보통신기반시설에 접근할 수 있도록 하는 프로그램이나 기술적 장치 등을 정보통신기반시설에 설치하는 방법으로 정보통신망 또는 이와 관련된 정보시스템을 공격하는 행위\n( C ) : 정보통신망의 구축 또는 정보통신서비스의 제공 이전에 계획 또는 설계 등의 과정에서 정보보호를 고려하여 필요한 조치를 하거나 계획을 마련하는 것",
+      "answer": "내부관리계획, 전자적 침해행위, 정보보호사전점검",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 87
+    },
+    {
+      "original_id": 88,
+      "type": "short",
+      "question": "침해사고 대응 7 단계에서 다음 ( )에 들어갈 절차를 기술하시오.\n[보기]\n사고 전 준비과정 > 사고 탐지 > ( ) > 대응 전략 체계화 > 사고 조사 > 보고서 작성 >\n해결",
+      "answer": "초기 대응",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 88
+    },
+    {
+      "original_id": 89,
+      "type": "short",
+      "question": "정보보호 관련 법령과 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ): 전기통신설비를 이용하거나 전기통신설비와 컴퓨터 및 컴퓨터의 이용기술을 활용하여 정보를 수집ㆍ가공ㆍ저장ㆍ검색ㆍ송신 또는 수신하는 정보통신체제\n( B ): 정보의 수집․저장․검색․송신․수신시 정보의 유출, 위․변조, 훼손 등을 방지하기 위한 하드웨어 및 소프트웨어 일체\n( C ):\n국가안전보장ㆍ행정ㆍ국방ㆍ치안ㆍ금융ㆍ통신 ㆍ운송ㆍ에너지 등의 업무와 관련된 전자적 제어ㆍ관리시스템",
+      "answer": "정보통신망, 정보보호시스템, 정보통신기반시설",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 89
+    },
+    {
+      "original_id": 90,
+      "type": "short",
+      "question": "ISO 27005 에 포함된 위험평가(Risk Assessment) 절차와 관련하여 ( ) 에 들어갈 절차명을 기술하시오.\n[보기]\n( A ): 잠재적인 손해 발생의 근원을 밝혀내기 위하여, 자산, 위협, 현 통제 현황, 취약점을 식별하는 단계\n( B ): 시나리오별 영향 및 발생 가능성을 객관적, 주관적인 방법으로 분석하는 단계\n( C ): 사전에 마련된 기준에 따라 분석된 위험 목록의 우선순위를 산정하는 단계",
+      "answer": "위험식별(Risk identification), 위험분석(Risk Analysis), 위험수준평가(Risk Evaluation)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 90
+    },
+    {
+      "original_id": 91,
+      "type": "short",
+      "question": "개인정보의 안전성 확보조치 기준과 관련하여 다음 ( )에 들어갈 용어를 기술하시오.\n[보기]\n제2 조(정의)\n19. \"접속기록\"이란, 개인정보취급자 등이 개인정보처리시스템에 접속하여 수행한 업무내역에 대하여 개인정보취급자 등의 계정,\n(A), 접속지 정보, (B), 수행업무 등을 전자적으로 기록한 것을 말한다.\n\n제8 조(접속기록의 보관 및 점검)\n(2) 개인정보처리자는 개인정보의 오남용, 분실, 도난, 유출, 위조, 변조 또는 훼손 등에 대응하기 위하여 개인정보처리시스템의 접속기록 등을 월 1 회 이상 점검하여야 한다.\n특히 개인정보를 다운로드한 것이 발견되었을 경우에는 ( C ) 으로 정하는 바에 따라 그 사유를 반드시 확인하여야 한다.",
+      "answer": "접속일시, 처리한 정보주체 정보, 내부관리계획",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 91
+    },
+    {
+      "original_id": 92,
+      "type": "short",
+      "question": "정보보호최고책임자의 역할 및 책임을 4 가지 이상 기술하시오.",
+      "answer": "1) 정보보호관리체계의 수립 및 관리ㆍ운영\n2) 정보보호 취약점 분석ㆍ평가 및 개선\n3) 침해사고의 예방 및 대응\n4) 사전 정보보호대책 마련 및 보안조치 설계ㆍ구현 등\n5) 정보보호 사전 보안성 검토\n6) 중요 정보의 암호화 및 보안서버 적합성 검토\n7) 그 밖에 정보통신망법 또는 관계 법령에 따라 정보보호를 위하여 필요한 조치의 이행",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 92
+    },
+    {
+      "original_id": 93,
+      "type": "short",
+      "question": "/etc/shadow 파일에서 암호화된 패스워드 값의 맨 첫 번째 항목이 무엇을 의미하는지 기술하시오.",
+      "answer": "패스워드 암호화에 사용된 해시 알고리즘 (예: 1 은 MD5, 5 는 SHA256, 6 은 SHA512)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 93
+    },
+    {
+      "original_id": 94,
+      "type": "short",
+      "question": "다음 각 호의 업무를 총괄하는 사람은 누구인가?\n1) 정보보호관리체계의 수립 및 관리/운영\n2) 정보보호 취약점 분석/평가 및 개선\n3) 침해사고의 예방 및 대응\n4) 사전 정보보호대책 마련 및 보안조치 설계/구현",
+      "answer": "정보보호최고책임자(CISO)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 94
+    },
+    {
+      "original_id": 95,
+      "type": "short",
+      "question": "기업의 정보호호에 대한 방향(목적, 활동 등)을 기술 및 솔루션과 독립적으로 가장 상위 개념으로 정의한 문서는 무엇인가?",
+      "answer": "정보보호정책(Policy)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 95
+    },
+    {
+      "original_id": 96,
+      "type": "short",
+      "question": "다음의 무선랜 보안 표준에서 사용하는 주요 암호화 알고리즘을 기술하시오.\n1) WEP : ( A )\n2) WPA : ( B )\n3) WPA2 : ( C )",
+      "answer": "RC4, TKIP, AES(CCMP)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 96
+    },
+    {
+      "original_id": 97,
+      "type": "short",
+      "question": "엔드포인트 영역에 대한 지속적인 모니터링을 통해 행위 기반 위협 탐지 및 분석, 대응 기능을 제공하는 솔루션은 무엇인가?",
+      "answer": "EDR(Endpoint Detection & Response)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 97
+    },
+    {
+      "original_id": 99,
+      "type": "short",
+      "question": "TLS 1.3 에 추가된 기능으로 세션키를 합의하는 핸드 셰이크 과정을 간소화하여 암호화 시간을 줄여주는 기능을 무엇이라고 하는가?",
+      "answer": "최초 세션 연결 시 1-RTT(Round Trip Time), 세션 재개 시 0-RTT",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 98
+    },
+    {
+      "original_id": 100,
+      "type": "short",
+      "question": "프로그램에서 실행하는 시스템 콜을 추적할 수 있으며, 바이너리 파일에 포함된 컴파일 경로 정보를 통하여 프로그램을 진단하거나 디버깅할 수 있는 명령어는 무엇인가?\n[보기]\n이 명령어를 통하여 트로이목마가 걸린 파일과 정상 파일을 구분할 수 있다.\n( A ) -e trace=open ps |more",
+      "answer": "strace",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 99
+    },
+    {
+      "original_id": 101,
+      "type": "short",
+      "question": "다음이 설명하는 보안 솔루션(A)의 이름을 기술하시오.\n[보기]\n- ( A ) 는 전사적 IT 인프라에 대한 위협정보 들을 수집·분석·경보·관리하는 정보보호 통합관리 시스템이며 실시간으로 공신력 있는 대외 정보보호기관의 위협정보들을 수집·분석하여 정보보호관리자에게 제공함으로써 각종 보안위협으로부터 사전 대응 및 예·경보 체계를 구축하고 이를 통해 APT 등 알려지지 않은 공격들에 대한 조기 대응을 유도한다.\n- SIEM 에서 위협 식별 후 ( A )에 쿼리를 요청하여 공격주체 식별이 가능하다.",
+      "answer": "TMS(Threat Management System)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 100
+    },
+    {
+      "original_id": 102,
+      "type": "short",
+      "question": "ISO/IEC 에서 정의한 위험 관리 모델은 위험 구성 요소들 간의 관계를 도표로 표현하고 있다. 괄호 안에 들어갈 용어를 기술하시오.\n[보기]\n공격 --------- 취약성 ---------→ 노출 ↑\n\n\n\n↓\n(A) -- 증가 → 위험 ← 증가 --- (B)\n\n\n↑ 보안대책 ---→ (C)",
+      "answer": "위협, 자산, 감소",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 101
+    },
+    {
+      "original_id": 103,
+      "type": "short",
+      "question": "전송 계층 프로토콜인 UDP 기반으로 통신을 수행하는 경우 SSL/TLS 와 유사한 보안 기능을 제공하는 프로토콜 명을 기술하시오.",
+      "answer": "DTLS(Datagram Transport Layer Security)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 102
+    },
+    {
+      "original_id": 104,
+      "type": "short",
+      "question": "디지털 포렌식 5 대 원칙 중 3 가지를 기술하시오.",
+      "answer": "정당성, 재현성, 신속성, 연계보관성, 무결성",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 103
+    },
+    {
+      "original_id": 105,
+      "type": "short",
+      "question": "웹 관련 취약점에 대하여 ( A), (B)에 들어갈 용어를 기술하시오.\n[보기]\n( A ) 는 게시판, 웹 메일 등에 삽입된 악의적인 스크립트에 의해 페이지가 깨지거나 다른 사용자의 사용을 방해하거나 쿠키 및 기타 개인 정보를 특정 사이트로 전송시키는 공격이다. 점검을 위하여 다음과 같은 스크립트를 사용할 수 있다.\n<script> ( B ) (document.cookie) </script>",
+      "answer": "XSS, Alert",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 104
+    },
+    {
+      "original_id": 106,
+      "type": "short",
+      "question": "웹 사이트에 로봇 Agent 가 접근하여 크롤링 하는 것을 제한하는 파일명은 무엇인가?",
+      "answer": "robots.txt",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 105
+    },
+    {
+      "original_id": 107,
+      "type": "short",
+      "question": "서비스 거부 공격 관련하여 ( )에 들어갈 공격 기법을 기술하시오.\n[보기]\n( A ) : 출발지와 목적지의 IP 주소를 공격대상의 IP 주소와 동일하게 설정하여 보내는 공격\n( B ) : 공격 대상자의 IP 로 스푸핑된 IP 를 소스로 하여 브로드캐스트 도메인으로 ICMP 메세지를 전송하는 공격\n( C ) : 다수의 SYN 패킷을 전송하는 공격",
+      "answer": "Land Attack, Smurf Attack, TCP SYN Flooding",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 106
+    },
+    {
+      "original_id": 108,
+      "type": "short",
+      "question": "Reflection 공격의 일종으로 1900 번 포트를 사용하여 IoT 시스템을 공격하는 기법은?",
+      "answer": "SSDP DRDoS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 107
+    },
+    {
+      "original_id": 109,
+      "type": "short",
+      "question": "다음 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A )는 오픈소스 IDS/IPS 로 기존의 ( B )의 장점을 수용하고, 대용량 트래픽을 실시간으로 처리하는데 특화된 소프트웨어 이다.",
+      "answer": "수리카타(Suricata), 스노트(Snort)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 108
+    },
+    {
+      "original_id": 110,
+      "type": "short",
+      "question": "개인정보의 안전성 확보조치 기준에 대하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n제8 조(접속기록의 보관 및 점검)\n① 개인정보처리자는 개인정보취급자가 개인정보처리시스템에 접속한 기록을 1 년 이상 보관·관리하여야 한다. 다만, 5 만명 이상의 정보주체에 관하여 개인정보를 처리하거나, ( A ) 또는 ( B ) 를 처리하는 개인정보처리시스템의 경우에는 2 년 이상 보관·관리하여야 한다.\n② 개인정보처리자는 개인정보의 오·남용, 분실·도난·유출·위조·변조 또는 훼손 등에 대응하기 위하여 개인정보처리시스템의 접속기록 등을 월 1 회 이상 점검하여야 한다.\n특히 개인정보를 다운로드한 것이 발견되었을 경우에는 ( C )으로 정하는 바에 따라 그 사유를 반드시 확인하여야 한다.",
+      "answer": "고유식별정보, 민감정보, 내부관리계획",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 109
+    },
+    {
+      "original_id": 111,
+      "type": "short",
+      "question": "TLS 연결을 SSL 3.0 으로 낮춰 SSL 3.0 취약점을 이용하여 암호문을 해독하는 공격 기법을 무엇이라 하는가?",
+      "answer": "POODLE(Padding Oracle on Downgraded Legacy Encryption) 공격",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 110
+    },
+    {
+      "original_id": 112,
+      "type": "short",
+      "question": "ISMS-P 인증 체계에 대하여 ( )안에 들어갈 명칭을 기술하시오.\n[보기]\n( A ) : 과학기술정보통신부, 행정안전부와 함께 정책 협의회를 구성하는 기관으로 법, 제도 개선 및 정책 결정, 인증기관 및 심사기관 지정 업무를 수행\n( B ) : 인증서 발급, 인증심사원 양성 및 자격관리 업무를 수행하는 기관\n( C ) : 인증심사 결과에 대한 심의/의결을 수행하는 조직",
+      "answer": "방송통신위원회, KISA, 인증위원회",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 111
+    },
+    {
+      "original_id": 113,
+      "type": "short",
+      "question": "자산 및 시스템의 위험을 평가하여, 수용 가능한 수준으로 위험을 완화하기 위한 대응책을 수립하는 일련의 과정을 무엇이라고 하는가?",
+      "answer": "위험관리",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 112
+    },
+    {
+      "original_id": 114,
+      "type": "short",
+      "question": "VPN 관련 프로토콜에 대하여 다음 ( )에 들어갈 프로토콜 명을 기술하시오.\n[보기]\n(A) : 시스코사에서 개발한 터널링 프로토콜(데이터 링크층에서 캡슐화 가능)\n(B) : MS, 3Com 등 여러 회사가 공동개발한 프로토콜\n(C) : OSI 3 계층에서 보안성을 제공해주는 표준 프로토콜",
+      "answer": "L2F(Layer 2 Forwarding), PPTP, IPSec",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 113
+    },
+    {
+      "original_id": 115,
+      "type": "short",
+      "question": "접근통제 정책 모델에 대하여 다음 물음에 답하시오.\n[보기]\n(A ) : 모든 객체는 정보의 비밀 수준에 근거하여 보안 레벨이 주어지고 허가된 사용자만 접근 가능토록 제어하는 모델\n(B ) : 사용자나 사용자 그룹에 근거한 사용자 중심의 접근 제어 모델\n(C ) : 사용자와 객체의 상호 관계를 역할로 구분하여 접근 제어하는 모델",
+      "answer": "MAC, DAC, RBAC",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 114
+    },
+    {
+      "original_id": 116,
+      "type": "short",
+      "question": "ARP 프로토콜에서 목적지의 물리 주소를 얻기 위해 프레임에 실어 보내는 목적지 주소를 주소 형식에 맞게 기술하시오.",
+      "answer": "ff:ff:ff:ff:ff:ff",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 115
+    },
+    {
+      "original_id": 117,
+      "type": "short",
+      "question": "IPSec 프로토콜에 대하여 다음 () 안에 들어갈 용어를 기술하시오.\n(1) 어느 계층에서 사용되는 프로토콜인가?\n(A)\n(2) 무결성을 보장하는 IPSec 의 세부 프로토콜은? (B)\n(3) 기밀성을 보장하는 IPSec 의 세부 프로토콜은? (C)",
+      "answer": "네트워크 계층, AH, ESP",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 116
+    },
+    {
+      "original_id": 118,
+      "type": "short",
+      "question": "MS 오피스와 애플리케이션 사이에서 데이터를 전달하는데 사용되는 프로토콜로 외부로 데이터 등을 전달할 수 있으며, 엑셀에서 이 기능이 활성화될 경우 악용될 수 있다. 해당 프로토콜의 이름을 기술하시오.",
+      "answer": "DDE(Dynamic Data Exchange)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 117
+    },
+    {
+      "original_id": 119,
+      "type": "short",
+      "question": "사이버위기 경보 단계에 대하여 다음 빈칸에 알맞은 단계별 명칭을 기술하시오.\n[보기]\n( A ) -> 주의 -> ( B ) -> ( C )",
+      "answer": "관심, 경계, 심각",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 118
+    },
+    {
+      "original_id": 120,
+      "type": "short",
+      "question": "리눅스 시스템 로그 파일에 대하여 다음 빈칸에 적절한 명칭을 기술하시오.\n[보기]\n(A) : 현재 시스템에 로그인한 사용자의 상태가 출력되는 로그\n(B) : 사용자의 로그인, 로그아웃, 시스템 재부팅 정보가 출력되는 로그\n(C) : 5 번 이상 로그인 실패 시 로그인 실패 정보가 기록되는 로그",
+      "answer": "utmp, wtmp, btmp",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 119
+    },
+    {
+      "original_id": 121,
+      "type": "short",
+      "question": "정보보호제품에 대한 국제 표준(ISO-\n15504) 인증의 명칭은?",
+      "answer": "CC 인증",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 120
+    },
+    {
+      "original_id": 122,
+      "type": "short",
+      "question": "Httpd.conf 파일에서 디렉터리에 업로드 가능한 최대 파일 사이즈를 제한하는 명령어는?",
+      "answer": "LimitRequestBody 파일사이즈\n*단위는 바이트",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 121
+    },
+    {
+      "original_id": 123,
+      "type": "short",
+      "question": "다음의 정보보호 관련 법률의 명칭(약칭)을 기술하시오.\n[보기]\n( A) : 정보통신망에 관한 법률의 명칭\n( B) : 주요 정보통신 기반 시설에 관한 법률의 명칭\n( C) : 위치정보에 관한 관한 법률의 명칭",
+      "answer": "정보통신망법(정보통신망 이용 촉진 및 정보보호 등에 관한 법률), 정보통신 기반보호법, 위치정보법(위치정보의 이용 및 보호 등에 관한 법률)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 122
+    },
+    {
+      "original_id": 124,
+      "type": "short",
+      "question": "ISMS-P 인증 평가 항목에 대한 설명이다. ( ) 안에 들어갈 적절한 명칭을 기술하시오.\n[보기]\n1.2.1(정보자산 식별) : 조직의 업무특성에 따라 정보자산 분류 기준을 수립하여 관리체계 범위 내 모든 정보자산을 식별/분류하고,\n(A)를 산정한 후 그 목록을 최신으로 관리하여야 한다.\n1.2.3 (위험평가) : 조직의 대내외 환경분석을 통해 유형별 (B)를 수집하고, 조직에 적합한 위험 평가 방법을 선정하여 관리체계 전 영역에 대하여 연 1 회 이상 위험을 평가하여, 수용할 수 있는 위험은 (C)의 승인을 받아 관리하여야 한다.",
+      "answer": "중요도, 위협 정보, 경영진",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 123
+    },
+    {
+      "original_id": 125,
+      "type": "short",
+      "question": "Victim 의 MAC 주소를 위조한 스니핑 공격은?",
+      "answer": "ARP 스푸핑",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 124
+    },
+    {
+      "original_id": 126,
+      "type": "short",
+      "question": "침해사고 발생시 실시간 경보, 분석체계를 운영하며 금융, 통신 분야별 정보통신 기반 시설을 보호하기 위한 업무를 수행하는 기관은?",
+      "answer": "ISAC(Information Sharing Analysis Center), 정보공유분석센터",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 125
+    },
+    {
+      "original_id": 127,
+      "type": "short",
+      "question": "침입탐지시스템(IDS)의 침입탐지 정책에 대하여 기술하시오.\n(1) 미리 등록된 패턴을 기반으로 이상행위를 탐지하는 기법은?\n(2) 정상행위와 이상행위를 프로파일링 하여 통계적인 방법으로 이상행위를 탐지하는 기법은?\n(3) 정상행위를 이상행위로 판단하거나 이상행위를 탐지하지 못하는 상황은?",
+      "answer": "(1) 오용탐지(Misuse) or 지식기반 탐지\n(2) 이상탐지(Anormaly) or 행위기반 탐지\n(3) 오탐(False Positive), 미탐(False Negative)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 126
+    },
+    {
+      "original_id": 128,
+      "type": "short",
+      "question": "Github 의 DDoS 공격에 악용된 캐시솔루션은?",
+      "answer": "Memcached",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 127
+    },
+    {
+      "original_id": 129,
+      "type": "short",
+      "question": "리눅스의 /etc 아래에 위치하고 있으며 패스워드의 사용기간 만료, 최대 사용기간, 최소 변경 기간 등의 패스워드 정책을 설정할 수 있는 파일은?",
+      "answer": "login.defs",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 128
+    },
+    {
+      "original_id": 130,
+      "type": "short",
+      "question": "웹 애플리케이션의 소스 코드를 보지 않고 외부 인터페이스나 구조를 분석하여 취약적을 발견하는 방식을 (1)이라 하고, 개발된 소스 코드를 살펴봄으로써 코딩 상의 취약점을 찾는 방식을 (2)라고 한다.",
+      "answer": "블랙박스 테스트, 화이트 박스 테스트",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 129
+    },
+    {
+      "original_id": 131,
+      "type": "short",
+      "question": "정성적 위험분석 방법론 2 가지에 대해 답하시오.\n(1) 어떤 사건도 기대대로 발생하지 않는다는 사실에 근거하여 일정 조건하에서 위험에 대한 발생 가능한 결과들을 추정하는 방법\n(2) 시스템에 관한 전문적인 지식을 가진 전문가의 집단을 구성하고 위험을 분석 및 평가하여 정보시스템이 직면한 다양한 위험과 취약성을 토론을 통해 분석하는 방법",
+      "answer": "시나리오법, 델파이법",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 130
+    },
+    {
+      "original_id": 132,
+      "type": "short",
+      "question": "자산에 대해 보험을 들어 손실에 대비하는 등 조직의 자산에 대한 위협, 위험, 취약점 등을 제3 자에게 전가하는 위험관리 방식은?",
+      "answer": "위험전가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 131
+    },
+    {
+      "original_id": 133,
+      "type": "short",
+      "question": "모든 시스템에 대하여 보호의 기본 수준을 정하고 이를 달성하기 위하여 일련의 보호대책을 선택하는 방식은?",
+      "answer": "기준접근법 (Baseline 접근법)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 132
+    },
+    {
+      "original_id": 134,
+      "type": "short",
+      "question": "비즈니스 연속성을 보장하기 위한 계획을 무엇이라 하는가?",
+      "answer": "BCP(Business Continuity Plan)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 133
+    },
+    {
+      "original_id": 135,
+      "type": "short",
+      "question": "다음은 윈도우 OS 의 계정 그룹 5 가지 유형에 대한 설명이다. ( ) 에 들어갈 그룹명을 기술하시오.\n[보기]\nAdministrators : 도메인 또는 로컬 컴퓨터에 대한 모든 권한 보유\n( A ) : 일반 사용자보다는 많은 권한을 가지나, Administrators 그룹보다는 제한적인 권한 보유\n( B ) : 시스템 백업을 목적으로 모든 파일과 디렉터리 접근 가능\n( C ) : 도메인 및 로컬 컴퓨터를 일반적으로 사용하는 그룹 Guests : 제한된 권한을 가지며 일시적으로 시스템을 사용하는 사용자를 위해 설계됨",
+      "answer": "Power Users, Backup Operators, Users",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 134
+    },
+    {
+      "original_id": 136,
+      "type": "short",
+      "question": "전자기기에서 발생되는 불필요한 전자 방사를 통해 민감한 정보를 도청하거나 유출하는 것을 방지하기 위한 일련의 표준과 기술을 무엇이라 하나?",
+      "answer": "TEMPEST (Telecommunications Electronics Material Protected from Emanating Spurious Transmissions)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 135
+    },
+    {
+      "original_id": 137,
+      "type": "short",
+      "question": "IPSec 이 제공하는 보안 기능 3 가지를 기술하시오.",
+      "answer": "접근제어, 비연결형 무결성, 데이터 근원지 인증, 재전송 방지, 기밀성, 제한적 트래픽 흐름의 기밀성",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 136
+    },
+    {
+      "original_id": 138,
+      "type": "short",
+      "question": "공격자가 사용자와 서버 간의 활성화된 세션을 가로채어 사용자의 신원으로 서버와 통신을 시도하는 공격 기법을 무엇이라 하나?",
+      "answer": "세션 하이재킹(Session Hijacking)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 137
+    },
+    {
+      "original_id": 139,
+      "type": "short",
+      "question": "정보보호대책은 안전대책, 통제 혹은 위협을 감소시키기 위한 정보보호조치를 의미하며, 크게 다음과 같이 3 가지로 구분된다.\n( A ) 은/는 발생 가능한 잠재적인 문제들을 식별하여 사전에 대처하는 능동적인 개념의 통제로 2 가지로 나눌 수 있다.\n( B ) 란 관계자 이외의 사람이 특정 시설이나 설비에 접근할 수 없게 하는 각종의 통제를 의미하며, ( C )란 승인을 받지 못한 사람이 정보통신망을 통하여 자산에 대한 접근을 막기 위한 통제방법이다.",
+      "answer": "예방 통제, 물리적 접근 통제, 논리적 접근 통제",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 138
+    },
+    {
+      "original_id": 140,
+      "type": "short",
+      "question": "메일 보안을 위하여 릴레이 설정을 하려고 한다. 다음 보기에 기술된 요구사항을 충족시키기 위하여 /etc/mail/access 에 설정해야할 옵션값()을 기술하시오.\n[보기]\n(보기) kca.or.kr 도메인의 메일은 릴레이를 허용한다.\nspam.com 도메인의 메일은 폐기한다.\n(/etc/mail/access 설정) kca.or.kr ( A ) spam.com ( B )",
+      "answer": "RELAY, DISCARD",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 139
+    },
+    {
+      "original_id": 141,
+      "type": "short",
+      "question": "다음 기능을 제공하는 도구를 무엇이라 하나?\n- 사용자가 웹 사이트와 주고받는 HTTP/HTTPS 요청과 응답을 중간에서 가로채어, 수정하거나 분석할 수 있게 해주는 도구이다.\n[보기]\n- Paros, Burp Suite, ZAP(Zed Attack Proxy) 가 대표적이며, 해킹 공격에도 사용되고, 웹 사이트의 보안 취약점 테스트 목적으로도 사용된다.",
+      "answer": "웹 프락시(Web Proxy)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 140
+    },
+    {
+      "original_id": 142,
+      "type": "short",
+      "question": "IP 주소가 200.100.50.25 (C 클래스)이고, 서브넷 마스크가\n255.255.255.192 일 때, 서브넷 마스크를 2 진수로 작성하시오.",
+      "answer": "11111111.11111111.11111111.11000000",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 141
+    },
+    {
+      "original_id": 143,
+      "type": "short",
+      "question": "프로그램에 의도적으로 잘못된 형식의 데이터 또는 무작위 데이터를 입력하여 프로그램의 취약점이나 버그를 찾는 SW 테스트 기법을 무엇이라고 하나?",
+      "answer": "Fuzzing(퍼징)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 142
+    },
+    {
+      "original_id": 144,
+      "type": "short",
+      "question": "SSRF(Server Side Request Forgery)는 공격자가 서버가 신뢰하는 특정 서버나 네트워크 리소스에 대해 임의의 요청을 보내도록 서버를 속이는 웹 보안 취약점이다.\n[보기]\n주로 서버가 외부 입력을 기반으로 HTTP 요청을 생성하는 기능을 가지고 있을 때 발생한다. SSRF 공격 대응 기법에 대하여 ( )에 들어갈 용어를 기술하시오.\n[공격 대응 기법]\n• 사용자 입력을 기반으로 요청을 생성할 때는 허용된 도메인이나 IP 주소에 대하여 ( A ) 리스트를 사용하여 필터링한다.\n• 만일, 무작위의 입력값을 사용해야 한다면 ( B ) 리스트 방식으로 필터링한다.",
+      "answer": "화이트, 블랙",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 143
+    },
+    {
+      "original_id": 145,
+      "type": "short",
+      "question": "위험 평가 이후 위험의 중요도에 따라 위험 처리 방안을 결정한다. ( )에 들어갈 위험 처리 방안을 기술하시오.\n[보기]\n위험 감소 : 잠재적인 위험에 대해 정보보호 대책을 구현하여 자산, 취약점, 위협 중 하나의 수준을 낮춤\n( A ) : 현재의 위험을 받아들이고 잠재적 손실 비용을 감수\n( B ) : 위험이 존재하는 프로세스나 사업을 수행하지 않고 포기\n( C ) : 보험이나 외주 등으로 잠재적 비용을 제3 자에게 이전",
+      "answer": "위험 수용, 위험 회피, 위험 전가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 144
+    },
+    {
+      "original_id": 146,
+      "type": "short",
+      "question": "다음 설명에 해당하는 보안 솔루션 명칭을 기술하시오.\n[보기]\n[설명]\n- 2015 년 가트너에서 처음 제시하였음\n- 인공지능이 적용되어 지능형 탐지가 가능하고 빅데이터 기반 솔루션보다 진보된 형태의 보안 관제 솔루션",
+      "answer": "SOAR",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 145
+    },
+    {
+      "original_id": 147,
+      "type": "short",
+      "question": "리눅스에서 패스워드 최소 길이를 8 자리 이상으로 설정하려고 한다. 패스워드 설정을 위한 파일명(A)과 설정 내용(B,C)을 기술하시오.\n[보기]\n#cat /etc/ ( A )\n( B ) ( C )",
+      "answer": "login.defs, PASS_MIN_LEN, 8",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 146
+    },
+    {
+      "original_id": 148,
+      "type": "short",
+      "question": "무선 네트워크에서는 다중 접속시 상호 충돌을 회피하기 위하여 CSMA/CA 프로토콜을 사용한다. 이 경우, 타임아웃 설정은 어느 신호에 포함되는지 보기에서 2 개를 선택하여 답하시오.\n[보기]\n(보기) CTS, DATA, RST, SYN, ACK, RTS",
+      "answer": "RTS, CTS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 147
+    },
+    {
+      "original_id": 149,
+      "type": "short",
+      "question": "Domain Name(URL) 에 대한 IP 정보를 찾아주는 DNS 는, 먼저 클라이언트 영역에 위치한 ( A ) DNS 서버에 질의하여 IP 정보를 찾고, 없으면 ( B ) DNS 서버에 추가로 요청하여 IP 정보를 찾는다.",
+      "answer": "Recursive (Cache), Authoritative",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 148
+    },
+    {
+      "original_id": 150,
+      "type": "short",
+      "question": "공격자가 HTTP 패킷의 헤더(Content- Length, Transfer Encoding: Chunked 등)를 변조하여 일반 사용자가 접근할 수 없는 Back-end 서버로 직접 보내 중요 정보 획득, XSS 공격유도, 서버 웹 캐시 포이즈닝 등을 수행하는 공격 기법을 무엇이라 하나?\n(보기) XSS, CSRF, SQL Injection, HTTP request smuggling",
+      "answer": "HTTP request smuggling",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 149
+    },
+    {
+      "original_id": 151,
+      "type": "short",
+      "question": "침입 탐지 시스템에서 공격이 아닌데 공격이라고 오판하는 것을 ( A )라 하고, 공격인데 공격이 아니라고 오판하는 것을 ( B ) 라고 한다.",
+      "answer": "오탐(False Positive), 미탐(False Negative)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 150
+    },
+    {
+      "original_id": 152,
+      "type": "short",
+      "question": "공격자들이 표적으로 삼은 조직 네트워크망에 침투한 후 오랜 기간 탐지를 회피하여 정보를 수집해 빼돌리는 고도의 지능형 표적 공격을 무엇이라 하나?",
+      "answer": "APT(Advanced Persistent Threat)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 151
+    },
+    {
+      "original_id": 153,
+      "type": "short",
+      "question": "XML 문서를 조회하는 기능을 구현해야 하는 경우 XML 쿼리에 사용되는 파라미터는 반드시 XML 쿼리를 조작할 수 없도록 필터링해서 사용하거나, 미리 작성된 쿼리문에 입력값을 자료형에 따라 바인딩해서 사용해야 한다. 관련하여 다음은 SW 설계시 고려해야할 사항이다. ( )에 들어갈 용어를 기술하시오.\n[보기]\n(ㄱ) ( A ) 컴포넌트를 이용한 입력값 필터링 :\n외부입력값에서 XML 삽입 공격이 가능한 문자열들을 필터링하는 Validator 컴포넌트를 개발하여 XML 조회를 수행하는 애플리케이션 작성시 입력값에 대한 검증 작업이 일괄 적용되도록 설계한다.\n(ㄴ) 개별 코드에서 입력값 ( B ) 하도록 시큐어코딩 규칙 정의 : 각각의 컴포넌트에서 입력값에 대해 XML 삽입을 발생시킬 수 있는 문자열(“, [, ], /, =, @ 등)을 제거 또는\n안전하게 치환하여 사용할 수 있도록 시큐어코딩 규칙을 정의한다.\n(ㄷ) 안전한 ( C ) 를 사용하도록 시큐어코딩 규칙 정의 : XML 조회를 수행하는 쿼리문 작성시 외부입력값이 쿼리문의 구조를 바꿀 수 없는 ( C ) (예. Java API‐ XQuery) 를 사용하도록 시큐어코딩 규칙을 정의한다.",
+      "answer": "공통 검증, 필터링, API",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 152
+    },
+    {
+      "original_id": 154,
+      "type": "short",
+      "question": "공격자가 자신의 TCP 윈도우 사이즈를 0 으로 설정한 후 다수의 HTTP 패킷을 송신하여 웹서버가 정상적으로 응답하지 못하도록 만드는 공격 기법을 무엇이라 하나?",
+      "answer": "Slow Read Attack",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 153
+    },
+    {
+      "original_id": 155,
+      "type": "short",
+      "question": "XSS 취약점 유형에 대한 설명이다.\n[보기]\n( )안에 들어갈 용어를 기술하시오.\n(1) ( A ) : 공격자의 입력 값이 서버에 저장되지 않고 HTTP 응답에 그대로 포함되도록 허용되는 경우, 사용자가 공격자가 전달한 악의적인 링크에 접속할 때 발생\n(2) ( B ) : 서버가 충분한 검증 없이 공격자로 부터 입력받은 값을 저장한 뒤 다른 사용자에게 표시해 줄 때 발생\n(3) ( C ) : 스크립트(일반적으로 자바스크립트)가 DOM 을 제어하는 과정을 공격자가 조작 가능할 때 발생",
+      "answer": "Reflected XSS, Stored XSS, DOM based XSS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 154
+    },
+    {
+      "original_id": 156,
+      "type": "short",
+      "question": "침입탐지 시스템에는 호스트 컴퓨터의 내부 상태 또는 저장된 로그를 분석하여 침입을 탐지하는 ( A ), 통신망을 통해 전송되는 패킷 데이터를 분석하여 침입 여부를 판정하는 ( B ) 가 있다.",
+      "answer": "HIDS(호스트기반 IDS), NIDS(네트워크기반 IDS)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 155
+    },
+    {
+      "original_id": 157,
+      "type": "short",
+      "question": "위험을 구성하는 요소에 대한 설명이다.\n[보기]\n( )에 들어갈 용어를 기술하시오.\n( A ) : 조직 내에서 가치를 가지고 있는 모든 것으로 보호해야 할 대상\n( B ) : 자산에 손실을 초래할 수 있는 원치 않는 사건의 잠재적인 원인 또는 행위자\n( C ) : 위협의 이용 대상이 되는 자산의 잠재적인 약점",
+      "answer": "자산(Asset), 위협(Threat), 취약성 or 취약점(Vulnerability)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 156
+    },
+    {
+      "original_id": 158,
+      "type": "short",
+      "question": "( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) 는 조직의 자산에 대한 위험을 감수할 수 있는 수준으로 유지하기 위하여, 위험을 분석하고, 비용대비 효과적인 대책을 마련하는 일련의 과정이다. ( A )의 단계는 ( B ), 위험 평가, ( C ) 이다.\n( B ) 는 잠재적으로 식별된 위험이 조직의 목표 및 운영에 미칠 가능성과 잠재적 영향을 분석하는 단계이다.\n( C ) 는 식별된 위험을 완화, 이전, 수용 또는 방지하기 위한 위험 처리 방안을 결정하는 단계이다.",
+      "answer": "위험관리, 위험분석, 위험 처리(보호대책 선정)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 157
+    },
+    {
+      "original_id": 159,
+      "type": "short",
+      "question": "다음의 (A), (B), (C)에 대해서 각각 기술하시오.\n[보기]\n정보나 정보처리 기기에 대한 위협의 종류, 위협의 영향, 위협의 발생 가능성 등을 평가하는 과정을 (A)라고 한다. 이 과정의 결과를 통해 정보보호의 위협을 인식하고, 적절한 비용 이내에서 필요한 통제 방안을 선택함으로써 위협을 적절히 통제하는 과정을\n(B)라고 한다. 또한 선택된 통제의 목적과 통제방안이 무엇인지, 그리고 선택한 이유 등을 문서로 정리한 것은 (C)라고 하며, 여기에는 선택된 통제방안들을 누가, 언제, 어디서, 무엇에게, 어떻게 적용할 것인지를 언급하게 된다.",
+      "answer": "위험평가, 위험관리, 위험관리계획",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 158
+    },
+    {
+      "original_id": 160,
+      "type": "short",
+      "question": "다음 (A), (B), (C)에 대해서 각각 기술하시오.\n[보기]\nNMS 서버는 (A) 방식으로 네트워크 장비의 상태정보 및 통계정보를 주기적으로 수집하며, NMS 클라이언트는 (B) 방식으로 장비의 특정 이벤트를 실시간으로 NMS 서버로 전달하여 장비의 상태변경을 알려준다. 이러한 실시간 전송방식과 유사하게 장비에게서 발생되는 실시간 이벤트 정보를 서버에 전송하는 (C) 방식으로도 네트워크 장비 상태 및 보안 상태정보를 전달하기도 한다.",
+      "answer": "Polling, Event Reporting, syslog",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 159
+    },
+    {
+      "original_id": 161,
+      "type": "short",
+      "question": "개인정보의 안전성 확보조치 기준인 안전행정부 고시 제 2011-43 에 따르면 개인정보처리자는 개인정보의 안전한 처리를 위하여 다음 각호의 사항을 포함하여 수립 시행하여야 한다.\n[보기]\n1. 개인정보 보호책임자의 지정에 관한 사항\n2. 개인정보 보호책임자 및 개인정보취급자의 역할 및 책임에 관한 사항\n3. 개인정보의 안전성 확보에 필요한 조치에 관한 사항\n4. 개인정보취급자에 대한 교육에 관한 사항\n5. 그 밖에 개인정보 보호를 위하여 필요한 사항",
+      "answer": "내부관리계획",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 160
+    },
+    {
+      "original_id": 162,
+      "type": "short",
+      "question": "공격자의 흔적을 발견하고 그 행위를 추적하기 위해 유닉스(UNIX) 솔라리스(Solaris) 운영체제의 사용 로그를 분석할 경우 해당 로그 파일명을 쓰시오.\n( A ) : 각 사용자의 가장 최근 로그인했던 시간을 기록\n( B ) : su 명령을 사용한 경우 발생하는 기록\n( C ) : 실패한 로그인 시도 기록",
+      "answer": "lastlog, sulog, loginlog",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 161
+    },
+    {
+      "original_id": 163,
+      "type": "short",
+      "question": "다음의 빈칸 (A), (B), (C) 각각에 알맞은 용어를 기술하시오.\n[보기]\n정보보호에 관하여 포괄적으로 언급하고 있기 때문에 조직의 관리자나 사용자들의 정책을 명확히 구현하고, 목표를 달성할 수 있도록\n( A ), ( B ), ( C )의 개발을 통해 명시적인 접근방법을 제공해 줄 수 있다.\n( A )와 ( B )는 시스템의 보안을 위해 사용할 기술이나 방법을 구체적으로 명시한 기술이며,\n( C )는 조직에서 필요한 구체적인 기술과 이에 필요한 파라미터의 설정 등을 일관성 있게 기술하여 놓은 것으로 일반적으로 강제사항이다.\n반면에 ( B )는 사용자들이나 관리자들이 시스템을 적절히 보호하는 것을 도와주기 위한 것으로, 시스템이 지속적으로 변할 경우 새로운 ( A )의 준비가 어려운 경우에 사용자들이 정보보호에 관한 중요사항을 간과하는 것을 막아주는 기능을 제공한다",
+      "answer": "표준, 지침, 절차",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 162
+    },
+    {
+      "original_id": 164,
+      "type": "short",
+      "question": "다음은 IDS 의 종류에 대한 설명이다.\n[보기]\n(A), (B) 에 알맞은 말은?\n( A ) 기반 IDS : 시스템 내부에 설치되어 하나의 시스템 내부 사용자들의 활동을 감시하고 해킹 시도를 탐지해내는 시스템이다.\n( B ) 기반 IDS : 패킷 캡처링에 기반하여 네트워크를 지나다니는 패킷을 분석해서 침입을 탐지하고 네트워크 단위에 하나만 설치하면 된다.",
+      "answer": "호스트, 네트워크",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 163
+    },
+    {
+      "original_id": 165,
+      "type": "short",
+      "question": "SIEM(Security Information & Event Management)은 IDS/IPS 및 응용서버 등을 일반 서버에서 생성하는 개별 로그를 수집 및 관리를 위해 일반적으로 다음과 같은 기능을 가진다.\n(A): 관제 대상 시스템에 설치된 에이전트로 SNMP, syslog 서버에 저장하는 과정\n(B): 이벤트 발생 누적 횟수 등 유사 정보를 기준으로 그룹핑하여 한 개의 정보로 취합하는 과정\n(C): 다양한 로그 표현형식을 표준 포맷으로 변환하는 과정\n(D): 표준 포맷으로 변환된 로그 중에서 타임스탬프, IP 주소, 이벤트 구성 규칙을 기준으로 여러 개여 로그들의 연관성을 분석하는 과정",
+      "answer": "로그 수집, 로그 분류, 로그 변환, 로그 분석",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 164
+    },
+    {
+      "original_id": 166,
+      "type": "short",
+      "question": "리눅스 시스템에서 다음의 로그는 각각 어떤 파일을 참고 하는지 답하라.\n(A) : 각 사용자의 가장 최근 로그인한 시간과 접근 소스 호스트에 대한 정보를 기록\n(B) : 5 회 이상 로그인 실패 시 상태를 기록\n(C) : ftp 로 로그인하는 사용자의 로그와 파일 업로드, 다운로드 내역을 기록",
+      "answer": "lastlog, btmp, xferlog",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 165
+    },
+    {
+      "original_id": 167,
+      "type": "short",
+      "question": "다음의 빈칸 (A), (B), (C) 각각에 알맞은 용어를 기술하시오.\n[보기]\n( A )란 업무를 목적으로 개인정보파일을 운용하기 위하여 스스로 또는 다른 사람을 통하여 개인정보를 처리하는 공공기관, 법인, 단체 및 개인 등을 말한다.\n( B )란 개인정보처리자의 지휘 감독을 받아 개인정보를 처리하는 임직원, 파견근로자, 시간제근로자 등을 말한다.\n( C ) 이라 함은 개인정보를 처리할 수 있도록 체계적으로 구성한 데이터베이스시스템을 말한다.",
+      "answer": "개인정보처리자, 개인정보취급자, 개인정보처리시스템",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 166
+    },
+    {
+      "original_id": 168,
+      "type": "short",
+      "question": "다음 (A), (B) 각각에 대한 적절한 용어를 기술하시오.\n[보기]\n자산에 대한 중요도를 평가하기 위하여 먼저\n( A )를 만든다. 이 때 누락 없이 최대한 자세하게 나열한다. 자산을 평가하고 관리하기 용이하게 재 분류 할 수 있도록 ( B )를 실시한다. ( B )는 자산의 특성을 고려하여야 하며 특히 사용 용도, 피해규모, 사용환경 등을 포함하여 실시한다.",
+      "answer": "자산목록, 자산분석",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 167
+    },
+    {
+      "original_id": 169,
+      "type": "short",
+      "question": "다음의 (A), (B)에 대해서 각각 기술하시오.\n[보기]\n소스 IP 주소가 정당한 IP 주소 범위 안에 있다면 네트워크에 들어가고 나가는 트래픽을 허락하는 것이다.\n(가)은/는 로컬 네트워크로 들어가는 트래픽을 필터링하는 것을 의미한다.\n(나)은/는 로컬 네트워크에서 나가는 트래픽을 필터링하는 것을 의미한다.\n(다)은/는 특정한 IP 또는 IP 대역을 가상의 인터페이스로 보내어 필터링하는 기법이다.",
+      "answer": "Ingress 필터링, Egress 필터링, Blackhole 필터링 (Null Routing)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 168
+    },
+    {
+      "original_id": 170,
+      "type": "short",
+      "question": "다음 (A), (B), (C) 설명에 알맞은 방법론에 대해서 답하시오.\n[보기]\nA: 시스템에 관한 전문적인 지식을 가진 전문가의 집단을 구성하고 위험을 분석 및 평가하여 정보시스템이 직면한 다양한 위험과 취약성을 토론을 통해 분석하는 방법으로, 위험 분석을 짧은 기간에 도출할 수 있어 시간과 비용을 절약할 수 있으나 위험 추정의 정확도가 낮다.\nB: 어떤 사건도 기대대로 발생하지 않는다는 사실에 근거하여 일정 조건하에서 위험에 대한 발생가능한 결과를 추정하는 방법으로 적은 정보를 가지고 전반적인 가능성을 추론할 수 있고, 위험분석팀과 관리자 간의 원활한 의사소통을 가능케한다.\nC: 각각의 위협을 상호 비교하여 각종 위협요인의 우선순위를 도출하는 방법으로 위험분석에 소모되는 시간과 분석하여야 하는 자원의 양이 적다는 장점이 있으나 위험추정의 정확도가 낮은 단점이 있다.",
+      "answer": "델파이법, 시나리오법, 순위결정법",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 169
+    },
+    {
+      "original_id": 171,
+      "type": "short",
+      "question": "(A), (B) 각 항목에서 설명하고 있는 공격에 대해 기술하시오.\n[보기]\n(A) 공격은 UDP 69 번 포트를 사용하고 인증 없이 파일 전송서비스를 할 수 있는 대상에 대한 공격을 말한다.\n(B) 공격은 보안절차를 거치지지 않고 익명으로 사용하는 사용자에게 FTP 서버 접근을 허용할 경우 생긴다.\n(C) 공격은 데이터를 전송할 목적지가 어디인지 검사하지 않는 설계상의 문제점을 이용한 공격을 말한다.",
+      "answer": "TFTP 공격, Anonymous FTP 공격, FTP Bounce Attack",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 170
+    },
+    {
+      "original_id": 172,
+      "type": "short",
+      "question": "다음의 빈칸 (A), (B), (C), (D)에 각각 알맞은 용어를 기술하시오.\n[보기]\n정보보호정책에는 최소한 중요한 정보자산이 무엇인지 식별하고 정보의 어떤 특성이 만족되어야 하는지를 선언하는 정보보호정책의\n(A)가 제시되어야 하고, 조직에 미치는 영향을 고려하여 중요한 업무, 서비스, 조직, 사람, 자산들을 포함할 수 있도록 정보보호정책의\n(B)를 설정해야 한다. 또한 누구든지 쉽게 숙지할 수 있도록 중요한 사항만을 간단하고 명려하게 작성한 정보보호정책의 내용이 있어야 하고, 정보보호정책 수행에 필요한 경영진, 정보보호조직, 일반직원 등의 (C)를 명확히 정의해야 하며, 정보보호정책은 조직의 최고경영자의 의지를 확인할 수 있도록 (D)로 승인되어야 한다.",
+      "answer": "목적, 적용범위, 책임, 문서",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 171
+    },
+    {
+      "original_id": 173,
+      "type": "short",
+      "question": "다음의 빈칸 (A), (B) 각각에 알맞은 용어를 기술하시오.\n[보기]\n보안 취약점 점검 도구들 중에서, Tripwire 는\n(A)를 점검하는 도구이며, (B)는 미국 Tenable 사가 개발하여 무료로 배포하는 취약점의 점검도구로 패스워드 취약점, TCP/IP 스택 DoS, 취약한 서버 설정 등 알려진 취약점을 점검하여 text, HTML, LaTex 등 다양한 형태로 보고서를 제공한다.",
+      "answer": "무결성, Nessus",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 172
+    },
+    {
+      "original_id": 174,
+      "type": "short",
+      "question": "(A), (B), (C) 각각에 대한 적절한 용어를 기술하시오.\n[보기]\n(A)은/는 네트워크 서비스에 관련된 트래픽을 제어하고 모니터링 할 수 있는 UNIX 기반의 방화벽 룰로서 외부의 TCP 연결로부터 특정 네트워크 서비스를 보호하기 위해서는 각각 허용정책파일과 거부 정책 파일 통해 통제정책을 수립한다.\n이 도구는 서버에 접근할 수 있는 서비스와 접근을 허용할 IP 주소를 세부적으로 설정할 수 있는 데 (B) 파일은 명시적으로 접근을 거부할 때, (C) 파일은 명시적으로 접근을 허용할 때 해당 파일에 서비스와 IP 주소를 등록한다.",
+      "answer": "tcpwrapper, hosts.deny, hosts.allow",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 173
+    },
+    {
+      "original_id": 175,
+      "type": "short",
+      "question": "(A), (B), (C) 각각에 대한 적절한 용어를 기술하시오.\n[보기]\n정보자산의 중요도를 파악하기 위해서는 먼저 자산을 안전하게 보호하기 위해 요구되는 특성을 파악해야 한다. 이와 같은 특성에는 일반적으로 (A), (B) 및 (C) 이/가 포함된다.\n(A)은/는 정보의 유출 측면에서의 특성을 말하며, (B)은/는 정보변조, (C)은/는 정보상실의 측면에서 자산에 보장되어야 하는 특성이며 이 특성들은 보안의 3 요소라고 불린다.",
+      "answer": "기밀성, 무결성, 가용성",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 174
+    },
+    {
+      "original_id": 176,
+      "type": "short",
+      "question": "다음 (A), (B), (C) 각각에 대한 적절한 용어를 기술하시오.\n[보기]\n(A) 공격이란 여러 호스트가 특정 공격대상에게 다량의 ICMP echo Request 를 보내게 하여 서비스 거부를 유발시키는 공격이다. 이러한 공격에 대응하기 위해서는 다음과 같은 방법이 있다.\n중간 매개지로 쓰이는 것을 막기 위해서 다른 네트워크로부터 자신의 네트워크로 들어오는\n(B) 패킷을 막도록 라우터를 설정한다.\n호스트는 IP Broadcast Address 로 전송된 (C) 패킷에 대해 응답하지 않도록 시스템을 설정할 수 있다.",
+      "answer": "smurf, Directed Broadcast,ICMP echo Request",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 175
+    },
+    {
+      "original_id": 177,
+      "type": "short",
+      "question": "다음에 해당하는 공격은 무엇인가?\n[보기]\n일반적으로 스위치 장치들은 MAC 주소 테이블이 가득차게 되면 모든 네트워크 세그먼트 트래픽을 브로드캐스팅하는 특징을 가지고 있다. 따라서 공격자는 위조된 MAC 주소를 지속적으로 네트워크에 흘림으로써 스위칭 허브의 주소 테이블을 오버플로우 시켜 허브처럼 동작하게 하여 해당 네트워크 세그먼트의 데이터를 스니핑할 수 있게 된다.\n이는 일반적인 스위칭 장비가 보안원리의 하나인 'Fail Close'를 따르지 않기 때문이다.\n결국 공격자가 만들어낸 임의의 ARP 패킷의 MAC 주소는 스위치의 주소 테이블을 오버플로우 시키게 되는 것이 공격 성공의 주요 요인이다.",
+      "answer": "Switch Jamming",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 176
+    },
+    {
+      "original_id": 178,
+      "type": "short",
+      "question": "다음 (A), (B), (C) 각각에 대한 적절한 용어를 기술하시오.\n[보기]\n(A): 위험을 보유하고 있는 대상을 말하며, 위험이 발생할 경우 피해규모를 측정하기 위하여 반드시 포함되는 요소이다.\n(B): 외부에서 발생하여 (A)에 손실을 일으키는 요소로서 발생 가능성으로 측정하기도 한다.\n(C): (A)의 내부에 존재하는 약점으로서\n(B)은/는 이 요소를 활용하여 위험을 발생시킨다.",
+      "answer": "자산, 위협, 취약성",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 177
+    },
+    {
+      "original_id": 179,
+      "type": "short",
+      "question": "다음은 Diffie-Hellman 알고리즘을 통한 키 교환 과정이다. (A), (B),(C)에 대해서 각각 기술하시오.",
+      "answer": "g^a mod p, g^b mod p, 비밀키",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 178
+    },
+    {
+      "original_id": 180,
+      "type": "short",
+      "question": "다음은 HeartBleed 취약점에 대한 설명이다. 다음 질문에 답하시오.\n[보기]\nCVE-2014-0160 로 명명된 이 취약점은 통신 구간 암호화를 위해 사용하는 OpenSSL 암호화 라이브러리의 하트비트라는 확장 모듈에서 클라이언트 요청 메시지를 처리할 때 데이터 길이 검증을 수행하지 않아 시스템 메모리에 저장된 64KB 크기의 데이터를 외부에서 아무런 제한 없이 탈취할 수 있는 취약점이다.\n1) 어떤 프로토콜의 취약점인가?\n2) 취약점 영향받는 버전은?",
+      "answer": "1) SSL/TLS 의 OpenSSL 라이브러리\n2) OpenSSL 1.0.1 ~ OpenSSL 1.0.1f, OpenSSL 1.0.2-beta, OpenSSL 1.0.2-beta1",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 179
+    },
+    {
+      "original_id": 181,
+      "type": "short",
+      "question": "다음 현상은 어떤 공격의 결과인가?",
+      "answer": "TCP SYN Flooding",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 180
+    },
+    {
+      "original_id": 182,
+      "type": "short",
+      "question": "다음의 접근통제 정책에 대해 빈칸\n(A),(B),(C) 각각에 알맞은 용어를 기술하시오.\n[보기]\n(A): 객체의 소유자가 권한을 부여한다.\n접근하는 사용자에게 권한을 추가, 삭제할 수 있다.\n(B): 객체에 대한 접근은 주체의 보안등급에 기반하여 접근을 제한다.\n(C): 주체에 할당된 역할에 기반하여 객체에 접근을 제한한다.",
+      "answer": "DAC(임의적 접근), MAC(강제적), RBAC(역할기반)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 181
+    },
+    {
+      "original_id": 183,
+      "type": "short",
+      "question": "\"/administrator\"라는 문자열이 포함되어 있는 경우 \"Web Scan Detected\"란 메시지 로깅을 위한 Snort rule 은 각각 무엇인가?\n[보기]\nalert tcp any any -> 192.168.0.1 (A) (B) :\n\"/administrator; (C) : \"Web Scan Detected\";)",
+      "answer": "any, content, msg",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 182
+    },
+    {
+      "original_id": 184,
+      "type": "short",
+      "question": "다음 보기에서 설명하는 용어는 무엇인가?\n[보기]\n정보보호의 목적인 정보자산의 기밀성, 무결성, 가용성을 실현하기 위한 절차와 과정을 체계적으로 수립, 문서화하고 지속적으로 관리 운영하는 시스템",
+      "answer": "정보보호관리체계(ISMS)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 183
+    },
+    {
+      "original_id": 185,
+      "type": "short",
+      "question": "다음은 OWASP TOP10 2013 중에서 어떤 공격을 설명하고 있는가?\n()는 애플리케이션이 신뢰할 수 없는 데이터를 가져와 적절한 검증이나 제한 없이 웹 브라우저를 보낼 때 발생한다. ()는 공격자가 피해자의 브라우저에 스크립트를 실행하여 사용자 세션 탈취, 웹 사이트 변조, 악의적인 사이트로 이동할 수 있다.",
+      "answer": "XSS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 184
+    },
+    {
+      "original_id": 186,
+      "type": "short",
+      "question": "정보보호관리체계에서 관리적 요구사항 절차에 맞게 순서를 배열하시오.\n[보기]\nㄱ. 사후관리 ㄴ. 위험관리 ㄷ. 경영진 책임 및 조직 구성 ㄹ. 정보보호정책 수립 및 범위설정 ㅁ. 정보보호대책 구현",
+      "answer": "ㄹ -> ㄷ -> ㄴ -> ㅁ -> ㄱ",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 185
+    },
+    {
+      "original_id": 187,
+      "type": "short",
+      "question": "다음은 어떤 공격기법에 대한 설명인가?\nFragment 재조합 과정에서 취약점을 이용하여 목표 시스템 정지나 재 부팅을 유발하는 공격이로서 TCP 헤더부분에 offset 값이 중첩되는 데이터 패킷을 공격 시스템으로 전송하는 방법이다.",
+      "answer": "Teardrop",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 186
+    },
+    {
+      "original_id": 188,
+      "type": "short",
+      "question": "다음에 설명하고 있는 보호대책은 무엇인가?\n1) 사업의 목적을 달성하기 위하여 위험을 낮추는 것을 의미한다.\n2) 위험이 존재하는 프로세스나 사업을 수행하지 않고 포기한다.\n3) 보험이나 외주 등으로 잠재적 위험은 제3 자에게 이전하거나 할당하는 것을 말한다.",
+      "answer": "위험 감소, 위험 회피, 위험 전가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 187
+    },
+    {
+      "original_id": 189,
+      "type": "short",
+      "question": "다음은 CVE 취약점 표기 방식이다.\n[보기]\n다음의 질문에 답하시오 CVE-2014-6628\n1) 2014 가 의미하는 것은?\n2) 6628 가 의미하는 것은?",
+      "answer": "해당년도, 취약점 번호",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 188
+    },
+    {
+      "original_id": 190,
+      "type": "short",
+      "question": "OWASP 는 오픈소스 웹 애플리케이션 보안프로젝트 기구다. 주로 웹에 관한 정보노출, 악성 파일 및 스크립트, 보안 취약점 등을 연구하며 3 년 마다 10 대 웹 애플리케이션의 취약점 발표한다. 다음에서 언급하고 잇는 내용은 어떤 취약점을 설명하고 있는 것인가?\n1) 신뢰할 수 없는 데이터가 명령어나 질의문의 일부분으로서 인터프리터로 보내질 때 발생한다. 공격자의 악의적인 데이터는 예상하지 못하는 명령을 실행하거나 적절한 권한 없이 데이터에 접근하도록 인터프리터를 속일 수 있다.\n\n2) 신뢰할 수 없는 데이터를 가져와 적절한 검증이나 제한 없이 웹 브라우저로 보낼 때 발생한다. 공격자가 피해자의 브라우저에 스크립트를 실행하여 사용자 세션 탈취, 웹 사이트 변조, 악의적인 사이트로 이동할 수 있다.\n\n3) 로그온 된 피해자의 취약한 웹 어플리케이션에 피해자의 세션 쿠키와 기타 다른 인증정보를 자동으로 포함하여 위조된 HTTP 요청을 강제로 보내도록 하는 것이다.\n[보기]\n이것은 공격자가 취약한 애플리케이션이 피해자로부터의 정당한 요청이라고 오해할 수 있는 요청들을 강제로 만들 수 있다.",
+      "answer": "Injection, XSS, CSRF",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 189
+    },
+    {
+      "original_id": 191,
+      "type": "short",
+      "question": "개인정보보호법 제17 조에 따르면 개인정보처리자는 다음 각 호의 어느 하나에 해당되는 경우에는 정보주체의 개인정보를 제3 자에게 제공(공유를 포함한다. 이하 같다)할 수 있다.\n개인정보처리자는 제1 항 제1 호에 따른 동의를 받을 때에는 다음 각 호의 사항을 정보주체에게 알려야 한다. (다음 각 호)의 어느 하나의 사항을 변경하는 경우에도 이를 알리고 동의를 받아야 한다.",
+      "answer": "개인정보를 제공받는 자, 개인정보를 제공받는 자의 개인정보 이용 목적, 제공하는 개인정보의 항목, 개인정보를 제공받는 자의 개인정보 보유 및 이용기간, 동의를 거부할 권리가 있다는 사실 및 동의 거부에 따른 불이익이 있는 경우에는 그 불이익의 내용",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 190
+    },
+    {
+      "original_id": 192,
+      "type": "short",
+      "question": "다음 위험분석 및 위험평가 관련 내용 중 빈칸 (A), (B), (C), (D) 각각에 알맞은 용어를 기재하시오.\n[보기]\n(A): 모든 시스템에 대하여 표준화는 보안 대책의 세트를 체크리스트 형태로 제공한다.\n(B): 구조적인 방법론에 기반하지 않고 경험자의 지식을 사용하여 위험분석을 수행하는 것이다.\n(C): 잘 정립된 모델에 기초하여 자산분석, 위협분석, 취약성 분석 각 단계를 수행하여 위험을 평가하는 것이다.\n(D): 위 세가지 방법을 혼합하여 접근하는 방식을 말한다.",
+      "answer": "베이스라인 접근법, 비정형화된 접근법, 상세위험분석, 복합접근법",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 191
+    },
+    {
+      "original_id": 193,
+      "type": "short",
+      "question": "다음 빈칸에 알맞은 단어를 적으시오.\n(A): 조직의 자산에 대한 위험을 수용할 수 있는 수준으로 유지하기 위하여 자산에 대한 위험을 분석하고 이러한 위험으로부터 자산을 보호하기 위해 비용대비 효과적인 보호대책을 마련하는 일련의 과정\n(B): 조직은 정보자산의 식별 후에 식별된 정보자산에 영향을 줄 수 있는 모든 위협과 취약성, 위험을 식별하고 분류하여야 하며, 이 정보자산의 가치와 위험을 고려하여 잠재적 손실에 대한 영향을 식별 분석해야 한다.\n[보기]\n(C): 정보자산에 대한 잠재적 및 알려진 위협과 취약성으로 나타날 수 있는 조직의 피해와 현재 구현된 정보\n(D): 위협에 대응하여 자산을 보호하기 위해 물리적, 기술적, 관리적 대응책을 말한다.",
+      "answer": "위험관리, 위험분석, 위험평가, 위험대응",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 192
+    },
+    {
+      "original_id": 194,
+      "type": "short",
+      "question": "다음에 설명하고 있는 것은 무엇인가?\n[보기]\n웹 서버를 대신하여 자신이 마치 웹 서버인 것처럼 동작을 대행해준다. 브라우저로부터 연결 요청에 대하여 대신 응답한다. 대표적인 툴로 paros 와 burp suite 등이 있다.",
+      "answer": "proxy",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 193
+    },
+    {
+      "original_id": 195,
+      "type": "short",
+      "question": "(A), (B), (C)에 알맞은 용어를 작성하시오.\n[보기]\n(A): 수집된 정보를 분석하여 공격 시그니처를 저장한 데이터베이스를 구축 후 저장된 정보와 비교하여 알려진 특정 공격을 탐지한다.\n(B): 공격인데 공격이 아닌 것으로 잘못 판단하는 것을 말하고, (C)는 공격이 아닌데 공격으로 잘못 판단하는 것을 말한다.",
+      "answer": "IDS, False Negative(미탐), False Positive(오탐)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 194
+    },
+    {
+      "original_id": 196,
+      "type": "short",
+      "question": "다음 5 개의 스캔 방법 중 포트가 닫혀있을 때만 응답이 오는 스캔 방식만을 고르시오.\nSYS Scan, FIN Scan, XMAS Scan, NULL Scan, Decoy Scan",
+      "answer": "FIN, XMAS, NULL",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 195
+    },
+    {
+      "original_id": 197,
+      "type": "short",
+      "question": "다음에서 설명하고 있는 파일 시스템의 기능은 무엇인가?\n[보기]\n리눅스 파일 시스템에서 ext3 부터 지원하는 기능으로 파일 시스템이 명령 수행 시 로그를 작성하고 있다가 갑작스러운 시스템 종료 등으로 파일 시스템이 손상되는 오류가 발생했을 때 기존에 작성된 로그를 통해 복구하는 기법을 ()이라 한다.",
+      "answer": "저널링",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 196
+    },
+    {
+      "original_id": 198,
+      "type": "short",
+      "question": "다음 보기에서 설명하고 있는 것은 무엇인가?\n[보기]\n특정 보안 취약점에 대해 해당 취약점을 정의하거나 설명하는 것이 여러 단체나 기관에서 일관성이 없고, 표준화되어 있지 않아 이를 공통으로 지칭하고 공유하기 위해 사용한 표준으로 통일된 취약점 코드는 무엇인가?",
+      "answer": "CVE",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 197
+    },
+    {
+      "original_id": 199,
+      "type": "short",
+      "question": "FTP 서비스를 운영하는 서버에 공격 징후가 발견되었다. 시스템 관리자는 해당 FTP 서버에서 다음과 같은 현상이 확인하였다.\n어떤 유형의 공격인가?",
+      "answer": "TCP SYN Flooding 공격",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 198
+    },
+    {
+      "original_id": 200,
+      "type": "short",
+      "question": "웹 서버에 다음과 같은 로그를 발견하였다. 어떤 공격으로 판단할 수 있는가?\n\"GET /login.php?id%3D%27user%27%20and %20pw%3D%271%27%20or%201%3D 1HTTP/1.1\" 200 3926",
+      "answer": "SQL Injection 공격",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 199
+    },
+    {
+      "original_id": 201,
+      "type": "short",
+      "question": "다음 빈칸에 알맞은 단어를 적으시오.\n개인정보의 안전성 확보조치 기준을 수립하는 경우 권한 부여, 변경 또는 말소에 대한 내역을 기록하고, 기록을 최소 (A)간 보관한다. 개인정보취급자가 개인정보처리시스템에 접속한 기록을 (B) 이상 정기적으로 확인 감독하여 하며, 시스템 이상 유무의 확인 등을 위해 최소 (C) 이상 접속기록을 보존 관리하여야 한다.",
+      "answer": "3 년, 월1 회, 1 년",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 200
+    },
+    {
+      "original_id": 202,
+      "type": "short",
+      "question": "다음에 설명하고 있는 (A), (B)에 알맞은 용어를 작성하시오.\n[보기]\n실행가능한 스크립트 파일을 첨부하여 원격에서 제어하는 공격을 (A)이라고 하며, 데이터베이스 질의문을 조작하기 위해 입력 인자에 질의문을 삽입하는 공격은 (B)이라고 한다.",
+      "answer": "파일 업로드 공격, SQL Injection 공격",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 201
+    },
+    {
+      "original_id": 203,
+      "type": "short",
+      "question": "(A), (B), (C)에 알맞은 용어를 작성하시오.\n[보기]\nsystem(), exec() 같은 운영체제의 명령어를 실행할 수 있는 함수가 실행되는 페이지를 include 한 경우 명령어 삽입을 통한 공격이 가능하다. 이러한 취약점을 방지하기 위해서 코드에 (A) 문이 존재하는 검증하고, PHP 의 경우 외부 사이트의 파일을 삽입 차단하기 위해 설정 파일인 (B)의 allow_url_fopen=(C)로 변경한다.",
+      "answer": "include/require, php.ini, off",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 202
+    },
+    {
+      "original_id": 204,
+      "type": "short",
+      "question": "(A), (B), (C)에 알맞은 용어를 작성하시오.\n[보기]\n정보자산에 대한 잠재적 및 알려진 (A)과\n(B)으로 나타날 수 있는 조직의 피해와 현재 구현된 통제의 실패 가능성 및 영향을 평가 시\n(C)을 포함하여야 한다. 이를 통해 정보자산의 위험을 관리할 수 있는 적절한 정보보호대책 선택 및 우선순위의 확보를 지원하여야 한다.",
+      "answer": "위협, 취약점, 목표 위험 수준",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 203
+    },
+    {
+      "original_id": 205,
+      "type": "short",
+      "question": "위험관리 기법 중에서 위험을 인지하였으나 별도의 통제를 수행하지 않고 위험을 받아들이고 진행하는 위험을 받아들이고 진행하는 위험관리 기법을 ()이라 한다.",
+      "answer": "위험수용",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 204
+    },
+    {
+      "original_id": 206,
+      "type": "short",
+      "question": "정보보안의 목적은 기밀성, (A), (B) 이며 위험관리계획 수립 시 (C)를 통해 업무의 우선순위선정 및 보호대책 수준을 도출한다.",
+      "answer": "무결성, 가용성, 업무영향분석",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 205
+    },
+    {
+      "original_id": 207,
+      "type": "short",
+      "question": "TCP 스캔을 수행 중이다. 각 경우에 알맞은 Flag 를 기술하시오.\n1) TCP Open Scan 시 포트가 닫힌 경우 공격자가 (A) flag 를 송신하면 수신 호스트는(B) flag 를 응답한다.\n2) TCP Half-Open Scan 시 포트가 열린 경우 공격자가 (C)flag 를 송신하면 수신 호스트는\n(D)를 응답하고, 공격자는 다시 (E) flag 를 송신하여 연결을 끊는다.",
+      "answer": "SYN, RST + ACK, SYN, SYN + ACK, RST",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 206
+    },
+    {
+      "original_id": 208,
+      "type": "short",
+      "question": "SNMPv3 에서 다음 보안 매개변수(msgSecurityParameters) 설정을 통해 방지 가능한 공격에 대해서 답하시 오.\n1) msgAuthoritativeEngineID, msgAuthoritativeEngineBoots, msgAuthoritativeEngineTime\n2) msgUserName, msgAuthenticationParameters\n3) msgPrivacyParameters",
+      "answer": "1) 재전송 공격 방지\n2) 메시지 위변조 공격 방지\n3) 도청/스니핑 공격 방지",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 207
+    },
+    {
+      "original_id": 209,
+      "type": "short",
+      "question": "다음은 아래 DNS 관련 로그에 나타난 이 공격을 막기 위한 라우터 ACL 설정 명령어이다. (A), (B)를 기술하시오.\n[보기]\n10-Feb-2016 13:21:41.757 queries: info:\nclient 10.10.100.27#12451: view external:\nquery: test.com IN ANY + (10.10.100.1) 10-Feb-2016 13:21:41.897 queries: info:\nclient 10.10.100.27#32282: view external:\nquery: test.com IN ANY + (10.10.100.1) 10-Feb-2016 13:21:42.054 queries: info:\nclient 10.10.100.27#18676: view external:\nquery: test.com IN ANY + (10.10.100.1) 10-Feb-2016 13:21:42.059 queries: info:\nclient 10.10.100.27#20630: view external:\nquery: test.com IN ANY + (10.10.100.1) 10-Feb-2016 13:21:42.193 queries: info:\nclient 10.10.100.27#14893: view external:\nquery: test.com IN ANY + (10.10.100.1) 10-Feb-2016 13:21:42.204 queries: info:\nclient 10.10.100.27#14893: view external:\nquery: test.com IN ANY + (10.10.100.1)\n# access-list 1 deny ( A ) any any eq ( B )",
+      "answer": "udp, 53",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 208
+    },
+    {
+      "original_id": 210,
+      "type": "short",
+      "question": "UNIX 시스템에서 who, last, lastcomm 명령어를 수행 시 참조되는 로그파일명을 답하시오.",
+      "answer": "utmp, wtmp, acct/pacct",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 209
+    },
+    {
+      "original_id": 211,
+      "type": "short",
+      "question": "다음은 netstat -rn 명령을 수행한 결과이다. (A), (B), (C) 호스트로 ping 명령을 수행 시 라우팅 되는 게이트웨이 아이피는 무엇인가?\n\n[보기]\n(A) 10.0.160.100\n(B) 10.0.122.64\n(C) 10.0.192.100",
+      "answer": "10.0.160.1, 10.0.160.2, 10.0.160.5",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 210
+    },
+    {
+      "original_id": 212,
+      "type": "short",
+      "question": "root 원격 접속 제한하기 위한 Solaris, AIX, Linux 각각 운영체제의 설정파일을 기술하시오.",
+      "answer": "/etc/default/login, /etc/security/user, /etc/securetty",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 211
+    },
+    {
+      "original_id": 213,
+      "type": "short",
+      "question": "정보보호관리체계(ISMS)의 라이프사이클 4 단계 (A), (B), (C)에 알맞은 용어를 작성하시오.\n[보기]\n(A) -> (B)-> (C) -> 조치 (Act)",
+      "answer": "계획(Plan), 실행(Do), 점검(Check)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 212
+    },
+    {
+      "original_id": 214,
+      "type": "short",
+      "question": "위험분석과 관련하여 (A), (B), (C)에 알맞은 용어를 작성하시오.\n[보기]\n( A ) : 조직이 보호해야 할 대상으로써, 정보, 하드웨어, 소프트웨어, 시설 등을 말하며 관련 인력, 기업 이미지 등의 무형자산을 포함한다.\n( B ) : 자산에 손실을 초래할 수 있는 원치 않는 사건의 잠재적 원인(Source)이나 행위자(Agent)\n( C ) : 자산의 잠재적 속성이나 처한 환경으로 위협의 이용 대상으로 관리적, 물리적, 기술적 약점",
+      "answer": "자산(Asset), 위협(Threat), 취약점(Vulnerability)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 213
+    },
+    {
+      "original_id": 215,
+      "type": "short",
+      "question": "다음에서 설명하고 있는 통제를 기술하시오.\n[보기]\n( A )는 오류나 부정이 발생하는 것을 예방할 목적으로 행사하는 통제이다. 발생 가능한 잠재적인 문제들을 식별하여 사전에 대처하는 능동적인 개념의 통제이며, ( B ), ( C ) 등으로 나눌 수 있다.\n( B )란 관계자 이외의 사람이 특정 시설이나 설비에 접근할 수 없게 하는 각종의 통제를 뜻하며, ( C )란 승인을 받지 못한 사람이 정보통신망을 통하여 자산에 대한 접근을 막기 위한 통제 방법이다.",
+      "answer": "예방 통제, 물리적 접근 통제, 논리적 접근 통제",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 214
+    },
+    {
+      "original_id": 216,
+      "type": "short",
+      "question": "IPSec 의 기능을 4 가지 이상 기술하시오.",
+      "answer": "데이터 기밀성, 비연결형 무결성, 데이터 근원지 인증, 재생공격보호, 제한된 트래픽 흐름의 비밀성",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 215
+    },
+    {
+      "original_id": 217,
+      "type": "short",
+      "question": "윈도우 PE(Preinstallation Environment) IMAGE_SECTION_HEADER 에는 각 세션들의 시작주소와 크기가 있다. 괄호안에 알맞은 용어를 넣으시오.\n(A)는 코드의 정보가 저장되는 영역\n(B)는 전역변수, 상수의 정보가 저장되는 영역\n(C) 는 DLL 에서 가져와 함수 정보가 저장되는 영역",
+      "answer": ".text, .data, .idata",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 216
+    },
+    {
+      "original_id": 218,
+      "type": "short",
+      "question": "익스플로잇과 관련된 다음 <보기>에 알맞은 용어를 넣으시오\n(A) 실제로 기계어로 구성되어 Exploit 의 본체에 해당하는 프로그램의 명칭은 무엇인가?\n[보기]\n(B) x86 계열에서 NOP(No Operation) code 를 hex 로 표현한 어느 값인가?\n(C) x86 계열에서 ESP 에 들어있는 값을 EIP 로 이동하는 어셈블리 코드를 적으시오",
+      "answer": "쉘코드, 0x90, jump esp",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 217
+    },
+    {
+      "original_id": 219,
+      "type": "short",
+      "question": "윈도우 DNS 서버에서 DNS 설정시 도메인 DNS 서버를 등록하는 (A)와 DNS 서버에 서비스정보를 입력하는 (B)가 있다.\n(A), (B)는 각각 무엇인가.",
+      "answer": "Zone 설정, 리소스 레코드 설정",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 218
+    },
+    {
+      "original_id": 220,
+      "type": "short",
+      "question": "Snort 정책에서 10 바이트에서 12 바이트 중 FFFF 바이트에 해당하는 내용을 찾으려고 할 때 알맞은 빈칸을 채우시오.\nalert tcp any any -> any any ( (A): “|FFFF|”;\n(B):9; (C):2)",
+      "answer": "content, offset, depth",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 219
+    },
+    {
+      "original_id": 221,
+      "type": "short",
+      "question": "다음에 해당하는 악성코드분류에 대해 답하시오.\n[보기]\n키로거는 사용자가 키보드로 PC 에 입력하는 내용을 몰래 낚아채어 기록하는 행위를 말한다.\n(A) : 일반적인 (Downloader)가 아닌 사용자가 인식하지 못하게 악성코드에 감염시키며, 사용자의 시스템 내부/외부에서 다양한 경로로 악성코드를 감염시킨다.\n(B) : (A)의 한 종류이며 동작방식은 같으나 해당코드가 메모리 영역에 상주하여 감염시킨다.",
+      "answer": "드롭퍼, 인젝터",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 220
+    },
+    {
+      "original_id": 222,
+      "type": "short",
+      "question": "와이어샤크에서 DNS Response 만 출력하는 필터링은?",
+      "answer": "dns.response_to",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 221
+    },
+    {
+      "original_id": 223,
+      "type": "short",
+      "question": "다음 빈칸에 알맞은 용어를 넣으시오.\n(A)는 공격자가 원격에서 웹서버에 명령을 수행할 수 있도록 작성한 웹스크립트 파일을 업로드하여 웹서버에 명령을 실행해 관리자 권한을 획득후 웹페이지 소스코드 열람, 서버 내 파일유형, 백도어 프로그램 설치등을 할수 있는 공격 형태를 말한다.",
+      "answer": "WebShell",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 222
+    },
+    {
+      "original_id": 224,
+      "type": "short",
+      "question": "다음 괄호 안에 알맞은 용어를 넣으시오.\nAPT 는 지능형 지속공격으로 특정 회사의 중요 정보 획득, 정치적 목적, 사이버 테러 등을 목적으로 하는 해커에 의해 사이트, 기업, 개인을 상대로 지속적으로 해킹하는 공격을 의미한다. 이에 대한 대비책인 (A)는 록히드마틴사가 정식 명칭을 특허로 등록하였다. 군사용으로 적 미사일 기지에 대한 선제공격을 의미하며, 사이버 공격에 대한 선제 대응책으로 사회적인 이슈로 대두되기도 하였다.",
+      "answer": "사이버 킬 체인",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 223
+    },
+    {
+      "original_id": 225,
+      "type": "short",
+      "question": "다음은 통제 시점에 따른 분류이다.\n[보기]\n알맞은 용어를 넣으시오\n(A) 발생가능한 잠재적인 문제들을 식별하여 사전에 대처\n(B) 예방통제를 우회하여 발생되는 문제점을 찾아내기 위한 통제\n(C ) 탐지된 위협에 대처하거나 줄이는 통제",
+      "answer": "예방통제, 탐지통제, 교정통제",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 224
+    },
+    {
+      "original_id": 226,
+      "type": "short",
+      "question": "MYSQL 에서 외부 접속이 가능한 설정은?",
+      "answer": "bind-address = 0.0.0.0",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 225
+    },
+    {
+      "original_id": 227,
+      "type": "short",
+      "question": "정보보호관리체계(ISMS) 인증 도입을 위한 정보보호 대책을 넣으시오.\n- 정보보호정책\n1)\n2)\n- 정보자산 분류\n- 정보보호 교육\n- 인적보안\n- 물리적 보안\n- 시스템개발 보안\n- 암호통제\n3)\n- 운영보안\n- 침해사고관리\n- IT 재해복구",
+      "answer": "정보보호조직, 외부자 보안, 접근통제",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 226
+    },
+    {
+      "original_id": 228,
+      "type": "short",
+      "question": "다음은 무선 보안 프로토콜 WEP 에 대한 설명이다. 빈칸에 알맞은 용어를 넣으시오.\nWEP 암호화 방식은 IEEE 802.11b 프로토콜에서 적용되기 시작하여 (A) 암호화 알고리즘을 사용한다.\n[보기]\n40 비트 길이의 WEP 비밀키와 임의로 할당되는 24 비트 (B) 로 조합된 총 64 비트의 키를 이용하여 (A) 알고리즘 암호화하는 방식이다.",
+      "answer": "RC4, IV",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 227
+    },
+    {
+      "original_id": 229,
+      "type": "short",
+      "question": "빈칸에 알맞은 용어를 넣으시오.\n( ) 디렉터리는 현재 실행되고 있는 프로세스 정보를 기록하고 있다.",
+      "answer": "/proc",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 228
+    },
+    {
+      "original_id": 230,
+      "type": "short",
+      "question": "다음은 정보보호 5 가지 목표를 제시하고 있다. 빈칸에 알맞은 용어를 넣으시오.\n기밀성, 무결성, (A), (B), (C)",
+      "answer": "가용성, 인증, 부인방지",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 229
+    },
+    {
+      "original_id": 231,
+      "type": "short",
+      "question": "TCP 연결 수립 시 3WAY handshaking 과정 설명한 것이다. 괄호안에 알맞은 용어는?\n(Client) ---- SYN(3478) -----> (Server) (Client) <---- SYN(2324), ACK(A) ---- (Server) (Client) --- SYN(B), ACK(C) ----> (Server)",
+      "answer": "3479, 3479, 2325",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 230
+    },
+    {
+      "original_id": 232,
+      "type": "short",
+      "question": "다음 보기 실행시 물음에 답하시오.\n1) getresuid() 호출 시 ruid, euid (A), suid\n(A)\n2) setuid(600) 이후 getresuid() 호출 시 ruid (B), euid (C), suid (C)",
+      "answer": "0, 600, 600",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 231
+    },
+    {
+      "original_id": 233,
+      "type": "short",
+      "question": "DNS 관련 설명에 괄호 용어 넣으시오.\n도메인네임 서비스는 IP 주소를 네임주소로 변환해 주는 서비스이며, (A) 프로토콜을 사용한다. 동일한 DNS 질의를 짧은 시간에 빈번하게 하는 것을 방지하기 위해 (B)를 내부에 구현하여 DNS 질의 결과 데이터를 일정기간 동안 이 (B)에 저장한다. 소스 레코드는 자체에 지정된 (C) 시간 동안만 리졸버 (B)에 존재한 후 삭제된다.",
+      "answer": "UDP, Cache, TTL",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 232
+    },
+    {
+      "original_id": 234,
+      "type": "short",
+      "question": "개인정보 안정성 확보조치 기준으로 괄호안을 채우시오.\n(A)를 처리하는 개인정보처리자는 인터넷 홈페이지를 통해 (A) 정보가 유출, 변조, 훼손되지 않도록 (B) 이상 (C)을 점검하고 필요한 보안 조치를 하여야 한다.",
+      "answer": "고유식별정보, 연 1 회, 취약점",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 233
+    },
+    {
+      "original_id": 235,
+      "type": "short",
+      "question": "위험처리방법에 대한 설명이다. 알맞은 용어 넣으시오.\n(A): 위험의 잠재 손실 비용을 감수하는 것으로 어떠한 대책을 도입하더라도 완전히 제거할 수 없으므로 일정수준 이하의 수준을 감수하고 사업을 진행하는 방법이다.\n[보기]\n(B): 위험이 존재하는 프로세스나 사업을 수행하지 않고 포기하는 것을 말한다.\n(C): 보험이나 외주 등으로 잠재적 비용을 제3 자에게 이전하거나 할당하는 것이다.",
+      "answer": "위험수용, 위험회피, 위험전가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 234
+    },
+    {
+      "original_id": 236,
+      "type": "short",
+      "question": "맥, 리눅스, 유닉스, 윈도우 등 운영체제 별로 디렉터리 경로는 다르지만 DNS 의 정보를 담고 있는 파일이며, 윈도우7 이상 버전에서는 관리자 외에 수정이 불가능 한 파일의 이름은 무엇인가?",
+      "answer": "hosts",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 235
+    },
+    {
+      "original_id": 237,
+      "type": "short",
+      "question": "스머프 공격(smurf attack)에 대한 설명 중 빈 칸을 채우시오.\n공격자가 출발지 주소(source address)를 공격 대상(victim)의 IP 주소로 변조, 목적지 주소(destination address)를 특정 네트워크의 브로드캐스트 주소로 변조한 ICMP ( A ) 패킷을 전송하면, 해당 패킷을 수신한 모든 호스트들이 ICMP ( B ) 패킷을 공격 대상에게 전송한다. 스머프 공격을 방어하기 위해서 라우터, 방화벽 등 네트워크 장비에서 외부로부터 유입되는 ( C ) 패킷을 차단할 수 있다.",
+      "answer": "Echo request, Echo reply, Directed Broadcast",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 236
+    },
+    {
+      "original_id": 238,
+      "type": "short",
+      "question": "다음은 오버플로 공격과 관련한 메모리 영역에 대한 설명이다. ( )에 알맞은 단어를 채우시오.\n( A ) 영역의 크기를 초과하는 코드를 넣어 특정 변수의 주소 혹은 복귀 주소(return address)를 변경하여 임의의 코드를 실행하거나, 프로그램 실행 시에 동적으로 할당되는 ( B ) 영역의 메모리에 실행가능 코드를 삽입할 수 있다.",
+      "answer": "스택, 힙",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 237
+    },
+    {
+      "original_id": 239,
+      "type": "short",
+      "question": "trustwave 사의 아파치웹서버 IIS 에서 사용가능 한 공개용 웹서버 방화벽은 무엇인가?",
+      "answer": "modsecurity",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 238
+    },
+    {
+      "original_id": 240,
+      "type": "short",
+      "question": "단편화된 tcpdump 의 패킷이다 각 숫자가 의미하는 것은?\nFrag (A)95 : (B)1480 @ (C)2920+",
+      "answer": "(A) fragment id\n(B) size\n(C) offset",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 239
+    },
+    {
+      "original_id": 241,
+      "type": "short",
+      "question": "제23 조의2(주민등록번호의 사용 제한)\n① 정보통신서비스 제공자는 다음 각 호의 어느 하나에 해당하는 경우를 제외하고는 이용자의 주민등록번호를 수집·이용할 수 없다.\n1. 제23 조의3 에 따라 (a)으로 지정 받은 경우\n② 제1 항제2 호 또는 제3 호에 따라 주민등록번호를 수집·이용할 수 있는 경우에도 이용자의 주민등록번호를 사용하지 아니하고 본인을 확인하는 방법(이하 \"(b)\"이라 한다)을 제공하여야 한다.",
+      "answer": "본인확인기관, 대체수단",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 240
+    },
+    {
+      "original_id": 242,
+      "type": "short",
+      "question": "SSL/TLS 레코드 프로토콜이 메시지 암호화하여 통신을 수행하는 부분이다.\n[보기]\n레코드 프로토콜은 상위계층 메시지를 (A),\n(B), (C), (D) 와 같은 처리과정을 거쳐 헤더를 붙인 후 하위계층으로 전달한다.",
+      "answer": "단편화, 압축, MAC 추가, 암호화",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 241
+    },
+    {
+      "original_id": 243,
+      "type": "short",
+      "question": "시스템에 관한 전문적인 지식을 가진 전문가의 집단을 구성하고, 정보시스템이 직면한 다양한 위협과 취약성을 토론을 통해 분석하는 방법론은 무엇인가?",
+      "answer": "델파이법",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 242
+    },
+    {
+      "original_id": 244,
+      "type": "short",
+      "question": "정보보호시스템 공통평가기준에 있는 내용이다.\n[보기]\n(A)이라 함은 평가대상 범주를 위한 특정 소비자의 요구에 부합하는 구현에 독립적인 보안요구사항의 집합을 말한다.\n(B)라 함은 식별된 평가대상의 평가를 위한 근거로 사용되는 보안요구사항과 구현 명세의 집합을 말한다.\n(C)이라 함은 공통평가 기준에서 미리 정의된 보증 수준을 가지는 보증 컴포넌트로 이루어진 패키지를 말한다.",
+      "answer": "보호프로파일, 보안목표명세서, 평가보증등급",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 243
+    },
+    {
+      "original_id": 245,
+      "type": "short",
+      "question": "위험은 비정상적인 일이 발생할 수 있는 가능성을 말하며, 위험분석은 위험을 분석하고 해석하는 과정이다. 위험을 구성하는 4 가지 기본요소를 쓰시오.",
+      "answer": "자산, 취약성, 위협, 정보보호대책",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 244
+    },
+    {
+      "original_id": 246,
+      "type": "short",
+      "question": "TCP 포트가 닫혀 있을 때 응답이 오는 스텔스 스캔 3 가지를 고르시오.",
+      "answer": "NULL Scan, FIN Scan, Xmas Scan",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 245
+    },
+    {
+      "original_id": 247,
+      "type": "short",
+      "question": "FTP 동작 방식에 대한 지문에 대한 빈칸을 채우시오.\nFTP 는 ( A )모드와 수동(passive)모드가 있다.\n( A )는 통신 제어를 위한 ( B )포트와 데이터 전송을 위한 ( C )포트를 사용한다.\n[보기]\n수동모드에서는 데이터 전송을 위해 서버에서\n( D )포트 이상을 사용한다.",
+      "answer": "Active, 21, 20, 1024",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 246
+    },
+    {
+      "original_id": 248,
+      "type": "short",
+      "question": "오픈 소스 도구인 PacketFens 와 같이 네트워크 통제 등을 수행하는 솔루션은?",
+      "answer": "NAC",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 247
+    },
+    {
+      "original_id": 249,
+      "type": "short",
+      "question": "VLAN 은 네트워크 자원 사용을 제한함으로써 ( A )를 높이고, 이용하는 도메인의 ( B )를 제한하여 네트워크 서비스의\n( C )를 향상시킨다.",
+      "answer": "보안, 크기, 성능",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 248
+    },
+    {
+      "original_id": 250,
+      "type": "short",
+      "question": "위험처리방법에는 위험감소, 위험수용, 위험회피, ( A )가 있으며, ( A )는 보험이나 외주를 통해 가능하다.",
+      "answer": "위험전가",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 249
+    },
+    {
+      "original_id": 251,
+      "type": "short",
+      "question": "제8 조(주요정보통신기반시설의 지정 등)에 관하여 아래 빈칸을 채우시오.\n중앙행정기관의 장은 소관분야의 정보통신기반시설 중 다음 각호의 사항을 고려하여 전자적 침해행위로부터의 보호가 필요하다고 인정되는 정보통신기반시설을 주요정보통신기반시설로 지정할 수 있다.\n2. 제1 호에 따른 기관이 수행하는 업무의 정보통신기반시설에 대한 (A)\n3. 다른 정보통신기반시설과의 (B)\n5. 침해사고의 발생가능성 또는 그 복구의 (C)",
+      "answer": "의존도, 상호연계성, 용이성",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 250
+    },
+    {
+      "original_id": 252,
+      "type": "short",
+      "question": "각 항목에 알맞은 재난복구서비스를 찾으시오\n(A) : 백업장치나 테이프와 같은 것만 구비한다. 중요성이 높은 정보 기술 자원만 부분적으로 사이트에 보유한다.\n[보기]\n(B) : 주 센터와 동일한 수준의 정보 기술 자원을 사이트에 보유하면서, 데이터를 최신으로 유지한다.\n(C) : 컴퓨터실과 같은 장소만 확보하고 정보자원은 확보하지 않은 상태에서, 재해 시 정보자원을 가지고 온다.",
+      "answer": "웜 사이트, 핫 사이트, 콜드 사이트",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 251
+    },
+    {
+      "original_id": 253,
+      "type": "short",
+      "question": "개인정보 안전성 확보조치 기준과 관련하여 다음 빈칸을 채우시오.\n(A)(이)란 데이터베이스시스템 등 개인정보를 처리할 수 있도록 체계적으로 구성한 시스템을 말한다.\n[보기]\n(B)(이)란 정보주체 및 개인정보취급자 등이 개인정보처리시스템 또는 정보통신망을 관리하는 시스템 등에 접속할 때 식별자와 함께 입력하여 정당한 접속 권한을 가진 자라는 것을 식별할 수 있도록 시스템에 전달해야 하는 고유의 문자열로서 타인에게 공개되지 않는 정보를 말한다.\n(C)(이)란 인터넷망 차단, 접근 통제시스템 등에 의해 인터넷 구간에서의 접근이 통제 또는 차단되는 구간을 말한다.",
+      "answer": "개인정보처리시스템, 비밀번호, 내부망",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 252
+    },
+    {
+      "original_id": 254,
+      "type": "short",
+      "question": "빈칸에 알맞은 단어는?\n공격 -------------- (A) -------------→ 노출 ↑\n\n↓ 증가 ↓ 보안대책 – (B) → 위험 자산\n\n\n↑ 증가 ↓ 가치(사업영향) ------------ (C)",
+      "answer": "취약성, 감소, 보유",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 253
+    },
+    {
+      "original_id": 255,
+      "type": "short",
+      "question": "Windows 시스템에서 하나 이상의 볼륨(드라이브)을 암호화하는 기능으로 TPM(신뢰할 수 있는 플랫폼 모듈)을 사용하여 초기 시작 구성요소의 무결성을 검사하는 암호화 방식은?",
+      "answer": "BitLocker",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 254
+    },
+    {
+      "original_id": 256,
+      "type": "short",
+      "question": "DB 보안 접근 통제 방법은?\n(A) 인증된 사용자에게 허가된 범위 내에서 시스템 내부의 정보에 대한 접근을 허용하는 기술적 방법\n(B) 사용자를 찾은 후 통계 함수 관계를 통해 키 값을 유도하는 것으로 간접 접근을 통한 추론과 상관 데이터로 찾는 통제\n(C) 보안 등급이 높은 객체에서 낮은 객체로의 정보 흐름을 제어하는 통제",
+      "answer": "접근통제, 추론통제, 흐름통제",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 255
+    },
+    {
+      "original_id": 257,
+      "type": "short",
+      "question": "VPN 에서 사용한 보안 프로토콜은?\n(A) 3 계층 보안 프로토콜로, 가장 많이 사용되는 프로토콜\n(B) 상기 프로토콜에서 무결성 보장, 메시지 인증을 위한 세부 프로토콜\n(C) 상기 프로토콜에서 암호화를 통해 기밀성을 유지하기 위한 세부 프로토콜",
+      "answer": "IPSec, AH, ESP",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 256
+    },
+    {
+      "original_id": 258,
+      "type": "short",
+      "question": "DNS 서버인 192.168.1.18 으로 axfr 레코드 타입의 질의를 전송하였더니 deny 된 것으로 확인되었다. 질의한 호스트 서버가\n192.168.10.3 이며, 정상적인 2 차 DNS 서버라고 할 때 192.168.1.18 의 named.conf 에 어떤 설정이 포함되어야 하는가?\noptions { directory \"/var/named\"; forward only; forwarders { 8.8.8.8; }; datasize 1024M; ( ) };",
+      "answer": "allow-transfer 192.168.10.3",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 257
+    },
+    {
+      "original_id": 259,
+      "type": "short",
+      "question": "HTTP 관련 공격 중 헤더의 CRLF 필드 부분을 조작함으로써 DNS 서버로 조작된 HTTP 헤더를 지속적으로 보내 서비스의 가용성을 떨어뜨리는 공격은?",
+      "answer": "Slow HTTP Header Dos (slowloris)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 258
+    },
+    {
+      "original_id": 260,
+      "type": "short",
+      "question": "고정형 영상정보처리기기의 설치 및 운영 제한에 대한 법규를 활용하여 안내판 설치 시 각 호 중 괄호안에 들어갈 내용은?\n1) ( )\n2) 촬영 범위 및 시간\n3) 관리 책임자의 연락처\n4) 그 밖에 대통령령으로 정하는 사항",
+      "answer": "설치 목적 및 장소",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 259
+    },
+    {
+      "original_id": 261,
+      "type": "short",
+      "question": "네트워크 관리에 사용되는 SNMP 에 대하여 다음에 답하시오.\n1) 매니저가 에이전트로 Request 하는 포트번호: UDP ( A )\n2) 에이전트가 매니저로 주기적으로 보고하는 과정: ( B )\n3) 에이전트가 매니저로 주기적으로 보고하는 포트번호: UDP ( C )",
+      "answer": "161, 이벤트 리포팅, 162",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 260
+    },
+    {
+      "original_id": 262,
+      "type": "short",
+      "question": "개인정보의 안전성 확보조치 기준 제5 조 접근 권한의 관리에 따라 개인정보처리시스템의 접근권한 부여, 말소 등의 기록을 최소 (A)간 보관해야 하며, 접속기록의 위조, 변조 또는 훼손 등에 대응하기 위해 월(B)회 이상 점검해야 한다.\n[보기]\n또한, 개인정보처리자는 개인정보취급자의 개인정보처리시스템에 대한 접속기록을 최소\n(C) 이상 보관해야 한다.",
+      "answer": "3 년, 1, 1 년",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 261
+    },
+    {
+      "original_id": 263,
+      "type": "short",
+      "question": "빈칸에 들어갈 말을 쓰시오.\nSLE = AV * (A) ALE = SLE * (B)",
+      "answer": "EF (노출 계수), ARO (연간 발생률)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 262
+    },
+    {
+      "original_id": 264,
+      "type": "short",
+      "question": "공격자는 SW 빌드 단계와 관련된 서버를 해킹한 후 악성코드를 삽입하여, 개발사가 제품 패키징(컴파일) 작업 시 정상 파일에 악성 모듈이 삽입되어 배포되는 공격은?",
+      "answer": "공급망 사슬 공격(Supply Chain Attack)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 263
+    },
+    {
+      "original_id": 265,
+      "type": "short",
+      "question": "악성코드(Malware)와 광고(Advertising)의 합성어로 온라인 광고를 이용하여 악성코드를 전파하는 기법을 무엇이라 하는가?",
+      "answer": "Malvertising",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 264
+    },
+    {
+      "original_id": 266,
+      "type": "short",
+      "question": "다음 빈 칸 (A), (B), (C)에 적절한 용어를 기술하시오.\n[보기]\nIPSec 은 OSI 7 Layer 중 (A) 계층에 보안성을 제공해주는 표준화된 보안 프로토콜로 두 가지 세부 프로토몰을 가지고 있다. (B) 프로토콜은 송신자 인증과 무결성을 보장해주고 프로토콜 식별번호 51 번을 사용하고 (C) 프로토콜은 송신처 인증, 무결성 및 기밀성을 보장해주고 프로토콜 식별번호 50 번을 사용한다.",
+      "answer": "네트워크 계층, AH, ESP",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 265
+    },
+    {
+      "original_id": 267,
+      "type": "short",
+      "question": "다음은 웹 어플리케이션의 HTTP 프로토콜 취약점을 이용한 공격에 대한 설명이다. 빈 칸 (A), (B)에 적절한 용어를 기술하시오.\n[보기]\nHTTP Request 에 있는 파라미터가 HTTP Response 의 응답 헤더로 다시 전달되는 경우 파라미터 내 개행문자 (A) 혹은 (B)가 존재하면 HTTP 여러개로 나누어질 수 있다.\n이 공격은 이러한 취약점을 통해 응답 메시지에 악의적인 코드를 주입합으로써 XSS 및 캐시를 훼손하는 취약점이다.",
+      "answer": "CR(%0D), LF(%0A)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 266
+    },
+    {
+      "original_id": 268,
+      "type": "short",
+      "question": "다음은 데이터베이스 보안 위협에 대한 설명이다. 빈 칸 (A), (B), (C)에 적절한 용어 기술하시오.\n[보기]\n(A): 낮은 보안 등급의 정보를 조각별로 조합하여 높은 등급의 정보를 알아내는 방식으로 개별 항목의 정보보다 종합적인 정보의 보안 등급이 높은 경우 심각한 발생\n(B): 접근 가늠한 정당한 사용자 계정으로 수집한 정보를 통해 유추하여 높은 보안등급의 정보에 접근하는 방식\n(C): 원본 정보 자체를 위 변조해 끼워 넣거나 바꿔치기하는 수법으로, 디스크 속에 대체할 자료를 만들어 두었다가 데이터를 추가하는 방식",
+      "answer": "집성, 추론, 데이터 디들링",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 267
+    },
+    {
+      "original_id": 269,
+      "type": "short",
+      "question": "다음은 리눅스 시스템에서 로그 파일을 관리하기 위한 logrotate 설정파일(/etc/logrotate.conf)에 대한 설명이다. (A), (B), (C)에 적절한 용어를 기술하시오.\n[보기]\n(A): 주 단위로 로그 파일을 순환한다.\nsize 1M: 로그 파일이 1MB 가 되면 순환한다.\n(B): 오래된 로그부터 순환한 후 새롭게 로그 파일을 생성한다.\n(C): 로그를 압축하여 저장한다.",
+      "answer": "weekly, create, compress",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 268
+    },
+    {
+      "original_id": 270,
+      "type": "short",
+      "question": "다음 중 국내 정보보호 관리체계 인증 심사 시 신청기관이 대상 서비스 및 자산에 해당하는 클라우드 서비스를 이용하여 정보통신서비스를 제공하는 경우, 신청기관이 관리 가능한 운영체제, DB, 응용 프로그램 등은 인증 범위에 포함한다. 아래 보기에서 설명하고 있는 클라우드 서비스 형태에 대한 설명을 알맞게 채우시오.\n( A ) : 직접 관리하는 서버 OS, DB, 미들웨어 (WAS 등), 응용프로그램\n( B ) : 직접 관리하는 응용프로그램으로, 계정 및 권한을 할당 받아 사용하는 영역 (서버OS 사용자 환경, 미들웨어 비밀번호 등)\n( C ) : 응용프로그램 계정/권한 관리 등",
+      "answer": "IaaS, PaaS, SaaS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 269
+    },
+    {
+      "original_id": 271,
+      "type": "short",
+      "question": "아래의 식을 참고하여 위험의 구성요소 3 가지를 적으시오.\n( A ) : 조직이 보호해야 할 대상\n( B ) : 자산에 손실을 초래할 수 있는, 원치 않는 사건의 잠재적 원인(source) 이나 행위자(agent)\n( C ) : 자산의 잠재적 속성으로써 위협의 이용 대상으로 정의 (때로는 정보보호대책의 미비로 정의하기도 한다.)",
+      "answer": "자산, 위협, 취약성",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 270
+    },
+    {
+      "original_id": 272,
+      "type": "short",
+      "question": "CC 공통 평가 기준 구성은?\n( A ) : 사용자 또는 개발자의 요구사항을 정의한다.\n[보기]\n( B ) : 개발자가 제품 평가를 위한 상세 기능을 정의하여 작성한다. PP 는 기술적인 구현 가능성을 고려하지 않는데 반해, ST 는 기술적 구현 가능성을 고려한다.\n( C ) : 미리 정의된 보증 수준을 가지는 보증 컴포넌트로 이루어진 패키지를 의미한다.",
+      "answer": "PP, ST, EAL",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 271
+    },
+    {
+      "original_id": 273,
+      "type": "short",
+      "question": "재난 복구 시스템 유형을 적으시오.\n(A): 메인 사이트와 동일한 수준의 정보 기술 자원을 실시간 상태에서 동작하는 방식\n(B): 장소 또는 전산실만 준비, 비용은 저렴하지만 상당한 지연 시간이 발생\n(C): 미러 사이트와 달리 대기 상태에서 동작하는 방식\n(D): 콜드 사이트와 핫 사이트의 중간, 중요성이 높은 정보만 부분적으로 보유",
+      "answer": "미러사이트, 콜드사이트, 핫 사이트, 웜 사이트",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 272
+    },
+    {
+      "original_id": 274,
+      "type": "short",
+      "question": "접근통제 정책에 대하여 다음 물음에 답하시오.\n[보기]\n( A ) : 사용자나 사용자 그룹에 근거한 사용자 중심의 접근 제어 수행\n( B ) : 모든 객체는 정보의 비밀수준에 근거하여 보안 레벨이 주어지고 허가된 사용자만 접근 가능하도록 제어\n( C ) : 사용자와 객체 상호관계를 역할에 따라 접근 제어 수행",
+      "answer": "DAC, MAC, RBAC",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 273
+    },
+    {
+      "original_id": 275,
+      "type": "short",
+      "question": "MAC 주소(물리 주소)를 기반으로 IP 주소(논리 주소)를 할당 받기 위해 사용되며, 디스크 없는 장치나 네트워크 부팅을 지원하는 장비에서 사용하는 TCP/IP 프로토콜은 무엇인가?",
+      "answer": "RARP(Reverse Address Resolution Protocol)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 274
+    },
+    {
+      "original_id": 276,
+      "type": "short",
+      "question": "VLAN 구성 방식에 대하여 다음 ( )에 들어갈 명칭을 기술하시오.\n[보기]\n( A ) 기반 VLAN : 스위치 포트를 각 VLAN 에 할당. 같은 VLAN 에 속한 호스트 간에만 통신 가능. 가장 일반적인 방식\n( B ) 기반 VLAN : 호스트의 MAC 주소를 VLAN 에 등록. 모든 MAC 을 등록하고 관리하는 어려움.\n( C ) 기반 VLAN : 네트워크 주소별로 VLAN 구성.\n( D ) 기반 VLAN : 같은 통신 프로토콜을 가진 호스트 간에는 통신이 가능하도록 VLAN 설정",
+      "answer": "포트, MAC, 네트워크 주소, 프로토콜",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 275
+    },
+    {
+      "original_id": 277,
+      "type": "short",
+      "question": "전자금융거래법 제21 조 2 제4 항에 기술된 다음 각호의 업무를 수행하는 사람을 무엇이라고 하나?\n1) 전자금융거래의 안정성 확보 및 이용자 보호를 위한 전략 및 계획의 수립\n2) 정보기술부문의 보호\n3) 정보기술부문의 보안에 필요한 인력관리 및 예산편성\n4) 전자금융거래의 사고 예방 및 조치",
+      "answer": "CISO(Chief Information Security Officer)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 276
+    },
+    {
+      "original_id": 278,
+      "type": "short",
+      "question": "리눅스 시스템 로그 파일에 대하여 다음 빈칸에 적절한 파일을 기술하시오.\n[보기]\n( A ) : 현재 시스템에 로그인한 사용자의 상태가 출력되는 로그\n( B ) : 사용자의 로그인, 로그아웃, 시스템 재부팅 정보가 누적되어 출력되는 로그\n( C ) : 마지막으로 성공한 로그인 정보가 출력되는 로그",
+      "answer": "utmp, wtmp, lastlog",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 277
+    },
+    {
+      "original_id": 279,
+      "type": "short",
+      "question": "다음 스캔 방법 중 포트가 닫혀 있을 때만 응답이 오는 스캔 방식을 고르시오.\n[보기] (SYN scan, FIN scan, XMAS scan, Null\nscan, Decoy scan)",
+      "answer": "FIN scan, XMAS scan, Null scan",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 278
+    },
+    {
+      "original_id": 280,
+      "type": "short",
+      "question": "SW 개발 보안과 관련하여 ( )에 들어갈 취약점명(공격기법)을 기술하시오.\n[보기]\n( A ) : DB 와 연결되어 있는 애플리케이션의 입력값을 조작하여 의도하지 않은 결과를 반환하도록 하는 공격 기법\n( B ) : 게시판, 웹, 메일 등에 삽입된 악의적인 스크립트에 의해 쿠키 및 기타 개인정보를 특정 사이트로 전송시키는 공격 기법\n( C ) : 적절한 검증 절차를 수행하지 않은 사용자 입력값이 운영체제 명령어의 일부로 전달되어 의도하지 않은 시스템 명령어가 실행되도록 하는 공격 기법",
+      "answer": "SQL Injection, XSS, 운영체제 명령어 삽입",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 279
+    },
+    {
+      "original_id": 281,
+      "type": "short",
+      "question": "다음은 특정 명령어를 수행한 결과이다.\n[보기]\n( )에 들어갈 명령어를 기술하시오.\nroot@kali:~#Telnet webserver.com 80 Trying 192.168.1.2… Connect to webserver.com.\nEscape character is '^]'.\n( ) * HTTP/1.0\n\nHTTP/1.1 200 OK Date: Sat, 6 Aug 2022 09:01:01 KST Server: Microsoft-IIS/5.0 Allow: GET,HEAD,POST,OPTIONS,TRACE Content-Length:0 Connection: close Content-Type: text/plain; charset-euc-kr Connection closed by foreign host.",
+      "answer": "OPTIONS",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 280
+    },
+    {
+      "original_id": 281,
+      "type": "short",
+      "question": "소프트웨어 패치의 종류와 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : 즉시 교정되어야만 하는 주요한 취약점을 패치하기 위해 배포되는 프로그램으로 서비스팩이 발표된 이후 패치가 추가될 필요가 있을 때 별도로 발표됨.\n( B ) : 문제를 예방 또는 해결하거나 컴퓨터 작동 방식을 향상시키거나, 컴퓨터 경험을 향상시킬 수 있도록 추가되는 소프트웨어",
+      "answer": "핫픽스(Hot Fix), 업데이트(Update)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 281
+    },
+    {
+      "original_id": 282,
+      "type": "short",
+      "question": "매니저와 에이전트 구조로 되어 있고, 네트워크 장비의 상태를 모니터링하고 관리하기 위해 사용되는 TCP/IP 기반 네트워크 프로토콜을 무엇이라고 하나?",
+      "answer": "SNMP(Simple Network Management Protocol)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 282
+    },
+    {
+      "original_id": 283,
+      "type": "short",
+      "question": "어떠한 대책을 도입하더라도 위험을 완전히 제거할 수 없으므로 일정 수준 이하의 위험은 받아들이고 사업을 진행하는 위험대응 방식을 무엇이라고 하나?",
+      "answer": "위험수용",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 283
+    },
+    {
+      "original_id": 284,
+      "type": "short",
+      "question": "네트워크 논리 그룹을 구분하여 보안을 강화하고, 브로드캐스트 도메인의 범위를 줄여 네트워크 성능 향상을 지원하는 LAN 기술을 무엇이라고 하나?",
+      "answer": "VLAN(Virtual LAN)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 284
+    },
+    {
+      "original_id": 285,
+      "type": "short",
+      "question": "반사 서버를 경유하여 대량의 ICMP echo reply 패킷을 전송하여 서비스 거부를 유발하는 공격을 ( A )라고 한다. 이에 대하여, 중간 매개자인 반사 서버로 악용되지 않기 위해서는 ( B ) 패킷과 ( C ) 패킷을 차단토록 설정해야 한다.",
+      "answer": "Smurf, Directeted Broadcast, ICMP echo request",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 285
+    },
+    {
+      "original_id": 286,
+      "type": "short",
+      "question": "공격자가 서버가 신뢰하는 특정 서버나 네트워크 리소스에 대해 임의의 요청을 보내도록 서버를 속이는 웹 보안 취약점이다.\n[보기]\n주로 서버가 외부 입력을 기반으로 HTTP 요청을 생성하는 기능을 가지고 있을 때 발생하는 이 취약점을 무엇이라고 하나?",
+      "answer": "SSRF(Server Side Request Forgery)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 286
+    },
+    {
+      "original_id": 287,
+      "type": "short",
+      "question": "VLAN 에 대하여 다음 ( )에 들어갈 명칭을 기술하시오.\n[보기]\n- 수동으로 VLAN 주소를 할당하는 방식 :\n( A )\n- 자동으로 VLAN 주소를 할당하는 방식 :\n( B )\n- CISCO 스위치에서 VLAN 확인하는 명령어 :\n( C )",
+      "answer": "정적 VLAN, 동적 VLAN, Show Vlan",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 287
+    },
+    {
+      "original_id": 288,
+      "type": "short",
+      "question": "웹 브라우저에서 자바스크립트(document.cookie)등을 통해 쿠키에 접근하는 행위를 차단하려면 쿠키에 어떤 보안 속성을 설정해야 하나?",
+      "answer": "HttpOnly",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 288
+    },
+    {
+      "original_id": 289,
+      "type": "short",
+      "question": "HTTP 요청 메시지에 삽입된 입력값이 HTTP 응답 메시지의 헤더에 포함되어 사용자에게 전달될 때 HTTP 응답이 여러 개로 분리되는 취약점을 HTTP 응답 분할(Response Splitting)이라고 한다.\n[보기]\n공격자는 이 취약점을 악용하여 추가적인 HTTP 응답이 생성되게 함으로써, 쿠키 탈취, XSS 등 다양한 공격을 수행할 수 있다. 이 공격을 위해, HTTP 요청 메시지에 삽입되는 개행 문자 2 개는 무엇인가?",
+      "answer": "CR(Carriage Return) or %0D , LF(Line Feed) or %0A",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 289
+    },
+    {
+      "original_id": 290,
+      "type": "short",
+      "question": "APT 공격에 대응하기 위하여 록히드 마틴사가 제시한 방법으로, 공격자의 공격 단계를 7 단계로 분리하여, 그중 하나만 사전에 확실히 제거해도 실제 공격까지 이어질 수 없도록 방어할 수 있다는 점에서 착안한 방어 전략을 무엇이라고 하나?",
+      "answer": "사이버 킬 체인",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 290
+    },
+    {
+      "original_id": 291,
+      "type": "short",
+      "question": "시스템이 공격자가 설치한 루트킷 등으로 장악된 경우, ps 와 같은 리눅스의 기본 명령어는 신뢰할 수 없게 될 수 있다. 이 경우 ps 명령어를 대신하여 시스템에서 실행 중인 프로세스들이 오픈한 파일의 목록을 확인하는 명령어는 무엇인가?",
+      "answer": "lsof",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 291
+    },
+    {
+      "original_id": 292,
+      "type": "short",
+      "question": "리눅스에서 로그인 실패한 로그는 btmp 파일에 남게 된다. btmp 로그의 내용을 확인하는 명령어는 무엇인가?",
+      "answer": "lastb",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 292
+    },
+    {
+      "original_id": 293,
+      "type": "short",
+      "question": "정보자산의 중요도는 조직에게 가져다주는 가치, 손실되었을 때 미치는 영향 그리고 이에 따라 정보보호에 투자해야 하는 정도를 결정하고 위험 분석을 수행하는 데 있어 중요한 요소이다. 정보자산의 중요도를 평가하는 기준은 일반적으로 기밀성, 무결성,\n( A ) 을 고려한다. 또한, 정보자산 ( B )을 통하여 유사한 특성의 정보자산을 하나의 그룹으로 묶어 위험 분석 및 보호대책 수립을 효율적이고 일관되게 적용할 수 있다.",
+      "answer": "가용성, 그룹핑",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 293
+    },
+    {
+      "original_id": 294,
+      "type": "short",
+      "question": "조직의 정보자산을 위협으로부터 보호하고, 손실을 최소화하기 위해 위험관리 방법 및 절차(수행 인력, 기간, 대상, 방법, 예산 등)를 구체화한 ( )을 수립하고, 이에 따라 정기적으로 또는 필요한 시점에 위험 평가를 수행해야 한다. ( )에 들어갈 용어는 무엇인가?",
+      "answer": "위험관리계획",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 294
+    },
+    {
+      "original_id": 295,
+      "type": "short",
+      "question": "ISMS-P 인증에서 요구하는 물리적 보안 대책 중 3 가지를 설명하시오.",
+      "answer": "보호구역 지정(통제구역,제한구역 등), 출입통제(출입 이력 검토), 정보시스템 보호(중요도 고려한 배치, 케이블 손상 방지 등), 보호설비 운영(UPS, 화재감지 등), 보호구역 내 작업(작업 기록 검토), 반출입 기기 통제(정보시스템, 모바일 기기, 저장 매체 등), 업무환경 보안(클린데스크 등)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 295
+    },
+    {
+      "original_id": 296,
+      "type": "short",
+      "question": "모바일 ( ) 는, 모바일 기기에셔 링크에 접속하면 기기에 설치된 앱이 실행되고 특정 화면으로 이동되는 기능이다. 이 기능을 해커가 악용하게 되면 클릭할 때 특정 웹페이지를 악성 링크로 접속하도록 조작하여 사용자 개인 정보를 조회하거나 의도하지 않은 계좌이체를 하도록 유도할 수 있다. ( )에 들어갈 용어를 기술하시오.",
+      "answer": "딥 링크(Deeplink)",
+      "explanation": "",
+      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
+      "id": 296
+    }
+  ]
+}
