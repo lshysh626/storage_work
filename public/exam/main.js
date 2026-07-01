@@ -2276,6 +2276,7 @@ try {
             firebase.initializeApp(firebaseConfig);
         }
         db = firebase.firestore();
+        window.db = db;
         // Force long polling to bypass strict network environments (solves hanging logins & admin panels)
         db.settings({ experimentalForceLongPolling: true });
         // Enable offline persistence for instant local reads
@@ -2296,6 +2297,7 @@ async function sha256(message) {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
+window.sha256 = sha256;
 
 // Auto-initialize Admin account in Firestore if not exists
 async function initAdminAccount() {
