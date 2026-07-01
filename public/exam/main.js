@@ -718,7 +718,7 @@ async function startMockExamQuiz() {
         const essayList = allQuestions.filter(q => q.type === 'essay');
         const practicalList = allQuestions.filter(q => q.type === 'practical');
         
-        if (shortList.length < 12 || essayList.length < 4 || practicalList.length < 2) {
+        if (shortList.length < 12 || essayList.length < 4 || practicalList.length < 1) {
             alert('모의고사를 생성하기 위한 충분한 문제가 없습니다. 문항 데이터를 확인해 주세요.');
             return;
         }
@@ -726,7 +726,7 @@ async function startMockExamQuiz() {
         // Randomly select items
         const selectedShort = [...shortList].sort(() => Math.random() - 0.5).slice(0, 12);
         const selectedEssay = [...essayList].sort(() => Math.random() - 0.5).slice(0, 4);
-        const selectedPractical = [...practicalList].sort(() => Math.random() - 0.5).slice(0, 2);
+        const selectedPractical = [...practicalList].sort(() => Math.random() - 0.5).slice(0, 1);
         
         // Override points according to mock exam specification
         selectedShort.forEach(q => q.points = 3);
@@ -940,9 +940,6 @@ function renderQuestion() {
     document.getElementById('q-type').textContent = TYPE_LABEL[q.type] || q.type;
     document.getElementById('q-points').textContent = `${q.points ?? TYPE_POINTS[q.type] ?? 0}점`;
     let questionText = q.question;
-    if (state.isMockExam && q.type === 'practical') {
-        questionText = `[실무형 선택 문제 - 2문항 중 택 1]\n* 안내: Q17과 Q18 중 풀이할 1문항만 선택해서 작성해 주세요. (두 문항 모두 작성하는 경우 더 높은 점수를 획득한 문항만 최종 성적에 합산됩니다.)\n\n` + q.question;
-    }
     
     // 이스케이프 및 보기 박스 처리
     let escaped = questionText.replace(/[&<>'"]/g, 
