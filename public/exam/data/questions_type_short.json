@@ -526,15 +526,15 @@
       "original_id": 59,
       "type": "short",
       "question": "개인정보 최소수집 원칙에 의거하여 개인정보 수집이 가능한 경우 4 가지를 기술하시오",
-      "answer": "1. 정보주체의 동의를 받은 경우",
+      "answer": "1. 정보주체의 동의를 받은 경우\n2. 법률에 특별한 규정이 있거나 법령상 의무 를 준수하기 위하여 불가피한 경우\n3. 공공기관이 법령 등에서 정하는 소관 업무 의 수행을 위하여 불가피한 경우\n4. 정보주체와 체결한 계약을 이행하거나 계약 을 체결하는 과정에서 정보주체의 요청에 따른 조치를 이행하기 위하여 필요한 경우\n5. 명백히 정보주체 또는 제3자의 급박한 생 명, 신체, 재산의 이익을 위하여 필요하다고 인정되는 경우\n6. 개인정보처리자의 정당한 이익을 달성하기 위하여 필요한 경우로서 명백하게 정보주체의 권리보다 우선하는 경우. 이 경우 개인정보처 리자의 정당한 이익과 상당한 관련이 있고 합 리적인 범위를 초과하지 아니하는 경우에 한한\n다.\n7. 공중위생 등 공공의 안전과 안녕을 위하여 긴급히 필요한 경우",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
       "id": 59
     },
     {
-      "original_id": 2,
+      "original_id": 60,
       "type": "short",
-      "question": "법률에 특별한 규정이 있거나 법령상 의무 를 준수하기 위하여 불가피한 경우\n3. 공공기관이 법령 등에서 정하는 소관 업무 의 수행을 위하여 불가피한 경우\n4. 정보주체와 체결한 계약을 이행하거나 계약 을 체결하는 과정에서 정보주체의 요청에 따른 조치를 이행하기 위하여 필요한 경우\n5. 명백히 정보주체 또는 제3자의 급박한 생 명, 신체, 재산의 이익을 위하여 필요하다고 인정되는 경우\n6. 개인정보처리자의 정당한 이익을 달성하기 위하여 필요한 경우로서 명백하게 정보주체의 권리보다 우선하는 경우. 이 경우 개인정보처 리자의 정당한 이익과 상당한 관련이 있고 합 리적인 범위를 초과하지 아니하는 경우에 한한\n다.\n7. 공중위생 등 공공의 안전과 안녕을 위하여 긴급히 필요한 경우\n60. 스팸메일 릴레이 제한 설정과 관련하여 다음 ( )에 들어갈 명칭을 기술하시오.\n[보기]\n# cat /etc/mail/( 1 ) | grep \"R$\\*\" | grep \"Relaying denied\" R$* $#error $@ 5.7.1 $ : \"550 Relaying denied\"\n# cat /etc/mail/access localhost.localdomain RELAY localhost RELAY\n127.0.0.1 RELAY spam.com ( 2 ) # Relay 를 허용하지 않음\n# ( 3 ) hash etc/mail/( 4 ) < etc/mail/access",
+      "question": "스팸메일 릴레이 제한 설정과 관련하여 다음 ( )에 들어갈 명칭을 기술하시오.\n[보기]\n# cat /etc/mail/( 1 ) | grep \"R$\\*\" | grep \"Relaying denied\" R$* $#error $@ 5.7.1 $ : \"550 Relaying denied\"\n# cat /etc/mail/access localhost.localdomain RELAY localhost RELAY\n127.0.0.1 RELAY spam.com ( 2 ) # Relay 를 허용하지 않음\n# ( 3 ) hash etc/mail/( 4 ) < etc/mail/access",
       "answer": "sendmail.cf, REJECT, makemap, access.db (or access)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -2515,19 +2515,10 @@
       "original_id": 281,
       "type": "short",
       "question": "다음은 특정 명령어를 수행한 결과이다.\n[보기]\n( )에 들어갈 명령어를 기술하시오.\nroot@kali:~#Telnet webserver.com 80 Trying 192.168.1.2… Connect to webserver.com.\nEscape character is '^]'.\n( ) * HTTP/1.0\n\nHTTP/1.1 200 OK Date: Sat, 6 Aug 2022 09:01:01 KST Server: Microsoft-IIS/5.0 Allow: GET,HEAD,POST,OPTIONS,TRACE Content-Length:0 Connection: close Content-Type: text/plain; charset-euc-kr Connection closed by foreign host.",
-      "answer": "OPTIONS",
+      "answer": "OPTIONS\n\n\n\n\n\n\n281. 소프트웨어 패치의 종류와 관련하여 ( )에 들어갈 용어를 기술하시오.\n( A ) : 즉시 교정되어야만 하는 주요한 취약점을 패치하기 위해 배포되는 프로그램으로 서비스팩이 발표된 이후 패치가 추가될 필요가 있을 때 별도로 발표됨.\n( B ) : 문제를 예방 또는 해결하거나 컴퓨터 작동 방식을 향상시키거나, 컴퓨터 경험을 향상시킬 수 있도록 추가되는 소프트웨어 (답) 핫픽스(Hot Fix), 업데이트(Update)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
       "id": 280
-    },
-    {
-      "original_id": 281,
-      "type": "short",
-      "question": "소프트웨어 패치의 종류와 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : 즉시 교정되어야만 하는 주요한 취약점을 패치하기 위해 배포되는 프로그램으로 서비스팩이 발표된 이후 패치가 추가될 필요가 있을 때 별도로 발표됨.\n( B ) : 문제를 예방 또는 해결하거나 컴퓨터 작동 방식을 향상시키거나, 컴퓨터 경험을 향상시킬 수 있도록 추가되는 소프트웨어",
-      "answer": "핫픽스(Hot Fix), 업데이트(Update)",
-      "explanation": "",
-      "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 281
     },
     {
       "original_id": 282,
@@ -2536,7 +2527,7 @@
       "answer": "SNMP(Simple Network Management Protocol)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 282
+      "id": 281
     },
     {
       "original_id": 283,
@@ -2545,7 +2536,7 @@
       "answer": "위험수용",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 283
+      "id": 282
     },
     {
       "original_id": 284,
@@ -2554,7 +2545,7 @@
       "answer": "VLAN(Virtual LAN)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 284
+      "id": 283
     },
     {
       "original_id": 285,
@@ -2563,7 +2554,7 @@
       "answer": "Smurf, Directeted Broadcast, ICMP echo request",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 285
+      "id": 284
     },
     {
       "original_id": 286,
@@ -2572,7 +2563,7 @@
       "answer": "SSRF(Server Side Request Forgery)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 286
+      "id": 285
     },
     {
       "original_id": 287,
@@ -2581,7 +2572,7 @@
       "answer": "정적 VLAN, 동적 VLAN, Show Vlan",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 287
+      "id": 286
     },
     {
       "original_id": 288,
@@ -2590,7 +2581,7 @@
       "answer": "HttpOnly",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 288
+      "id": 287
     },
     {
       "original_id": 289,
@@ -2599,7 +2590,7 @@
       "answer": "CR(Carriage Return) or %0D , LF(Line Feed) or %0A",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 289
+      "id": 288
     },
     {
       "original_id": 290,
@@ -2608,7 +2599,7 @@
       "answer": "사이버 킬 체인",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 290
+      "id": 289
     },
     {
       "original_id": 291,
@@ -2617,7 +2608,7 @@
       "answer": "lsof",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 291
+      "id": 290
     },
     {
       "original_id": 292,
@@ -2626,7 +2617,7 @@
       "answer": "lastb",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 292
+      "id": 291
     },
     {
       "original_id": 293,
@@ -2635,7 +2626,7 @@
       "answer": "가용성, 그룹핑",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 293
+      "id": 292
     },
     {
       "original_id": 294,
@@ -2644,7 +2635,7 @@
       "answer": "위험관리계획",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 294
+      "id": 293
     },
     {
       "original_id": 295,
@@ -2653,7 +2644,7 @@
       "answer": "보호구역 지정(통제구역,제한구역 등), 출입통제(출입 이력 검토), 정보시스템 보호(중요도 고려한 배치, 케이블 손상 방지 등), 보호설비 운영(UPS, 화재감지 등), 보호구역 내 작업(작업 기록 검토), 반출입 기기 통제(정보시스템, 모바일 기기, 저장 매체 등), 업무환경 보안(클린데스크 등)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 295
+      "id": 294
     },
     {
       "original_id": 296,
@@ -2662,7 +2653,7 @@
       "answer": "딥 링크(Deeplink)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
-      "id": 296
+      "id": 295
     }
   ]
 }
