@@ -965,9 +965,9 @@ function renderQuestion() {
     const sourceEl = document.getElementById('q-source');
     const sourceTextEl = document.getElementById('q-source-text');
     if (sourceEl && sourceTextEl) {
-        if (q.session && q.id) {
+        if (q.session && (q.original_id || q.id)) {
             sourceEl.style.display = 'flex';
-            sourceTextEl.textContent = `${q.session} - ${q.id}번 문제`;
+            sourceTextEl.textContent = `${q.session} - ${q.original_id || q.id}번 문제`;
         } else if (q.session) {
             sourceEl.style.display = 'flex';
             sourceTextEl.textContent = `${q.session}`;
