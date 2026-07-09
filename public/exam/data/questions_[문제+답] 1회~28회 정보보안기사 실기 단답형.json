@@ -1596,7 +1596,7 @@
     {
       "original_id": 179,
       "type": "short",
-      "question": "다음은 Diffie-Hellman 알고리즘을 통한 키 교환 과정이다. (A), (B),(C)에 대해서 각각 기술하시오.",
+      "question": "다음은 Diffie-Hellman 알고리즘을 통한 키 교환 과정이다. (A), (B), (C)에 들어갈 알맞은 식 또는 용어를 기술하시오.\n\n[보기]\nA(Alice)와 B(Bob)가 키 교환을 하고자 한다. (단, p는 소수, g는 원시근이다.)\n1) A는 개인키 a를 선택하여 (A)를 계산하여 B에게 전송한다.\n2) B는 개인키 b를 선택하여 (B)를 계산하여 A에게 전송한다.\n3) A와 B는 공유키인 (C)를 계산하여 비밀 통신을 수행한다.",
       "answer": "g^a mod p, g^b mod p, 비밀키",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -1614,7 +1614,7 @@
     {
       "original_id": 181,
       "type": "short",
-      "question": "다음 현상은 어떤 공격의 결과인가?",
+      "question": "다음 현상은 어떤 공격의 결과인가?\n\n[보기]\n# netstat -na\nProto Recv-Q Send-Q Local Address          Foreign Address        State\ntcp   0      0      192.168.0.10:80        211.xxx.xxx.x:3522     SYN_RECEIVED\ntcp   0      0      192.168.0.10:80        211.xxx.xxx.x:3523     SYN_RECEIVED\ntcp   0      0      192.168.0.10:80        211.xxx.xxx.x:3524     SYN_RECEIVED",
       "answer": "TCP SYN Flooding",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -1776,7 +1776,7 @@
     {
       "original_id": 199,
       "type": "short",
-      "question": "FTP 서비스를 운영하는 서버에 공격 징후가 발견되었다. 시스템 관리자는 해당 FTP 서버에서 다음과 같은 현상이 확인하였다.\n어떤 유형의 공격인가?",
+      "question": "FTP 서비스를 운영하는 서버에 공격 징후가 발견되었다. 시스템 관리자는 해당 FTP 서버에서 다음과 같은 현상을 확인하였다. 어떤 유형의 공격인가?\n\n[보기]\n# netstat -na\nProto Recv-Q Send-Q Local Address          Foreign Address        State\ntcp   0      0      0.0.0.0:21             0.0.0.0:*              LISTEN\ntcp   0      0      192.168.0.10:21        211.xxx.xxx.x:1025     SYN_RECEIVED\ntcp   0      0      192.168.0.10:21        211.xxx.xxx.x:1026     SYN_RECEIVED\ntcp   0      0      192.168.0.10:21        211.xxx.xxx.x:1027     SYN_RECEIVED",
       "answer": "TCP SYN Flooding 공격",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -1884,7 +1884,7 @@
     {
       "original_id": 211,
       "type": "short",
-      "question": "다음은 netstat -rn 명령을 수행한 결과이다. (A), (B), (C) 호스트로 ping 명령을 수행 시 라우팅 되는 게이트웨이 아이피는 무엇인가?\n\n[보기]\n(A) 10.0.160.100\n(B) 10.0.122.64\n(C) 10.0.192.100",
+      "question": "다음은 netstat -rn 명령을 수행한 결과이다. [보기]의 (A), (B), (C) 호스트로 ping 명령을 수행 시 라우팅 되는 게이트웨이 아이피는 무엇인가?\n\n[보기]\nKernel IP routing table\nDestination     Gateway         Genmask         Flags Metric Ref    Use Iface\n10.0.160.100    10.0.160.1      255.255.255.255 UGH   0      0        0 eth0\n10.0.160.0      10.0.160.101    255.255.255.0   UG    0      0        0 eth0\n10.0.64.101     10.0.160.2      255.255.192.0   UG    0      0        0 eth0\n10.0.128.100    10.0.160.3      255.255.192.0   UG    0      0        0 eth0\n10.0.63.1       10.0.160.4      255.255.254.0   UG    0      0        0 eth0\n0.0.0.0         10.0.160.5      0.0.0.0         UG    0      0        0 eth0\n\n(A) 10.0.160.100\n(B) 10.0.122.64\n(C) 10.0.192.100",
       "answer": "10.0.160.1, 10.0.160.2, 10.0.160.5",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",

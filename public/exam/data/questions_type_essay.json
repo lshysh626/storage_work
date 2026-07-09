@@ -687,7 +687,7 @@
     {
       "original_id": 115,
       "type": "essay",
-      "question": "Source PORT: 443, Destination PORT: 80 일 때 아래 HTTP Request 분석하라.\nGET /login.php HTTP/1.1 Host: test.com Connection: keep-alive Cookie: sEsz4sH5bChIslfOeJgjXdi== Pragma: no-cache Cache-Control: must-revalidate Content-length: 32\n\nid=admin&password=1234&act=login",
+      "question": "Source PORT: 443, Destination PORT: 80 일 때 아래 HTTP Request를 분석하시오.\n\n[HTTP Request]\nGET /login.php HTTP/1.1\nHost: test.com\nConnection: keep-alive\nCookie: sEsz4sH5bChIslfOeJgjXdi==\nPragma: no-cache\nCache-Control: must-revalidate\nContent-length: 32\n\nid=admin&password=1234&act=login",
       "answer": "Cache-control 에서 must-revalidate 설정으로 캐시서버를 사용하고 있지 않아 부하를 일으킬 가능성이 있다.\n• 전달 파라미터로 넘긴 내용에 id 와 password 등의 내용은 스니핑, 도청의 민감한 정보 유출에 위험이 있다.\n• 쿠키 값을 노출시키고 있다.\n• 443 포트 접속을 80 포트로 접속하고 있다.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",

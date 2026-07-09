@@ -192,7 +192,7 @@
     {
       "original_id": 66,
       "type": "practical",
-      "question": "Robot.txt 파일에 대하여 다음 물음에 답하시오.\n(1) Robot.txt 파일의 용도\n(2) 아래 설정값의 의미 useragent : yeti useragent : googlebot (가) allow : /\n\nuseragent : googlebot-image (나) disallow : /admin/ (다) disallow : /*.pdf$",
+      "question": "robots.txt 파일에 대하여 다음 물음에 답하시오.\n\n(1) robots.txt 파일의 용도\n(2) 아래 설정값의 의미를 쓰시오.\n\n[설정값]\nUser-agent: yeti\nUser-agent: googlebot\nAllow: /\n\nUser-agent: googlebot-image\nDisallow: /admin/\nDisallow: /*.pdf$",
       "answer": "(1) 검색엔진에서 자동 크롤링 도구에 대하여 접근 허용 여부를 제어하기 위한 파일\n\n(2-가) 검색 엔진 로봇(yeti, googlebot)에 대하여 root 디렉토리(/) 밑의 모든 파일 및 디렉토리의 크롤링을 허용 (2-나) 검색 엔진 로봇(googlebot-image)에 대하여 /admin 폴더 크롤링을 허용하지 않음.\n(2-다) 검색 엔진 로봇(googlebot-image)에 대하여 pdf 확장자를 가진 파일에 대하여 크롤링을 허용하지 않음",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",

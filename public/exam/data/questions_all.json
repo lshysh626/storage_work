@@ -1596,7 +1596,7 @@
     {
       "original_id": 179,
       "type": "short",
-      "question": "다음은 Diffie-Hellman 알고리즘을 통한 키 교환 과정이다. (A), (B),(C)에 대해서 각각 기술하시오.",
+      "question": "다음은 Diffie-Hellman 알고리즘을 통한 키 교환 과정이다. (A), (B), (C)에 들어갈 알맞은 식 또는 용어를 기술하시오.\n\n[보기]\nA(Alice)와 B(Bob)가 키 교환을 하고자 한다. (단, p는 소수, g는 원시근이다.)\n1) A는 개인키 a를 선택하여 (A)를 계산하여 B에게 전송한다.\n2) B는 개인키 b를 선택하여 (B)를 계산하여 A에게 전송한다.\n3) A와 B는 공유키인 (C)를 계산하여 비밀 통신을 수행한다.",
       "answer": "g^a mod p, g^b mod p, 비밀키",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -1614,7 +1614,7 @@
     {
       "original_id": 181,
       "type": "short",
-      "question": "다음 현상은 어떤 공격의 결과인가?",
+      "question": "다음 현상은 어떤 공격의 결과인가?\n\n[보기]\n# netstat -na\nProto Recv-Q Send-Q Local Address          Foreign Address        State\ntcp   0      0      192.168.0.10:80        211.xxx.xxx.x:3522     SYN_RECEIVED\ntcp   0      0      192.168.0.10:80        211.xxx.xxx.x:3523     SYN_RECEIVED\ntcp   0      0      192.168.0.10:80        211.xxx.xxx.x:3524     SYN_RECEIVED",
       "answer": "TCP SYN Flooding",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -1776,7 +1776,7 @@
     {
       "original_id": 199,
       "type": "short",
-      "question": "FTP 서비스를 운영하는 서버에 공격 징후가 발견되었다. 시스템 관리자는 해당 FTP 서버에서 다음과 같은 현상이 확인하였다.\n어떤 유형의 공격인가?",
+      "question": "FTP 서비스를 운영하는 서버에 공격 징후가 발견되었다. 시스템 관리자는 해당 FTP 서버에서 다음과 같은 현상을 확인하였다. 어떤 유형의 공격인가?\n\n[보기]\n# netstat -na\nProto Recv-Q Send-Q Local Address          Foreign Address        State\ntcp   0      0      0.0.0.0:21             0.0.0.0:*              LISTEN\ntcp   0      0      192.168.0.10:21        211.xxx.xxx.x:1025     SYN_RECEIVED\ntcp   0      0      192.168.0.10:21        211.xxx.xxx.x:1026     SYN_RECEIVED\ntcp   0      0      192.168.0.10:21        211.xxx.xxx.x:1027     SYN_RECEIVED",
       "answer": "TCP SYN Flooding 공격",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -1884,7 +1884,7 @@
     {
       "original_id": 211,
       "type": "short",
-      "question": "다음은 netstat -rn 명령을 수행한 결과이다. (A), (B), (C) 호스트로 ping 명령을 수행 시 라우팅 되는 게이트웨이 아이피는 무엇인가?\n\n[보기]\n(A) 10.0.160.100\n(B) 10.0.122.64\n(C) 10.0.192.100",
+      "question": "다음은 netstat -rn 명령을 수행한 결과이다. [보기]의 (A), (B), (C) 호스트로 ping 명령을 수행 시 라우팅 되는 게이트웨이 아이피는 무엇인가?\n\n[보기]\nKernel IP routing table\nDestination     Gateway         Genmask         Flags Metric Ref    Use Iface\n10.0.160.100    10.0.160.1      255.255.255.255 UGH   0      0        0 eth0\n10.0.160.0      10.0.160.101    255.255.255.0   UG    0      0        0 eth0\n10.0.64.101     10.0.160.2      255.255.192.0   UG    0      0        0 eth0\n10.0.128.100    10.0.160.3      255.255.192.0   UG    0      0        0 eth0\n10.0.63.1       10.0.160.4      255.255.254.0   UG    0      0        0 eth0\n0.0.0.0         10.0.160.5      0.0.0.0         UG    0      0        0 eth0\n\n(A) 10.0.160.100\n(B) 10.0.122.64\n(C) 10.0.192.100",
       "answer": "10.0.160.1, 10.0.160.2, 10.0.160.5",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -3243,7 +3243,7 @@
     {
       "original_id": 66,
       "type": "practical",
-      "question": "Robot.txt 파일에 대하여 다음 물음에 답하시오.\n(1) Robot.txt 파일의 용도\n(2) 아래 설정값의 의미 useragent : yeti useragent : googlebot (가) allow : /\n\nuseragent : googlebot-image (나) disallow : /admin/ (다) disallow : /*.pdf$",
+      "question": "robots.txt 파일에 대하여 다음 물음에 답하시오.\n\n(1) robots.txt 파일의 용도\n(2) 아래 설정값의 의미를 쓰시오.\n\n[설정값]\nUser-agent: yeti\nUser-agent: googlebot\nAllow: /\n\nUser-agent: googlebot-image\nDisallow: /admin/\nDisallow: /*.pdf$",
       "answer": "(1) 검색엔진에서 자동 크롤링 도구에 대하여 접근 허용 여부를 제어하기 위한 파일\n\n(2-가) 검색 엔진 로봇(yeti, googlebot)에 대하여 root 디렉토리(/) 밑의 모든 파일 및 디렉토리의 크롤링을 허용 (2-나) 검색 엔진 로봇(googlebot-image)에 대하여 /admin 폴더 크롤링을 허용하지 않음.\n(2-다) 검색 엔진 로봇(googlebot-image)에 대하여 pdf 확장자를 가진 파일에 대하여 크롤링을 허용하지 않음",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 실무형",
@@ -3684,7 +3684,7 @@
     {
       "original_id": 115,
       "type": "essay",
-      "question": "Source PORT: 443, Destination PORT: 80 일 때 아래 HTTP Request 분석하라.\nGET /login.php HTTP/1.1 Host: test.com Connection: keep-alive Cookie: sEsz4sH5bChIslfOeJgjXdi== Pragma: no-cache Cache-Control: must-revalidate Content-length: 32\n\nid=admin&password=1234&act=login",
+      "question": "Source PORT: 443, Destination PORT: 80 일 때 아래 HTTP Request를 분석하시오.\n\n[HTTP Request]\nGET /login.php HTTP/1.1\nHost: test.com\nConnection: keep-alive\nCookie: sEsz4sH5bChIslfOeJgjXdi==\nPragma: no-cache\nCache-Control: must-revalidate\nContent-length: 32\n\nid=admin&password=1234&act=login",
       "answer": "Cache-control 에서 must-revalidate 설정으로 캐시서버를 사용하고 있지 않아 부하를 일으킬 가능성이 있다.\n• 전달 파라미터로 넘긴 내용에 id 와 password 등의 내용은 스니핑, 도청의 민감한 정보 유출에 위험이 있다.\n• 쿠키 값을 노출시키고 있다.\n• 443 포트 접속을 80 포트로 접속하고 있다.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
