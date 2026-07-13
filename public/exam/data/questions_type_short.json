@@ -2514,8 +2514,8 @@
     {
       "original_id": 281,
       "type": "short",
-      "question": "다음은 특정 명령어를 수행한 결과이다.\n[보기]\n( )에 들어갈 명령어를 기술하시오.\nroot@kali:~#Telnet webserver.com 80 Trying 192.168.1.2… Connect to webserver.com.\nEscape character is '^]'.\n( ) * HTTP/1.0\n\nHTTP/1.1 200 OK Date: Sat, 6 Aug 2022 09:01:01 KST Server: Microsoft-IIS/5.0 Allow: GET,HEAD,POST,OPTIONS,TRACE Content-Length:0 Connection: close Content-Type: text/plain; charset-euc-kr Connection closed by foreign host.",
-      "answer": "OPTIONS\n\n\n\n\n\n\n281. 소프트웨어 패치의 종류와 관련하여 ( )에 들어갈 용어를 기술하시오.\n( A ) : 즉시 교정되어야만 하는 주요한 취약점을 패치하기 위해 배포되는 프로그램으로 서비스팩이 발표된 이후 패치가 추가될 필요가 있을 때 별도로 발표됨.\n( B ) : 문제를 예방 또는 해결하거나 컴퓨터 작동 방식을 향상시키거나, 컴퓨터 경험을 향상시킬 수 있도록 추가되는 소프트웨어 (답) 핫픽스(Hot Fix), 업데이트(Update)",
+      "question": "소프트웨어 패치의 종류와 관련하여 ( )에 들어갈 용어를 기술하시오.\n[보기]\n( A ) : 즉시 교정되어야만 하는 주요한 취약점을 패치하기 위해 배포되는 프로그램으로 서비스팩이 발표된 이후 패치가 추가될 필요가 있을 때 별도로 발표됨.\n( B ) : 문제를 예방 또는 해결하거나 컴퓨터 작동 방식을 향상시키거나, 컴퓨터 경험을 향상시킬 수 있도록 추가되는 소프트웨어",
+      "answer": "핫픽스(Hot Fix), 업데이트(Update)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
       "id": 280
