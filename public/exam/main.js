@@ -3013,43 +3013,134 @@ function renderBookmarkFoldersList() {
     `;
 }
 
-window.addNewFolderFromDashboard = async function() {
-    const name = prompt('새로 만드실 폴더명을 입력해 주세요:');
-    if (!name) return;
-    const cleanName = name.trim();
-    if (!cleanName) return;
-    if (bookmarkData.folders.some(f => f.name === cleanName)) {
+window.openCustomDialog = function() {
+    const modal = document.getElementById('custom-dialog-modal');
+    const content = document.getElementById('custom-dialog-content');
+    if (modal && content) {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.style.transform = 'scale(1)';
+        }, 10);
+    }
+};
+
+window.closeCustomDialog = function() {
+    const modal = document.getElementById('custom-dialog-modal');
+    const content = document.getElementById('custom-dialog-content');
+    if (modal && content) {
+        content.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 150);
+    }
+};
+
+window.addNewFolderFromDashboard = function() {
+    const title = document.getElementById('custom-dialog-title');
+    const body = document.getElementById('custom-dialog-body');
+    const actions = document.getElementById('custom-dialog-actions');
+    
+    title.innerHTML = '📁 새 북마크 폴더 추가';
+    body.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+            <label style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; text-align: left;">생성할 폴더명을 입력해 주세요.</label>
+            <input type="text" id="dialog-folder-name" placeholder="폴더명 입력..." style="background: #0f172a; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.95rem; outline: none; width: 100%;" />
+        </div>
+    `;
+    
+    actions.innerHTML = `
+        <button onclick="closeCustomDialog()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">취소</button>
+        <button onclick="submitNewFolderFromDialog()" style="background: #fbbf24; border: none; color: #000; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">폴더 생성</button>
+    `;
+    
+    openCustomDialog();
+    setTimeout(() => {
+        const input = document.getElementById('dialog-folder-name');
+        if (input) input.focus();
+    }, 100);
+};
+
+window.submitNewFolderFromDialog = async function() {
+    const input = document.getElementById('dialog-folder-name');
+    const name = input ? input.value.trim() : '';
+    if (!name) {
+        alert('폴더 이름을 입력해 주세요.');
+        return;
+    }
+    if (bookmarkData.folders.some(f => f.name === name)) {
         alert('이미 존재하는 폴더 이름입니다.');
         return;
     }
+    
     bookmarkData.folders.push({
         id: 'folder_' + Date.now(),
-        name: cleanName,
+        name: name,
         keys: []
     });
+    
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks();
+    closeCustomDialog();
     renderBookmarkFoldersList();
 };
 
-window.renameBookmarkFolder = async function(folderId, event) {
+window.renameBookmarkFolder = function(folderId, event) {
     if (event) event.stopPropagation();
     const folder = bookmarkData.folders.find(f => f.id === folderId);
     if (!folder) return;
     
-    const newName = prompt('변경할 폴더명을 입력해 주세요:', folder.name);
-    if (!newName) return;
-    const cleanName = newName.trim();
-    if (!cleanName || cleanName === folder.name) return;
+    const title = document.getElementById('custom-dialog-title');
+    const body = document.getElementById('custom-dialog-body');
+    const actions = document.getElementById('custom-dialog-actions');
     
-    if (bookmarkData.folders.some(f => f.name === cleanName && f.id !== folderId)) {
+    title.innerHTML = '✏️ 폴더 이름 변경';
+    body.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+            <label style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; text-align: left;">변경할 폴더명을 입력해 주세요.</label>
+            <input type="text" id="dialog-rename-folder-name" value="${folder.name}" placeholder="폴더명 입력..." style="background: #0f172a; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.95rem; outline: none; width: 100%;" />
+        </div>
+    `;
+    
+    actions.innerHTML = `
+        <button onclick="closeCustomDialog()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">취소</button>
+        <button onclick="submitRenameFolderFromDialog('${folderId}')" style="background: #fbbf24; border: none; color: #000; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">이름 변경</button>
+    `;
+    
+    openCustomDialog();
+    setTimeout(() => {
+        const input = document.getElementById('dialog-rename-folder-name');
+        if (input) {
+            input.focus();
+            input.select();
+        }
+    }, 100);
+};
+
+window.submitRenameFolderFromDialog = async function(folderId) {
+    const input = document.getElementById('dialog-rename-folder-name');
+    const name = input ? input.value.trim() : '';
+    if (!name) {
+        alert('폴더 이름을 입력해 주세요.');
+        return;
+    }
+    
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    if (name === folder.name) {
+        closeCustomDialog();
+        return;
+    }
+    
+    if (bookmarkData.folders.some(f => f.name === name && f.id !== folderId)) {
         alert('이미 존재하는 폴더 이름입니다.');
         return;
     }
     
-    folder.name = cleanName;
+    folder.name = name;
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks();
+    closeCustomDialog();
     renderBookmarkFoldersList();
 };
 
@@ -3130,7 +3221,7 @@ window.selectBookmarkFolder = async function(folderId) {
     }
 };
 
-window.moveQuestionFolder = async function(sourceFolderId, qKey, event) {
+window.moveQuestionFolder = function(sourceFolderId, qKey, event) {
     if (event) event.stopPropagation();
     const otherFolders = bookmarkData.folders.filter(f => f.id !== sourceFolderId);
     if (otherFolders.length === 0) {
@@ -3138,37 +3229,49 @@ window.moveQuestionFolder = async function(sourceFolderId, qKey, event) {
         return;
     }
     
-    let msg = '이동할 대상 폴더의 번호를 입력해 주세요:\n\n';
-    otherFolders.forEach((f, idx) => {
-        msg += `${idx + 1}. ${f.name}\n`;
-    });
+    const title = document.getElementById('custom-dialog-title');
+    const body = document.getElementById('custom-dialog-body');
+    const actions = document.getElementById('custom-dialog-actions');
     
-    const choice = prompt(msg);
-    if (!choice) return;
+    title.innerHTML = '📂 문제 폴더 이동';
+    body.innerHTML = `
+        <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-bottom: 0.5rem; display: block; text-align: left;">이동할 대상 폴더를 선택해 주세요:</span>
+        <div style="display: flex; flex-direction: column; gap: 0.6rem; max-height: 250px; overflow-y: auto;">
+            ${otherFolders.map(f => `
+                <button onclick="submitMoveQuestionFolder('${sourceFolderId}', '${f.id}', '${qKey}')" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: #fff; padding: 0.8rem; border-radius: 8px; cursor: pointer; text-align: left; font-size: 0.95rem; font-weight: 600; transition: 0.2s; display: flex; align-items: center; justify-content: space-between;" onmouseover="this.style.background='rgba(251,191,36,0.1)'; this.style.borderColor='rgba(251,191,36,0.3)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.05)';">
+                    <span>📁 ${f.name}</span>
+                    <span style="font-size: 0.8rem; color: #94a3b8;">${f.keys ? f.keys.length : 0}개 문제</span>
+                </button>
+            `).join('')}
+        </div>
+    `;
     
-    const num = parseInt(choice.trim(), 10);
-    if (isNaN(num) || num < 1 || num > otherFolders.length) {
-        alert('올바른 번호를 입력해 주세요.');
-        return;
-    }
+    actions.innerHTML = `
+        <button onclick="closeCustomDialog()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; width: 100%;">취소</button>
+    `;
     
-    const targetFolder = otherFolders[num - 1];
-    
+    openCustomDialog();
+};
+
+window.submitMoveQuestionFolder = async function(sourceFolderId, targetFolderId, qKey) {
     const sourceFolder = bookmarkData.folders.find(f => f.id === sourceFolderId);
+    const targetFolder = bookmarkData.folders.find(f => f.id === targetFolderId);
+    
     if (sourceFolder) {
         sourceFolder.keys = sourceFolder.keys.filter(k => k !== qKey);
     }
     
-    if (!targetFolder.keys) targetFolder.keys = [];
-    if (!targetFolder.keys.includes(qKey)) {
-        targetFolder.keys.push(qKey);
+    if (targetFolder) {
+        if (!targetFolder.keys) targetFolder.keys = [];
+        if (!targetFolder.keys.includes(qKey)) {
+            targetFolder.keys.push(qKey);
+        }
     }
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks();
-    
+    closeCustomDialog();
     selectBookmarkFolder(sourceFolderId);
-    alert(`[${targetFolder.name}] 폴더로 이동되었습니다.`);
 };
 
 window.removeQuestionFromFolder = async function(folderId, qKey, event) {
