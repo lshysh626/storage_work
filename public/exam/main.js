@@ -2816,31 +2816,40 @@ window.updateBookmarkButtonState = function() {
     }
 };
 
-async function syncBookmarks() {
+async function syncBookmarks(overwriteRemote = false) {
     let local = JSON.parse(localStorage.getItem('review_bookmarks') || '{"folders":[]}');
     if (!local.folders) local = { folders: [] };
     
     if (db && loggedInUser && loggedInUser.username) {
         try {
-            const docSnap = await db.collection('users').doc(loggedInUser.username).get();
-            if (docSnap.exists) {
-                const data = docSnap.data();
-                if (data.bookmarks && data.bookmarks.folders) {
-                    const mergedFolders = [...data.bookmarks.folders];
-                    local.folders.forEach(lf => {
-                        const existing = mergedFolders.find(f => f.name === lf.name);
-                        if (existing) {
-                            existing.keys = [...new Set([...(existing.keys || []), ...(lf.keys || [])])];
-                        } else {
-                            mergedFolders.push(lf);
-                        }
-                    });
-                    local.folders = mergedFolders;
+            const docRef = db.collection('users').doc(loggedInUser.username);
+            if (overwriteRemote) {
+                // User modified bookmarks locally: overwrite Firestore copy with local state
+                await docRef.set({
+                    bookmarks: local
+                }, { merge: true });
+            } else {
+                // Initial load: pull from Firestore and merge with local state
+                const docSnap = await docRef.get();
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    if (data.bookmarks && data.bookmarks.folders) {
+                        const remoteFolders = data.bookmarks.folders;
+                        remoteFolders.forEach(rf => {
+                            const localFolder = local.folders.find(f => f.id === rf.id || f.name === rf.name);
+                            if (localFolder) {
+                                localFolder.keys = [...new Set([...(localFolder.keys || []), ...(rf.keys || [])])];
+                            } else {
+                                local.folders.push(rf);
+                            }
+                        });
+                    }
                 }
+                // Save the merged state back to Firestore
+                await docRef.set({
+                    bookmarks: local
+                }, { merge: true });
             }
-            await db.collection('users').doc(loggedInUser.username).set({
-                bookmarks: local
-            }, { merge: true });
         } catch (e) {
             console.error('[Sync] Bookmarks sync failed:', e);
         }
@@ -2918,7 +2927,7 @@ window.createNewBookmarkFolder = async function() {
     input.value = '';
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
-    await syncBookmarks();
+    await syncBookmarks(true);
     alert('새 폴더가 생성되었습니다.');
 };
 
@@ -2948,7 +2957,7 @@ window.saveQuestionToBookmark = async function() {
     folder.keys.push(qKey);
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
-    await syncBookmarks();
+    await syncBookmarks(true);
     updateBookmarkButtonState();
     
     const btn = document.getElementById('bookmark-btn');
@@ -3079,7 +3088,7 @@ window.submitNewFolderFromDialog = async function() {
     });
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
-    await syncBookmarks();
+    await syncBookmarks(true);
     closeCustomDialog();
     renderBookmarkFoldersList();
 };
@@ -3139,7 +3148,7 @@ window.submitRenameFolderFromDialog = async function(folderId) {
     
     folder.name = name;
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
-    await syncBookmarks();
+    await syncBookmarks(true);
     closeCustomDialog();
     renderBookmarkFoldersList();
 };
@@ -3150,7 +3159,7 @@ window.deleteBookmarkFolder = async function(folderId, event) {
     
     bookmarkData.folders = bookmarkData.folders.filter(f => f.id !== folderId);
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
-    await syncBookmarks();
+    await syncBookmarks(true);
     renderBookmarkFoldersList();
 };
 
@@ -3271,7 +3280,7 @@ window.submitMoveQuestionFolder = async function(sourceFolderId, targetFolderId,
     }
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
-    await syncBookmarks();
+    await syncBookmarks(true);
     closeCustomDialog();
     selectBookmarkFolder(sourceFolderId);
 };
@@ -3284,7 +3293,7 @@ window.removeQuestionFromFolder = async function(folderId, qKey, event) {
     
     folder.keys = folder.keys.filter(k => k !== qKey);
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
-    await syncBookmarks();
+    await syncBookmarks(true);
     updateBookmarkButtonState();
     
     selectBookmarkFolder(folderId);
