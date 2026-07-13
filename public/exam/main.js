@@ -937,6 +937,10 @@ function renderQuestion() {
     const q = state.questions[state.index];
     if (!q) return;
 
+    if (typeof updateBookmarkButtonState === 'function') {
+        updateBookmarkButtonState();
+    }
+
     // Meta badges
     document.getElementById('q-number').textContent = `Q${state.index + 1}`;
     document.getElementById('q-type').textContent = TYPE_LABEL[q.type] || q.type;
@@ -2784,6 +2788,34 @@ async function handleDeleteUser(username) {
 // ─── Bookmark (다시 볼 문제) Logic ─────────────────────────────────
 let bookmarkData = { folders: [] };
 
+window.updateBookmarkButtonState = function() {
+    const btn = document.getElementById('bookmark-btn');
+    if (!btn) return;
+    const q = state.questions && state.questions[state.index];
+    if (!q) return;
+    
+    const qKey = (q.original_id || q.id) + "_" + q.type;
+    
+    let bookmarkedFolders = [];
+    bookmarkData.folders.forEach(f => {
+        if (f.keys && f.keys.includes(qKey)) {
+            bookmarkedFolders.push(f.name);
+        }
+    });
+    
+    if (bookmarkedFolders.length > 0) {
+        btn.innerHTML = `⭐ 북마크됨 (${bookmarkedFolders.join(', ')})`;
+        btn.style.background = '#fbbf24';
+        btn.style.color = '#000';
+        btn.style.borderColor = '#fbbf24';
+    } else {
+        btn.innerHTML = '⭐ 다시 볼 문제';
+        btn.style.background = 'rgba(251, 191, 36, 0.15)';
+        btn.style.color = '#fbbf24';
+        btn.style.borderColor = 'rgba(251, 191, 36, 0.3)';
+    }
+};
+
 async function syncBookmarks() {
     let local = JSON.parse(localStorage.getItem('review_bookmarks') || '{"folders":[]}');
     if (!local.folders) local = { folders: [] };
@@ -2824,6 +2856,7 @@ async function syncBookmarks() {
     
     bookmarkData = local;
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    updateBookmarkButtonState();
 }
 
 window.openBookmarkModal = function() {
@@ -2916,6 +2949,7 @@ window.saveQuestionToBookmark = async function() {
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks();
+    updateBookmarkButtonState();
     
     const btn = document.getElementById('bookmark-btn');
     if (btn) {
@@ -2925,10 +2959,7 @@ window.saveQuestionToBookmark = async function() {
         btn.style.color = '#10b981';
         btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
         setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = 'rgba(251, 191, 36, 0.15)';
-            btn.style.color = '#fbbf24';
-            btn.style.borderColor = 'rgba(251, 191, 36, 0.3)';
+            updateBookmarkButtonState();
         }, 1500);
     }
     
@@ -2952,29 +2983,75 @@ function renderBookmarkFoldersList() {
     const sub = document.getElementById('sub-list');
     if (!sub) return;
     
-    if (bookmarkData.folders.length === 0) {
-        sub.innerHTML = '<div style="color:var(--muted);padding:1rem">생성된 폴더가 없습니다.</div>';
-        return;
-    }
-    
     sub.innerHTML = `
+        <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #cbd5e1; font-weight: 700; font-size: 1.05rem;">📂 북마크 폴더 관리</span>
+            <button onclick="addNewFolderFromDashboard()" style="background: #fbbf24; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">
+                ➕ 새 폴더 추가
+            </button>
+        </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
             ${bookmarkData.folders.map(f => `
                 <div class="item-row" style="position: relative; display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
-                    <div style="flex: 1; text-align: left;" onclick="selectBookmarkFolder('${f.id}')">
+                    <div style="flex: 1; text-align: left; padding-right: 0.5rem;" onclick="selectBookmarkFolder('${f.id}')">
                         <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.3rem;">📁 ${f.name}</strong>
                         <span style="color: var(--muted); font-size: 0.9rem;">${f.keys ? f.keys.length : 0}개 문제 저장됨</span>
                     </div>
-                    ${f.id !== 'folder_default' ? `
-                        <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: 0.2s; z-index: 10;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
-                            🗑️ 삭제
+                    <div style="display: flex; gap: 0.3rem; z-index: 10;">
+                        <button onclick="renameBookmarkFolder('${f.id}', event)" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
+                            ✏️ 수정
                         </button>
-                    ` : ''}
+                        ${f.id !== 'folder_default' ? `
+                            <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                                🗑️ 삭제
+                            </button>
+                        ` : ''}
+                    </div>
                 </div>
             `).join('')}
         </div>
     `;
 }
+
+window.addNewFolderFromDashboard = async function() {
+    const name = prompt('새로 만드실 폴더명을 입력해 주세요:');
+    if (!name) return;
+    const cleanName = name.trim();
+    if (!cleanName) return;
+    if (bookmarkData.folders.some(f => f.name === cleanName)) {
+        alert('이미 존재하는 폴더 이름입니다.');
+        return;
+    }
+    bookmarkData.folders.push({
+        id: 'folder_' + Date.now(),
+        name: cleanName,
+        keys: []
+    });
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks();
+    renderBookmarkFoldersList();
+};
+
+window.renameBookmarkFolder = async function(folderId, event) {
+    if (event) event.stopPropagation();
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    const newName = prompt('변경할 폴더명을 입력해 주세요:', folder.name);
+    if (!newName) return;
+    const cleanName = newName.trim();
+    if (!cleanName || cleanName === folder.name) return;
+    
+    if (bookmarkData.folders.some(f => f.name === cleanName && f.id !== folderId)) {
+        alert('이미 존재하는 폴더 이름입니다.');
+        return;
+    }
+    
+    folder.name = cleanName;
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks();
+    renderBookmarkFoldersList();
+};
 
 window.deleteBookmarkFolder = async function(folderId, event) {
     if (event) event.stopPropagation();
@@ -3013,7 +3090,7 @@ window.selectBookmarkFolder = async function(folderId) {
                         <span style="color: var(--muted); font-size: 0.9rem;">북마크 문제 ${matchingQuestions.length}개</span>
                     </div>
                     <div style="display: flex; gap: 0.5rem;">
-                        <button onclick="renderBookmarkFoldersList()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">뒤로가기</button>
+                        <button onclick="renderBookmarkFoldersList()" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">뒤로가기</button>
                         ${matchingQuestions.length > 0 ? `
                             <button onclick="startBookmarkFolderQuiz('${folder.id}')" style="background: #fbbf24; color: #000; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">▶️ 이 폴더 문제 풀기</button>
                         ` : ''}
@@ -3025,6 +3102,7 @@ window.selectBookmarkFolder = async function(folderId) {
                         <div style="color: var(--muted); text-align: center; padding: 2rem;">폴더에 저장된 문제가 없습니다. 문제 풀이 중에 북마크 버튼으로 추가해 주세요.</div>
                     ` : matchingQuestions.map(q => {
                         const snippet = q.question.substring(0, 100).replace(/\n/g, ' ') + (q.question.length > 100 ? '...' : '');
+                        const qKey = (q.original_id || q.id) + "_" + q.type;
                         return `
                             <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 0.8rem 1rem; gap: 1rem;">
                                 <div style="flex: 1; text-align: left;">
@@ -3032,7 +3110,14 @@ window.selectBookmarkFolder = async function(folderId) {
                                     <span style="font-size: 0.85rem; color: var(--muted); font-weight: 500;">${q.session} - ${q.original_id || q.id}번</span>
                                     <div style="color: #cbd5e1; font-size: 0.95rem; font-weight: 500; margin-top: 0.4rem; line-height: 1.4;">${snippet}</div>
                                 </div>
-                                <button onclick="removeQuestionFromFolder('${folder.id}', '${(q.original_id || q.id) + "_" + q.type}', event)" style="background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; padding: 0.3rem; display: flex; align-items: center; justify-content: center;" title="북마크 취소">&times;</button>
+                                <div style="display: flex; gap: 0.3rem;">
+                                    <button onclick="moveQuestionFolder('${folder.id}', '${qKey}', event)" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'" title="다른 폴더로 이동">
+                                        📂 이동
+                                    </button>
+                                    <button onclick="removeQuestionFromFolder('${folder.id}', '${qKey}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'" title="북마크 삭제">
+                                        ❌ 삭제
+                                    </button>
+                                </div>
                             </div>
                         `;
                     }).join('')}
@@ -3043,6 +3128,47 @@ window.selectBookmarkFolder = async function(folderId) {
         console.error('Failed to load bookmark questions list:', e);
         sub.innerHTML = '<div style="color:#ef4444;padding:1rem">문제 목록을 가져오는 데 실패했습니다.</div>';
     }
+};
+
+window.moveQuestionFolder = async function(sourceFolderId, qKey, event) {
+    if (event) event.stopPropagation();
+    const otherFolders = bookmarkData.folders.filter(f => f.id !== sourceFolderId);
+    if (otherFolders.length === 0) {
+        alert('이동할 다른 폴더가 없습니다. 먼저 상단에서 폴더를 생성해 주세요.');
+        return;
+    }
+    
+    let msg = '이동할 대상 폴더의 번호를 입력해 주세요:\n\n';
+    otherFolders.forEach((f, idx) => {
+        msg += `${idx + 1}. ${f.name}\n`;
+    });
+    
+    const choice = prompt(msg);
+    if (!choice) return;
+    
+    const num = parseInt(choice.trim(), 10);
+    if (isNaN(num) || num < 1 || num > otherFolders.length) {
+        alert('올바른 번호를 입력해 주세요.');
+        return;
+    }
+    
+    const targetFolder = otherFolders[num - 1];
+    
+    const sourceFolder = bookmarkData.folders.find(f => f.id === sourceFolderId);
+    if (sourceFolder) {
+        sourceFolder.keys = sourceFolder.keys.filter(k => k !== qKey);
+    }
+    
+    if (!targetFolder.keys) targetFolder.keys = [];
+    if (!targetFolder.keys.includes(qKey)) {
+        targetFolder.keys.push(qKey);
+    }
+    
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks();
+    
+    selectBookmarkFolder(sourceFolderId);
+    alert(`[${targetFolder.name}] 폴더로 이동되었습니다.`);
 };
 
 window.removeQuestionFromFolder = async function(folderId, qKey, event) {
