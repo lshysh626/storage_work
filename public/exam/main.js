@@ -2405,8 +2405,11 @@ async function handleLogin(username, password) {
         localStorage.removeItem('gemini_model');
     }
 
-    // Sync statistics history in background to speed up login
-    syncStatsFromFirestore(userData.username).then(() => {
+    // Sync statistics history and bookmarks in background to speed up login
+    Promise.all([
+        syncStatsFromFirestore(userData.username),
+        syncBookmarks()
+    ]).then(() => {
         // Re-render dashboard to show synced stats
         if (typeof renderDashboard === 'function') renderDashboard();
     });
@@ -2421,6 +2424,7 @@ function handleLogout() {
     localStorage.removeItem('quiz_sessions');
     localStorage.removeItem('gemini_api_key');
     localStorage.removeItem('gemini_model');
+    localStorage.removeItem('review_bookmarks');
     loggedInUser = null;
     applyLoginState();
 }
@@ -2777,6 +2781,312 @@ async function handleDeleteUser(username) {
     }
 }
 
+// ─── Bookmark (다시 볼 문제) Logic ─────────────────────────────────
+let bookmarkData = { folders: [] };
+
+async function syncBookmarks() {
+    let local = JSON.parse(localStorage.getItem('review_bookmarks') || '{"folders":[]}');
+    if (!local.folders) local = { folders: [] };
+    
+    if (db && loggedInUser && loggedInUser.username) {
+        try {
+            const docSnap = await db.collection('users').doc(loggedInUser.username).get();
+            if (docSnap.exists) {
+                const data = docSnap.data();
+                if (data.bookmarks && data.bookmarks.folders) {
+                    const mergedFolders = [...data.bookmarks.folders];
+                    local.folders.forEach(lf => {
+                        const existing = mergedFolders.find(f => f.name === lf.name);
+                        if (existing) {
+                            existing.keys = [...new Set([...(existing.keys || []), ...(lf.keys || [])])];
+                        } else {
+                            mergedFolders.push(lf);
+                        }
+                    });
+                    local.folders = mergedFolders;
+                }
+            }
+            await db.collection('users').doc(loggedInUser.username).set({
+                bookmarks: local
+            }, { merge: true });
+        } catch (e) {
+            console.error('[Sync] Bookmarks sync failed:', e);
+        }
+    }
+    
+    if (local.folders.length === 0) {
+        local.folders.push({
+            id: 'folder_default',
+            name: '기본 폴더',
+            keys: []
+        });
+    }
+    
+    bookmarkData = local;
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+}
+
+window.openBookmarkModal = function() {
+    const q = state.questions && state.questions[state.index];
+    if (!q) {
+        alert('현재 선택된 문제가 없습니다.');
+        return;
+    }
+    
+    const select = document.getElementById('bookmark-folder-select');
+    if (select) {
+        select.innerHTML = bookmarkData.folders.map(f => 
+            `<option value="${f.id}">${f.name} (${f.keys ? f.keys.length : 0}개)</option>`
+        ).join('');
+    }
+    
+    const modal = document.getElementById('bookmark-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+};
+
+window.closeBookmarkModal = function() {
+    const modal = document.getElementById('bookmark-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+    const newFolderInput = document.getElementById('new-folder-name');
+    if (newFolderInput) newFolderInput.value = '';
+};
+
+window.createNewBookmarkFolder = async function() {
+    const input = document.getElementById('new-folder-name');
+    const name = input ? input.value.trim() : '';
+    if (!name) {
+        alert('폴더 이름을 입력해 주세요.');
+        return;
+    }
+    if (bookmarkData.folders.some(f => f.name === name)) {
+        alert('이미 존재하는 폴더 이름입니다.');
+        return;
+    }
+    
+    const newFolder = {
+        id: 'folder_' + Date.now(),
+        name: name,
+        keys: []
+    };
+    bookmarkData.folders.push(newFolder);
+    
+    const select = document.getElementById('bookmark-folder-select');
+    if (select) {
+        select.innerHTML = bookmarkData.folders.map(f => 
+            `<option value="${f.id}">${f.name} (${f.keys ? f.keys.length : 0}개)</option>`
+        ).join('');
+        select.value = newFolder.id;
+    }
+    
+    input.value = '';
+    
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks();
+    alert('새 폴더가 생성되었습니다.');
+};
+
+window.saveQuestionToBookmark = async function() {
+    const q = state.questions && state.questions[state.index];
+    if (!q) return;
+    
+    const select = document.getElementById('bookmark-folder-select');
+    const folderId = select ? select.value : '';
+    if (!folderId) {
+        alert('폴더를 선택하거나 새로 생성해 주세요.');
+        return;
+    }
+    
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    const qKey = (q.original_id || q.id) + "_" + q.type;
+    if (!folder.keys) folder.keys = [];
+    
+    if (folder.keys.includes(qKey)) {
+        alert('이미 이 폴더에 저장된 문제입니다.');
+        closeBookmarkModal();
+        return;
+    }
+    
+    folder.keys.push(qKey);
+    
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks();
+    
+    const btn = document.getElementById('bookmark-btn');
+    if (btn) {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '⭐ 저장 완료!';
+        btn.style.background = 'rgba(16, 185, 129, 0.2)';
+        btn.style.color = '#10b981';
+        btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = 'rgba(251, 191, 36, 0.15)';
+            btn.style.color = '#fbbf24';
+            btn.style.borderColor = 'rgba(251, 191, 36, 0.3)';
+        }, 1500);
+    }
+    
+    closeBookmarkModal();
+};
+
+window.toggleBookmarkSelection = function() {
+    const sub = document.getElementById('sub-list');
+    if (state.subMode === 'bookmark') {
+        sub.classList.add('hidden');
+        state.subMode = null;
+        return;
+    }
+    state.subMode = 'bookmark';
+    sub.style.display = 'block';
+    sub.classList.remove('hidden');
+    renderBookmarkFoldersList();
+};
+
+function renderBookmarkFoldersList() {
+    const sub = document.getElementById('sub-list');
+    if (!sub) return;
+    
+    if (bookmarkData.folders.length === 0) {
+        sub.innerHTML = '<div style="color:var(--muted);padding:1rem">생성된 폴더가 없습니다.</div>';
+        return;
+    }
+    
+    sub.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+            ${bookmarkData.folders.map(f => `
+                <div class="item-row" style="position: relative; display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                    <div style="flex: 1; text-align: left;" onclick="selectBookmarkFolder('${f.id}')">
+                        <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.3rem;">📁 ${f.name}</strong>
+                        <span style="color: var(--muted); font-size: 0.9rem;">${f.keys ? f.keys.length : 0}개 문제 저장됨</span>
+                    </div>
+                    ${f.id !== 'folder_default' ? `
+                        <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: 0.2s; z-index: 10;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                            🗑️ 삭제
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+window.deleteBookmarkFolder = async function(folderId, event) {
+    if (event) event.stopPropagation();
+    if (!confirm('이 폴더와 안에 저장된 모든 북마크를 삭제하시겠습니까?')) return;
+    
+    bookmarkData.folders = bookmarkData.folders.filter(f => f.id !== folderId);
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks();
+    renderBookmarkFoldersList();
+};
+
+window.selectBookmarkFolder = async function(folderId) {
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    const sub = document.getElementById('sub-list');
+    if (!sub) return;
+    
+    sub.innerHTML = '<div style="color:var(--muted);padding:1rem">불러오는 중...</div>';
+    
+    try {
+        const res = await fetch('./data/questions_all.json?t=' + Date.now());
+        const data = await res.json();
+        const allQuestions = data.questions || [];
+        
+        const matchingQuestions = allQuestions.filter(q => {
+            const qKey = (q.original_id || q.id) + "_" + q.type;
+            return folder.keys && folder.keys.includes(qKey);
+        });
+        
+        sub.innerHTML = `
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                    <div style="text-align: left;">
+                        <h2 style="margin: 0; color: #fbbf24; font-size: 1.3rem;">📁 ${folder.name}</h2>
+                        <span style="color: var(--muted); font-size: 0.9rem;">북마크 문제 ${matchingQuestions.length}개</span>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="renderBookmarkFoldersList()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">뒤로가기</button>
+                        ${matchingQuestions.length > 0 ? `
+                            <button onclick="startBookmarkFolderQuiz('${folder.id}')" style="background: #fbbf24; color: #000; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">▶️ 이 폴더 문제 풀기</button>
+                        ` : ''}
+                    </div>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.8rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
+                    ${matchingQuestions.length === 0 ? `
+                        <div style="color: var(--muted); text-align: center; padding: 2rem;">폴더에 저장된 문제가 없습니다. 문제 풀이 중에 북마크 버튼으로 추가해 주세요.</div>
+                    ` : matchingQuestions.map(q => {
+                        const snippet = q.question.substring(0, 100).replace(/\n/g, ' ') + (q.question.length > 100 ? '...' : '');
+                        return `
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 0.8rem 1rem; gap: 1rem;">
+                                <div style="flex: 1; text-align: left;">
+                                    <span style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">${TYPE_LABEL[q.type]}</span>
+                                    <span style="font-size: 0.85rem; color: var(--muted); font-weight: 500;">${q.session} - ${q.original_id || q.id}번</span>
+                                    <div style="color: #cbd5e1; font-size: 0.95rem; font-weight: 500; margin-top: 0.4rem; line-height: 1.4;">${snippet}</div>
+                                </div>
+                                <button onclick="removeQuestionFromFolder('${folder.id}', '${(q.original_id || q.id) + "_" + q.type}', event)" style="background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; padding: 0.3rem; display: flex; align-items: center; justify-content: center;" title="북마크 취소">&times;</button>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    } catch (e) {
+        console.error('Failed to load bookmark questions list:', e);
+        sub.innerHTML = '<div style="color:#ef4444;padding:1rem">문제 목록을 가져오는 데 실패했습니다.</div>';
+    }
+};
+
+window.removeQuestionFromFolder = async function(folderId, qKey, event) {
+    if (event) event.stopPropagation();
+    
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    folder.keys = folder.keys.filter(k => k !== qKey);
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks();
+    
+    selectBookmarkFolder(folderId);
+};
+
+window.startBookmarkFolderQuiz = async function(folderId) {
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder || !folder.keys || folder.keys.length === 0) return;
+    
+    try {
+        const res = await fetch('./data/questions_all.json?t=' + Date.now());
+        const data = await res.json();
+        const allQuestions = data.questions || [];
+        
+        const matchingQuestions = allQuestions.filter(q => {
+            const qKey = (q.original_id || q.id) + "_" + q.type;
+            return folder.keys.includes(qKey);
+        });
+        
+        if (matchingQuestions.length === 0) {
+            alert('이 폴더에 저장된 문제들을 데이터베이스에서 찾을 수 없습니다.');
+            return;
+        }
+        
+        document.getElementById('sub-list').classList.add('hidden');
+        state.subMode = null;
+        
+        launchQuiz(matchingQuestions, `⭐ 북마크: ${folder.name} (${matchingQuestions.length}제)`);
+    } catch (e) {
+        console.error('Failed to start bookmark quiz:', e);
+        alert('북마크 퀴즈를 시작하지 못했습니다.');
+    }
+};
+
 // ─── Init App ─────────────────────────────────────────────
 async function initApp() {
     await initAdminAccount();
@@ -2794,6 +3104,7 @@ async function initApp() {
             loggedInUser = null;
         }
     }
+    await syncBookmarks();
     applyLoginState();
     loadSettings();
     restoreQuizStateIfAvailable();
