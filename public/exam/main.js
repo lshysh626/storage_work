@@ -3183,7 +3183,8 @@ async function selectBookmarkFolder(folderId) {
                     <div style="display: flex; gap: 0.5rem;">
                         <button onclick="renderBookmarkFoldersList()" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">뒤로가기</button>
                         ${matchingQuestions.length > 0 ? `
-                            <button onclick="startBookmarkFolderQuiz('${folder.id}')" style="background: #fbbf24; color: #000; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">▶️ 이 폴더 문제 풀기</button>
+                            <button onclick="startBookmarkFolderQuiz('${folder.id}', false)" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(251,191,36,0.25)'" onmouseout="this.style.background='rgba(251,191,36,0.15)'">▶️ 순차 풀기</button>
+                            <button onclick="startBookmarkFolderQuiz('${folder.id}', true)" style="background: #fbbf24; color: #000; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">🔀 랜덤 풀기</button>
                         ` : ''}
                     </div>
                 </div>
@@ -3196,7 +3197,7 @@ async function selectBookmarkFolder(folderId) {
                         const qKey = (q.original_id || q.id) + "_" + q.type;
                         return `
                             <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 0.8rem 1rem; gap: 1rem;">
-                                <div style="flex: 1; text-align: left;">
+                                <div onclick="viewSingleBookmarkQuestion('${folder.id}', '${qKey}')" style="flex: 1; text-align: left; cursor: pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
                                     <span style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">${TYPE_LABEL[q.type]}</span>
                                     <span style="font-size: 0.85rem; color: var(--muted); font-weight: 500;">${q.session} - ${q.original_id || q.id}번</span>
                                     <div style="color: #cbd5e1; font-size: 0.95rem; font-weight: 500; margin-top: 0.4rem; line-height: 1.4;">${snippet}</div>
@@ -3284,11 +3285,12 @@ window.removeQuestionFromFolder = async function(folderId, qKey, event) {
     folder.keys = folder.keys.filter(k => k !== qKey);
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks();
+    updateBookmarkButtonState();
     
     selectBookmarkFolder(folderId);
 };
 
-window.startBookmarkFolderQuiz = async function(folderId) {
+window.startBookmarkFolderQuiz = async function(folderId, shuffle = false) {
     const folder = bookmarkData.folders.find(f => f.id === folderId);
     if (!folder || !folder.keys || folder.keys.length === 0) return;
     
@@ -3297,7 +3299,7 @@ window.startBookmarkFolderQuiz = async function(folderId) {
         const data = await res.json();
         const allQuestions = data.questions || [];
         
-        const matchingQuestions = allQuestions.filter(q => {
+        let matchingQuestions = allQuestions.filter(q => {
             const qKey = (q.original_id || q.id) + "_" + q.type;
             return folder.keys.includes(qKey);
         });
@@ -3307,14 +3309,55 @@ window.startBookmarkFolderQuiz = async function(folderId) {
             return;
         }
         
+        if (shuffle) {
+            matchingQuestions = [...matchingQuestions].sort(() => Math.random() - 0.5);
+        }
+        
         document.getElementById('sub-list').classList.add('hidden');
         state.subMode = null;
         
-        launchQuiz(matchingQuestions, `⭐ 북마크: ${folder.name} (${matchingQuestions.length}제)`);
+        launchQuiz(matchingQuestions, `⭐ 북마크: ${folder.name} (${matchingQuestions.length}제)${shuffle ? ' [랜덤]' : ''}`);
     } catch (e) {
         console.error('Failed to start bookmark quiz:', e);
         alert('북마크 퀴즈를 시작하지 못했습니다.');
     }
+};
+
+window.viewSingleBookmarkQuestion = function(folderId, qKey) {
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    fetch('./data/questions_all.json?t=' + Date.now())
+        .then(res => res.json())
+        .then(data => {
+            const allQuestions = data.questions || [];
+            
+            const folderQuestions = allQuestions.filter(q => {
+                const k = (q.original_id || q.id) + "_" + q.type;
+                return folder.keys && folder.keys.includes(k);
+            });
+            
+            const clickedIndex = folderQuestions.findIndex(q => {
+                const k = (q.original_id || q.id) + "_" + q.type;
+                return k === qKey;
+            });
+            
+            if (clickedIndex === -1) {
+                alert('문제를 찾을 수 없습니다.');
+                return;
+            }
+            
+            document.getElementById('sub-list').classList.add('hidden');
+            state.subMode = null;
+            
+            launchQuiz(folderQuestions, `⭐ 북마크: ${folder.name} (${folderQuestions.length}제)`);
+            state.index = clickedIndex;
+            renderQuestion();
+        })
+        .catch(e => {
+            console.error('Failed to view single bookmark question:', e);
+            alert('문제를 불러오지 못했습니다.');
+        });
 };
 
 // ─── Init App ─────────────────────────────────────────────
