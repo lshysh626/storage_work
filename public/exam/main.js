@@ -3154,7 +3154,7 @@ window.deleteBookmarkFolder = async function(folderId, event) {
     renderBookmarkFoldersList();
 };
 
-window.selectBookmarkFolder = async function(folderId) {
+async function selectBookmarkFolder(folderId) {
     const folder = bookmarkData.folders.find(f => f.id === folderId);
     if (!folder) return;
     
@@ -3219,7 +3219,8 @@ window.selectBookmarkFolder = async function(folderId) {
         console.error('Failed to load bookmark questions list:', e);
         sub.innerHTML = '<div style="color:#ef4444;padding:1rem">문제 목록을 가져오는 데 실패했습니다.</div>';
     }
-};
+}
+window.selectBookmarkFolder = selectBookmarkFolder;
 
 window.moveQuestionFolder = function(sourceFolderId, qKey, event) {
     if (event) event.stopPropagation();
