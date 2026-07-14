@@ -2875,17 +2875,60 @@ window.openBookmarkModal = function() {
         return;
     }
     
+    const qKey = (q.original_id || q.id) + "_" + q.type;
+    
+    // 1. Render currently saved folders
+    const savedFolders = bookmarkData.folders.filter(f => f.keys && f.keys.includes(qKey));
+    const listContainer = document.getElementById('modal-current-bookmarks-list');
+    
+    if (listContainer) {
+        if (savedFolders.length === 0) {
+            listContainer.innerHTML = '<div style="color:var(--muted); font-size:0.9rem; padding: 0.2rem 0; text-align: left;">현재 이 문제는 저장된 폴더가 없습니다.</div>';
+        } else {
+            listContainer.innerHTML = savedFolders.map(f => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); padding:0.5rem 0.8rem; border-radius:8px;">
+                    <span style="font-size:0.95rem; color:#fff; font-weight:600; text-align:left;">📁 ${f.name}</span>
+                    <button onclick="unbookmarkFromFolderInModal('${f.id}')" style="background:rgba(239,68,68,0.1); color:#ef4444; border:1px solid rgba(239,68,68,0.2); padding:0.25rem 0.6rem; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:700; transition:0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">해제</button>
+                </div>
+            `).join('');
+        }
+    }
+    
+    // 2. Render dropdown option folders (excluding already saved folders)
     const select = document.getElementById('bookmark-folder-select');
     if (select) {
-        select.innerHTML = bookmarkData.folders.map(f => 
-            `<option value="${f.id}">${f.name} (${f.keys ? f.keys.length : 0}개)</option>`
-        ).join('');
+        const nonSavedFolders = bookmarkData.folders.filter(f => !f.keys || !f.keys.includes(qKey));
+        if (nonSavedFolders.length === 0) {
+            select.innerHTML = '<option value="">(이미 모든 폴더에 저장됨)</option>';
+            select.disabled = true;
+        } else {
+            select.innerHTML = nonSavedFolders.map(f => 
+                `<option value="${f.id}">${f.name} (${f.keys ? f.keys.length : 0}개)</option>`
+            ).join('');
+            select.disabled = false;
+        }
     }
     
     const modal = document.getElementById('bookmark-modal');
     if (modal) {
         modal.classList.remove('hidden');
     }
+};
+
+window.unbookmarkFromFolderInModal = async function(folderId) {
+    const q = state.questions && state.questions[state.index];
+    if (!q) return;
+    
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    const qKey = (q.original_id || q.id) + "_" + q.type;
+    folder.keys = folder.keys.filter(k => k !== qKey);
+    
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks(true);
+    
+    openBookmarkModal();
 };
 
 window.closeBookmarkModal = function() {
