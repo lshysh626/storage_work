@@ -2313,8 +2313,8 @@ async function initAdminAccount() {
     try {
         const adminDocRef = db.collection('users').doc('admin');
         const docSnap = await adminDocRef.get();
+        const adminHash = await sha256('admin123');
         if (!docSnap.exists) {
-            const adminHash = await sha256('2wsxXSW@');
             await adminDocRef.set({
                 username: 'admin',
                 passwordHash: adminHash,
@@ -2322,6 +2322,16 @@ async function initAdminAccount() {
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             console.log('[Auth] Admin account pre-configured in Firestore.');
+        } else {
+            // Force update password to admin123 if not already set
+            const data = docSnap.data();
+            if (data.passwordHash !== adminHash) {
+                await adminDocRef.set({
+                    passwordHash: adminHash,
+                    isAdmin: true
+                }, { merge: true });
+                console.log('[Auth] Admin account password force updated in Firestore.');
+            }
         }
     } catch (e) {
         console.error('[Auth] Failed to initialize admin account:', e);
