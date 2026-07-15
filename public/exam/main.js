@@ -2827,8 +2827,127 @@ async function handleDeleteUser(username) {
     }
 }
 
-// ─── Bookmark (다시 볼 문제) Logic ─────────────────────────────────
 let bookmarkData = { folders: [] };
+
+// ─── Hierarchical Folder Helpers ─────────────────────────────────────
+function getBreadcrumbs(folderId) {
+    const crumbs = [];
+    let current = bookmarkData.folders.find(f => f.id === folderId);
+    while (current) {
+        crumbs.unshift(current);
+        current = current.parentId ? bookmarkData.folders.find(f => f.id === current.parentId) : null;
+    }
+    return crumbs;
+}
+
+function getFolderKeysRecursive(folderId, keysSet = new Set()) {
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (folder && folder.keys) {
+        folder.keys.forEach(k => keysSet.add(k));
+    }
+    const children = bookmarkData.folders.filter(f => f.parentId === folderId);
+    children.forEach(child => getFolderKeysRecursive(child.id, keysSet));
+    return keysSet;
+}
+
+function getIndentedFolderOptions(folders, parentId = null, depth = 0, qKey) {
+    const list = folders.filter(f => f.parentId === parentId || (!parentId && !f.parentId));
+    let html = '';
+    list.forEach(f => {
+        const indent = '&nbsp;&nbsp;'.repeat(depth) + (depth > 0 ? '└─ ' : '');
+        const isSaved = f.keys && f.keys.includes(qKey);
+        const disabledAttr = isSaved ? 'disabled' : '';
+        const suffix = isSaved ? ' (저장됨)' : ` (${f.keys ? f.keys.length : 0}개)`;
+        html += `<option value="${f.id}" ${disabledAttr}>${indent}📁 ${f.name}${suffix}</option>`;
+        html += getIndentedFolderOptions(folders, f.id, depth + 1, qKey);
+    });
+    return html;
+}
+
+function getHierarchicalMoveButtons(folders, parentId = null, depth = 0, sourceFolderId, qKey) {
+    const list = folders.filter(f => f.parentId === parentId || (!parentId && !f.parentId));
+    let html = '';
+    list.forEach(f => {
+        const indentPadding = depth * 1.5;
+        const isSource = f.id === sourceFolderId;
+        
+        if (isSource) {
+            html += `
+                <div style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); color: var(--muted); padding: 0.8rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; justify-content: space-between; margin-left: ${indentPadding}rem; opacity: 0.5;">
+                    <span>📁 ${f.name} (현재 폴더)</span>
+                </div>
+            `;
+        } else {
+            html += `
+                <button onclick="submitMoveQuestionFolder('${sourceFolderId}', '${f.id}', '${qKey}')" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: #fff; padding: 0.8rem; border-radius: 8px; cursor: pointer; text-align: left; font-size: 0.95rem; font-weight: 600; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; margin-left: ${indentPadding}rem;" onmouseover="this.style.background='rgba(251,191,36,0.1)'; this.style.borderColor='rgba(251,191,36,0.3)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.05)';">
+                    <span>📁 ${f.name}</span>
+                    <span style="font-size: 0.8rem; color: #94a3b8;">${f.keys ? f.keys.length : 0}개 문제</span>
+                </button>
+            `;
+        }
+        
+        html += getHierarchicalMoveButtons(folders, f.id, depth + 1, sourceFolderId, qKey);
+    });
+    return html;
+}
+
+function deleteFolderRecursive(folderId) {
+    const children = bookmarkData.folders.filter(f => f.parentId === folderId);
+    children.forEach(child => deleteFolderRecursive(child.id));
+    bookmarkData.folders = bookmarkData.folders.filter(f => f.id !== folderId);
+}
+
+window.addNewSubfolder = function(parentId) {
+    const title = document.getElementById('custom-dialog-title');
+    const body = document.getElementById('custom-dialog-body');
+    const actions = document.getElementById('custom-dialog-actions');
+    
+    title.innerHTML = '📁 새 하위 폴더 추가';
+    body.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+            <label style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; text-align: left;">생성할 하위 폴더명을 입력해 주세요.</label>
+            <input type="text" id="dialog-subfolder-name" placeholder="하위 폴더명 입력..." style="background: #0f172a; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.95rem; outline: none; width: 100%;" />
+        </div>
+    `;
+    
+    actions.innerHTML = `
+        <button onclick="closeCustomDialog()" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #cbd5e1; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">취소</button>
+        <button onclick="submitNewSubfolderFromDialog('${parentId}')" style="background: #fbbf24; border: none; color: #000; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">폴더 생성</button>
+    `;
+    
+    openCustomDialog();
+    setTimeout(() => {
+        const input = document.getElementById('dialog-subfolder-name');
+        if (input) input.focus();
+    }, 100);
+};
+
+window.submitNewSubfolderFromDialog = async function(parentId) {
+    const input = document.getElementById('dialog-subfolder-name');
+    const name = input ? input.value.trim() : '';
+    if (!name) {
+        alert('폴더 이름을 입력해 주세요.');
+        return;
+    }
+    
+    const siblings = bookmarkData.folders.filter(f => f.parentId === parentId);
+    if (siblings.some(f => f.name === name)) {
+        alert('이미 존재하는 하위 폴더 이름입니다.');
+        return;
+    }
+    
+    bookmarkData.folders.push({
+        id: 'folder_' + Date.now(),
+        name: name,
+        parentId: parentId,
+        keys: []
+    });
+    
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks(true);
+    closeCustomDialog();
+    selectBookmarkFolder(parentId);
+};
 
 window.updateBookmarkButtonState = function() {
     const btn = document.getElementById('bookmark-btn');
@@ -2941,14 +3060,12 @@ window.openBookmarkModal = function(customIndex = null) {
     // 2. Render dropdown option folders (excluding already saved folders)
     const select = document.getElementById('bookmark-folder-select');
     if (select) {
-        const nonSavedFolders = bookmarkData.folders.filter(f => !f.keys || !f.keys.includes(qKey));
-        if (nonSavedFolders.length === 0) {
-            select.innerHTML = '<option value="">(이미 모든 폴더에 저장됨)</option>';
+        const optionsHtml = getIndentedFolderOptions(bookmarkData.folders, null, 0, qKey);
+        if (!optionsHtml) {
+            select.innerHTML = '<option value="">(생성된 폴더가 없습니다)</option>';
             select.disabled = true;
         } else {
-            select.innerHTML = nonSavedFolders.map(f => 
-                `<option value="${f.id}">${f.name} (${f.keys ? f.keys.length : 0}개)</option>`
-            ).join('');
+            select.innerHTML = optionsHtml;
             select.disabled = false;
         }
     }
@@ -3105,13 +3222,14 @@ function renderBookmarkFoldersList() {
         state.selectedBookmarkFolderIds = [];
     }
     
+    const rootFolders = bookmarkData.folders.filter(f => !f.parentId);
     const selectedCount = state.selectedBookmarkFolderIds.length;
     let selectionActionBar = '';
     if (selectedCount > 0) {
         const selectedFoldersObj = bookmarkData.folders.filter(f => state.selectedBookmarkFolderIds.includes(f.id));
         const allKeys = new Set();
         selectedFoldersObj.forEach(f => {
-            if (f.keys) f.keys.forEach(k => allKeys.add(k));
+            getFolderKeysRecursive(f.id, allKeys);
         });
         
         selectionActionBar = `
@@ -3139,7 +3257,7 @@ function renderBookmarkFoldersList() {
         ${selectionActionBar}
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; width: 100%;">
-            ${bookmarkData.folders.map(f => {
+            ${rootFolders.map(f => {
                 const isChecked = state.selectedBookmarkFolderIds.includes(f.id);
                 return `
                     <div class="item-row" style="position: relative; display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid ${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}; border-radius: 12px; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}'">
@@ -3187,9 +3305,7 @@ window.startSelectedFoldersQuiz = async function(shuffle = false) {
     const selectedFoldersObj = bookmarkData.folders.filter(f => state.selectedBookmarkFolderIds.includes(f.id));
     const allKeys = new Set();
     selectedFoldersObj.forEach(f => {
-        if (f.keys) {
-            f.keys.forEach(k => allKeys.add(k));
-        }
+        getFolderKeysRecursive(f.id, allKeys);
     });
     
     if (allKeys.size === 0) {
@@ -3348,7 +3464,8 @@ window.submitRenameFolderFromDialog = async function(folderId) {
         return;
     }
     
-    if (bookmarkData.folders.some(f => f.name === name && f.id !== folderId)) {
+    const siblings = bookmarkData.folders.filter(f => f.parentId === folder.parentId && f.id !== folderId);
+    if (siblings.some(f => f.name === name)) {
         alert('이미 존재하는 폴더 이름입니다.');
         return;
     }
@@ -3357,17 +3474,31 @@ window.submitRenameFolderFromDialog = async function(folderId) {
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     closeCustomDialog();
-    renderBookmarkFoldersList();
+    
+    if (folder.parentId) {
+        selectBookmarkFolder(folder.parentId);
+    } else {
+        renderBookmarkFoldersList();
+    }
 };
 
 window.deleteBookmarkFolder = async function(folderId, event) {
     if (event) event.stopPropagation();
-    if (!confirm('이 폴더와 안에 저장된 모든 북마크를 삭제하시겠습니까?')) return;
+    if (!confirm('이 폴더와 안에 저장된 모든 북마크 및 하위 폴더들을 삭제하시겠습니까?')) return;
     
-    bookmarkData.folders = bookmarkData.folders.filter(f => f.id !== folderId);
+    const folderToDelete = bookmarkData.folders.find(f => f.id === folderId);
+    const parentId = folderToDelete ? folderToDelete.parentId : null;
+    
+    deleteFolderRecursive(folderId);
+    
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
-    renderBookmarkFoldersList();
+    
+    if (parentId) {
+        selectBookmarkFolder(parentId);
+    } else {
+        renderBookmarkFoldersList();
+    }
 };
 
 async function selectBookmarkFolder(folderId) {
@@ -3389,15 +3520,52 @@ async function selectBookmarkFolder(folderId) {
             return folder.keys && folder.keys.includes(qKey);
         });
         
-        sub.innerHTML = `
-            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-                    <div style="text-align: left;">
-                        <h2 style="margin: 0; color: #fbbf24; font-size: 1.3rem;">📁 ${folder.name}</h2>
-                        <span style="color: var(--muted); font-size: 0.9rem;">북마크 문제 ${matchingQuestions.length}개</span>
+        const crumbs = getBreadcrumbs(folder.id);
+        const breadcrumbHtml = crumbs.map((c, idx) => {
+            if (idx === crumbs.length - 1) {
+                return `<span style="color: #fbbf24; font-weight: 700;">📁 ${c.name}</span>`;
+            }
+            return `<span onclick="selectBookmarkFolder('${c.id}')" style="cursor: pointer; color: #cbd5e1; text-decoration: underline;" onmouseover="this.style.color='#fbbf24'" onmouseout="this.style.color='#cbd5e1'">📁 ${c.name}</span>`;
+        }).join(' <span style="color:var(--muted); margin: 0 0.3rem;">&gt;</span> ');
+
+        const subfolders = bookmarkData.folders.filter(f => f.parentId === folderId);
+        let subfoldersHtml = '';
+        if (subfolders.length > 0) {
+            subfoldersHtml = `
+                <div style="background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; width: 100%;">
+                    <span style="color: #94a3b8; font-weight: 600; font-size: 0.85rem; text-align: left; display: block; text-transform: uppercase; letter-spacing: 0.05em;">📂 하위 폴더 목록</span>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.8rem; width: 100%;">
+                        ${subfolders.map(sf => `
+                            <div class="item-row" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.8rem 1rem; background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                                <div style="text-align: left; min-width: 0; flex: 1;" onclick="selectBookmarkFolder('${sf.id}')">
+                                    <strong style="font-size: 0.95rem; color: #fff; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📁 ${sf.name}</strong>
+                                    <span style="color: var(--muted); font-size: 0.8rem;">${sf.keys ? sf.keys.length : 0}개 문제</span>
+                                </div>
+                                <div style="display: flex; gap: 0.2rem; z-index: 10;">
+                                    <button onclick="renameBookmarkFolder('${sf.id}', event)" style="background: none; border: none; color: #cbd5e1; font-size: 0.8rem; cursor: pointer; padding: 0.25rem;">✏️</button>
+                                    <button onclick="deleteBookmarkFolder('${sf.id}', event)" style="background: none; border: none; color: #ef4444; font-size: 0.8rem; cursor: pointer; padding: 0.25rem;">🗑️</button>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button onclick="renderBookmarkFoldersList()" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">뒤로가기</button>
+                </div>
+            `;
+        }
+        
+        sub.innerHTML = `
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; width: 100%; flex-wrap: wrap; gap: 1rem;">
+                    <div style="text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.95rem; margin-bottom: 0.3rem;">
+                            <span onclick="renderBookmarkFoldersList()" style="cursor: pointer; color: #cbd5e1; text-decoration: underline;" onmouseover="this.style.color='#fbbf24'" onmouseout="this.style.color='#cbd5e1'">Root</span>
+                            <span style="color:var(--muted);">&gt;</span>
+                            ${breadcrumbHtml}
+                        </div>
+                        <span style="color: var(--muted); font-size: 0.9rem;">이 폴더 문제 ${matchingQuestions.length}개 (하위 폴더 제외)</span>
+                    </div>
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <button onclick="${folder.parentId ? `selectBookmarkFolder('${folder.parentId}')` : 'renderBookmarkFoldersList()'}" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">뒤로가기</button>
+                        <button onclick="addNewSubfolder('${folder.id}')" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.25)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.15)'">➕ 하위 폴더</button>
                         ${matchingQuestions.length > 0 ? `
                             <button onclick="startBookmarkFolderQuiz('${folder.id}', false)" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(251,191,36,0.25)'" onmouseout="this.style.background='rgba(251,191,36,0.15)'">▶️ 순차 풀기</button>
                             <button onclick="startBookmarkFolderQuiz('${folder.id}', true)" style="background: #fbbf24; color: #000; border: none; padding: 0.6rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">🔀 랜덤 풀기</button>
@@ -3405,14 +3573,16 @@ async function selectBookmarkFolder(folderId) {
                     </div>
                 </div>
                 
-                <div style="display: flex; flex-direction: column; gap: 0.8rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
+                ${subfoldersHtml}
+                
+                <div style="display: flex; flex-direction: column; gap: 0.8rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem; width: 100%;">
                     ${matchingQuestions.length === 0 ? `
-                        <div style="color: var(--muted); text-align: center; padding: 2rem;">폴더에 저장된 문제가 없습니다. 문제 풀이 중에 북마크 버튼으로 추가해 주세요.</div>
+                        <div style="color: var(--muted); text-align: center; padding: 2rem; width: 100%;">이 폴더에 저장된 문제가 없습니다. (상단 '하위 폴더'나 문제 풀이 중에 북마크 버튼으로 추가해 주세요.)</div>
                     ` : matchingQuestions.map(q => {
                         const snippet = q.question.substring(0, 100).replace(/\n/g, ' ') + (q.question.length > 100 ? '...' : '');
                         const qKey = (q.original_id || q.id) + "_" + q.type;
                         return `
-                            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 0.8rem 1rem; gap: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; padding: 0.8rem 1rem; gap: 1rem; width: 100%;">
                                 <div onclick="viewSingleBookmarkQuestion('${folder.id}', '${qKey}')" style="flex: 1; text-align: left; cursor: pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
                                     <span style="font-size: 0.8rem; color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">${TYPE_LABEL[q.type]}</span>
                                     <span style="font-size: 0.85rem; color: var(--muted); font-weight: 500;">${q.session} - ${q.original_id || q.id}번</span>
@@ -3441,8 +3611,7 @@ window.selectBookmarkFolder = selectBookmarkFolder;
 
 window.moveQuestionFolder = function(sourceFolderId, qKey, event) {
     if (event) event.stopPropagation();
-    const otherFolders = bookmarkData.folders.filter(f => f.id !== sourceFolderId);
-    if (otherFolders.length === 0) {
+    if (bookmarkData.folders.length <= 1) {
         alert('이동할 다른 폴더가 없습니다. 먼저 상단에서 폴더를 생성해 주세요.');
         return;
     }
@@ -3454,13 +3623,8 @@ window.moveQuestionFolder = function(sourceFolderId, qKey, event) {
     title.innerHTML = '📂 문제 폴더 이동';
     body.innerHTML = `
         <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-bottom: 0.5rem; display: block; text-align: left;">이동할 대상 폴더를 선택해 주세요:</span>
-        <div style="display: flex; flex-direction: column; gap: 0.6rem; max-height: 250px; overflow-y: auto;">
-            ${otherFolders.map(f => `
-                <button onclick="submitMoveQuestionFolder('${sourceFolderId}', '${f.id}', '${qKey}')" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: #fff; padding: 0.8rem; border-radius: 8px; cursor: pointer; text-align: left; font-size: 0.95rem; font-weight: 600; transition: 0.2s; display: flex; align-items: center; justify-content: space-between;" onmouseover="this.style.background='rgba(251,191,36,0.1)'; this.style.borderColor='rgba(251,191,36,0.3)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.05)';">
-                    <span>📁 ${f.name}</span>
-                    <span style="font-size: 0.8rem; color: #94a3b8;">${f.keys ? f.keys.length : 0}개 문제</span>
-                </button>
-            `).join('')}
+        <div style="display: flex; flex-direction: column; gap: 0.6rem; max-height: 250px; overflow-y: auto; width: 100%;">
+            ${getHierarchicalMoveButtons(bookmarkData.folders, null, 0, sourceFolderId, qKey)}
         </div>
     `;
     
