@@ -898,6 +898,10 @@ function launchQuiz(questions, title) {
                 const pts = q.points ?? TYPE_POINTS[q.type] ?? 0;
                 return {
                     qIndex: idx,
+                    id: q.id,
+                    original_id: q.original_id,
+                    type: q.type,
+                    session: q.session,
                     question: q.question,
                     correct_answer: q.answer,
                     user_answer: '미입력',
@@ -1397,6 +1401,10 @@ async function submitAnswer() {
         if (!existingDetail) {
             session.details.push({
                 qIndex: savedIndex,
+                id: q.id,
+                original_id: q.original_id,
+                type: q.type,
+                session: q.session,
                 question: q.question,
                 correct_answer: q.answer,
                 user_answer: userAnswer,
@@ -1564,6 +1572,10 @@ async function submitBulkAnswers() {
             
             session.details.push({
                 qIndex: i,
+                id: q.id,
+                original_id: q.original_id,
+                type: q.type,
+                session: q.session,
                 question: q.question,
                 correct_answer: q.answer,
                 user_answer: state.userAnswers[i],
@@ -1606,10 +1618,30 @@ function showSessionResult() {
     
     let html = '';
     session.details.forEach((d, i) => {
+        const qKey = (d.original_id || d.id) + "_" + d.type;
+        let bookmarkedFolders = [];
+        if (bookmarkData && bookmarkData.folders) {
+            bookmarkData.folders.forEach(f => {
+                if (f.keys && f.keys.includes(qKey)) {
+                    bookmarkedFolders.push(f.name);
+                }
+            });
+        }
+        
+        const isBookmarked = bookmarkedFolders.length > 0;
+        const starBtn = `
+            <button onclick="openBookmarkModalFromResultList(${d.qIndex})" style="background: ${isBookmarked ? '#fbbf24' : 'rgba(251,191,36,0.05)'}; color: ${isBookmarked ? '#000' : '#fbbf24'}; border: 1px solid ${isBookmarked ? '#fbbf24' : 'rgba(251,191,36,0.3)'}; padding: 0.35rem 0.7rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s; display: flex; align-items: center; gap: 0.3rem;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                ⭐ ${isBookmarked ? `북마크됨 (${bookmarkedFolders.join(', ')})` : '다시 볼 문제'}
+            </button>
+        `;
+
         html += `
             <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid ${d.is_correct ? 'var(--primary)' : '#f87171'}">
-                <div style="display:flex; justify-content:space-between; margin-bottom: 1rem;">
-                    <strong style="font-size: 1.2rem;">Q${i+1}.</strong>
+                <div style="display:flex; justify-content:space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <strong style="font-size: 1.2rem;">Q${i+1}.</strong>
+                        ${starBtn}
+                    </div>
                     <span style="font-size: 1.1rem; font-weight: 800; color: ${d.is_correct ? 'var(--primary)' : '#f87171'}">${d.score} / ${d.points}점</span>
                 </div>
                 <p style="color: #cbd5e1; margin-bottom: 1rem; line-height: 1.5;">${d.question}</p>
@@ -2878,13 +2910,15 @@ async function syncBookmarks(overwriteRemote = false) {
     updateBookmarkButtonState();
 }
 
-window.openBookmarkModal = function() {
-    const q = state.questions && state.questions[state.index];
+window.openBookmarkModal = function(customIndex = null) {
+    const targetIndex = customIndex !== null ? customIndex : state.index;
+    const q = state.questions && state.questions[targetIndex];
     if (!q) {
         alert('현재 선택된 문제가 없습니다.');
         return;
     }
     
+    state.bookmarkModalTargetIndex = targetIndex;
     const qKey = (q.original_id || q.id) + "_" + q.type;
     
     // 1. Render currently saved folders
@@ -2925,8 +2959,13 @@ window.openBookmarkModal = function() {
     }
 };
 
+window.openBookmarkModalFromResultList = function(qIndex) {
+    openBookmarkModal(qIndex);
+};
+
 window.unbookmarkFromFolderInModal = async function(folderId) {
-    const q = state.questions && state.questions[state.index];
+    const targetIndex = state.bookmarkModalTargetIndex !== undefined ? state.bookmarkModalTargetIndex : state.index;
+    const q = state.questions && state.questions[targetIndex];
     if (!q) return;
     
     const folder = bookmarkData.folders.find(f => f.id === folderId);
@@ -2938,7 +2977,13 @@ window.unbookmarkFromFolderInModal = async function(folderId) {
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     
-    openBookmarkModal();
+    openBookmarkModal(targetIndex);
+    
+    // Refresh result list if result view is currently open
+    const bulkResultView = document.getElementById('bulk-result-view');
+    if (bulkResultView && !bulkResultView.classList.contains('hidden') && bulkResultView.style.display !== 'none') {
+        showSessionResult();
+    }
 };
 
 window.closeBookmarkModal = function() {
@@ -2981,11 +3026,16 @@ window.createNewBookmarkFolder = async function() {
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
+    
+    const targetIndex = state.bookmarkModalTargetIndex !== undefined ? state.bookmarkModalTargetIndex : state.index;
+    openBookmarkModal(targetIndex);
+    
     alert('새 폴더가 생성되었습니다.');
 };
 
 window.saveQuestionToBookmark = async function() {
-    const q = state.questions && state.questions[state.index];
+    const targetIndex = state.bookmarkModalTargetIndex !== undefined ? state.bookmarkModalTargetIndex : state.index;
+    const q = state.questions && state.questions[targetIndex];
     if (!q) return;
     
     const select = document.getElementById('bookmark-folder-select');
@@ -3023,6 +3073,12 @@ window.saveQuestionToBookmark = async function() {
         setTimeout(() => {
             updateBookmarkButtonState();
         }, 1500);
+    }
+    
+    // Refresh result list if result view is currently open
+    const bulkResultView = document.getElementById('bulk-result-view');
+    if (bulkResultView && !bulkResultView.classList.contains('hidden') && bulkResultView.style.display !== 'none') {
+        showSessionResult();
     }
     
     closeBookmarkModal();
