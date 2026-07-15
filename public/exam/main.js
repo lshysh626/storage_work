@@ -941,6 +941,14 @@ function renderQuestion() {
     const q = state.questions[state.index];
     if (!q) return;
 
+    // Load memo for current question
+    const memoPad = document.getElementById('memo-pad');
+    if (memoPad) {
+        const qKey = (q.original_id || q.id) + "_" + q.type;
+        const memos = JSON.parse(localStorage.getItem('question_memos') || '{}');
+        memoPad.value = memos[qKey] || '';
+    }
+
     if (typeof updateBookmarkButtonState === 'function') {
         updateBookmarkButtonState();
     }
@@ -1981,6 +1989,47 @@ function startTimer() {
     }, 1000);
 }
 
+let memoSyncTimeout = null;
+function saveMemoDebounced(qKey, value) {
+    let memos = JSON.parse(localStorage.getItem('question_memos') || '{}');
+    memos[qKey] = value;
+    localStorage.setItem('question_memos', JSON.stringify(memos));
+    
+    if (memoSyncTimeout) clearTimeout(memoSyncTimeout);
+    memoSyncTimeout = setTimeout(async () => {
+        await syncMemos(true);
+    }, 1000);
+}
+
+async function syncMemos(overwriteRemote = false) {
+    let local = JSON.parse(localStorage.getItem('question_memos') || '{}');
+    
+    if (db && loggedInUser && loggedInUser.username) {
+        try {
+            const docRef = db.collection('users').doc(loggedInUser.username);
+            if (overwriteRemote) {
+                await docRef.set({
+                    memos: local
+                }, { merge: true });
+            } else {
+                const docSnap = await docRef.get();
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    if (data.memos) {
+                        local = { ...data.memos, ...local };
+                    }
+                }
+                await docRef.set({
+                    memos: local
+                }, { merge: true });
+            }
+        } catch (e) {
+            console.error('[Sync] Memos sync failed:', e);
+        }
+    }
+    localStorage.setItem('question_memos', JSON.stringify(local));
+}
+
 // ─── Events ───────────────────────────────────────────────
 // Event binding for Chat
 document.addEventListener('DOMContentLoaded', () => {
@@ -1993,6 +2042,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if(chatSendBtn) {
         chatSendBtn.addEventListener('click', sendChatMessage);
+    }
+    
+    const memoPad = document.getElementById('memo-pad');
+    if (memoPad) {
+        memoPad.addEventListener('input', () => {
+            const q = state.questions && state.questions[state.index];
+            if (!q) return;
+            const qKey = (q.original_id || q.id) + "_" + q.type;
+            saveMemoDebounced(qKey, memoPad.value);
+        });
     }
 });
 
@@ -2471,6 +2530,7 @@ function handleLogout() {
     localStorage.removeItem('gemini_api_key');
     localStorage.removeItem('gemini_model');
     localStorage.removeItem('review_bookmarks');
+    localStorage.removeItem('question_memos');
     loggedInUser = null;
     applyLoginState();
 }
@@ -3926,6 +3986,7 @@ async function initApp() {
         }
     }
     await syncBookmarks();
+    await syncMemos();
     applyLoginState();
     loadSettings();
     restoreQuizStateIfAvailable();
