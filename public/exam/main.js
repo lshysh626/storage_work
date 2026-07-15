@@ -3101,35 +3101,133 @@ function renderBookmarkFoldersList() {
     const sub = document.getElementById('sub-list');
     if (!sub) return;
     
+    if (!state.selectedBookmarkFolderIds) {
+        state.selectedBookmarkFolderIds = [];
+    }
+    
+    const selectedCount = state.selectedBookmarkFolderIds.length;
+    let selectionActionBar = '';
+    if (selectedCount > 0) {
+        const selectedFoldersObj = bookmarkData.folders.filter(f => state.selectedBookmarkFolderIds.includes(f.id));
+        const allKeys = new Set();
+        selectedFoldersObj.forEach(f => {
+            if (f.keys) f.keys.forEach(k => allKeys.add(k));
+        });
+        
+        selectionActionBar = `
+            <div style="background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="text-align: left;">
+                    <strong style="color: #fbbf24; font-size: 1rem; display: block;">📂 ${selectedCount}개 폴더 선택됨</strong>
+                    <span style="color: #cbd5e1; font-size: 0.85rem;">중복 제외 총 ${allKeys.size}개 문항</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button onclick="startSelectedFoldersQuiz(false)" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">▶️ 순차 풀기</button>
+                    <button onclick="startSelectedFoldersQuiz(true)" style="background: #fbbf24; color: #000; border: none; padding: 0.5rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 800; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">🔀 랜덤 풀기</button>
+                </div>
+            </div>
+        `;
+    }
+    
     sub.innerHTML = `
-        <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; width: 100%;">
             <span style="color: #cbd5e1; font-weight: 700; font-size: 1.05rem;">📂 북마크 폴더 관리</span>
             <button onclick="addNewFolderFromDashboard()" style="background: #fbbf24; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='#f59e0b'" onmouseout="this.style.background='#fbbf24'">
                 ➕ 새 폴더 추가
             </button>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-            ${bookmarkData.folders.map(f => `
-                <div class="item-row" style="position: relative; display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.05)'">
-                    <div style="flex: 1; text-align: left; padding-right: 0.5rem;" onclick="selectBookmarkFolder('${f.id}')">
-                        <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.3rem;">📁 ${f.name}</strong>
-                        <span style="color: var(--muted); font-size: 0.9rem;">${f.keys ? f.keys.length : 0}개 문제 저장됨</span>
-                    </div>
-                    <div style="display: flex; gap: 0.3rem; z-index: 10;">
-                        <button onclick="renameBookmarkFolder('${f.id}', event)" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
-                            ✏️ 수정
-                        </button>
-                        ${f.id !== 'folder_default' ? `
-                            <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
-                                🗑️ 삭제
+        
+        ${selectionActionBar}
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; width: 100%;">
+            ${bookmarkData.folders.map(f => {
+                const isChecked = state.selectedBookmarkFolderIds.includes(f.id);
+                return `
+                    <div class="item-row" style="position: relative; display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid ${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}; border-radius: 12px; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}'">
+                        <div style="display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 0;">
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="toggleSelectFolder('${f.id}', event)" style="width: 1.25rem; height: 1.25rem; accent-color: #fbbf24; cursor: pointer; flex-shrink: 0;" />
+                            <div style="flex: 1; text-align: left; min-width: 0; padding-right: 0.5rem;" onclick="selectBookmarkFolder('${f.id}')">
+                                <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📁 ${f.name}</strong>
+                                <span style="color: var(--muted); font-size: 0.9rem;">${f.keys ? f.keys.length : 0}개 문제 저장됨</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.3rem; z-index: 10; flex-shrink: 0;">
+                            <button onclick="renameBookmarkFolder('${f.id}', event)" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
+                                ✏️ 수정
                             </button>
-                        ` : ''}
+                            ${f.id !== 'folder_default' ? `
+                                <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                                    🗑️ 삭제
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
-                </div>
-            `).join('')}
+                `;
+            }).join('')}
         </div>
     `;
 }
+
+window.toggleSelectFolder = function(folderId, event) {
+    if (event) event.stopPropagation();
+    if (!state.selectedBookmarkFolderIds) {
+        state.selectedBookmarkFolderIds = [];
+    }
+    const idx = state.selectedBookmarkFolderIds.indexOf(folderId);
+    if (idx > -1) {
+        state.selectedBookmarkFolderIds.splice(idx, 1);
+    } else {
+        state.selectedBookmarkFolderIds.push(folderId);
+    }
+    renderBookmarkFoldersList();
+};
+
+window.startSelectedFoldersQuiz = async function(shuffle = false) {
+    if (!state.selectedBookmarkFolderIds || state.selectedBookmarkFolderIds.length === 0) return;
+    
+    const selectedFoldersObj = bookmarkData.folders.filter(f => state.selectedBookmarkFolderIds.includes(f.id));
+    const allKeys = new Set();
+    selectedFoldersObj.forEach(f => {
+        if (f.keys) {
+            f.keys.forEach(k => allKeys.add(k));
+        }
+    });
+    
+    if (allKeys.size === 0) {
+        alert('선택한 폴더들에 저장된 문제가 없습니다.');
+        return;
+    }
+    
+    try {
+        const res = await fetch('./data/questions_all.json?t=' + Date.now());
+        const data = await res.json();
+        const allQuestions = data.questions || [];
+        
+        let matchingQuestions = allQuestions.filter(q => {
+            const qKey = (q.original_id || q.id) + "_" + q.type;
+            return allKeys.has(qKey);
+        });
+        
+        if (matchingQuestions.length === 0) {
+            alert('선택한 폴더의 문제들을 데이터베이스에서 찾을 수 없습니다.');
+            return;
+        }
+        
+        if (shuffle) {
+            matchingQuestions = [...matchingQuestions].sort(() => Math.random() - 0.5);
+        }
+        
+        // Clear selection and close sub-list
+        state.selectedBookmarkFolderIds = [];
+        document.getElementById('sub-list').classList.add('hidden');
+        state.subMode = null;
+        
+        const folderNames = selectedFoldersObj.map(f => f.name).join(', ');
+        launchQuiz(matchingQuestions, `⭐ 북마크: ${folderNames} (${matchingQuestions.length}제)${shuffle ? ' [랜덤]' : ''}`);
+    } catch (e) {
+        console.error('Failed to start selected folders quiz:', e);
+        alert('북마크 퀴즈를 시작하지 못했습니다.');
+    }
+};
 
 window.openCustomDialog = function() {
     const modal = document.getElementById('custom-dialog-modal');
