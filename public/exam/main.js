@@ -989,11 +989,10 @@ function renderQuestion() {
         const mainText = parts[0];
         const subText = parts.slice(1).join('\n');
         
-        const imagesHTML = `<div style="text-align: center; margin: 1.2rem 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; user-select: none;">` + 
+        const imagesHTML = `<div style="text-align: center; margin: 1.2rem 0; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.04); padding: 0.8rem; border-radius: 8px; user-select: none; overflow-x: auto;">` + 
             q.images.map(img => 
-                `<img src="./images/${img}" onclick="openLightbox('./images/${img}')" style="max-width: 100%; max-height: 380px; border-radius: 6px; margin: 0.3rem 0; border: 1px solid rgba(255,255,255,0.1); cursor: zoom-in; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.015)'" onmouseout="this.style.transform='scale(1)'" />`
+                `<img src="./images/${img}" class="question-image" onclick="this.classList.toggle('expanded')" />`
             ).join('') + 
-            `<div style="color: var(--muted); font-size: 0.8rem; margin-top: 0.5rem; font-weight: 500;">🔍 클릭하면 이미지 확대 및 줌(Ctrl+휠)이 가능합니다.</div>` +
             `</div>`;
             
         finalHTML = formatBogiAndNewlines(mainText) + imagesHTML + (subText ? formatBogiAndNewlines(subText) : '');

@@ -869,3 +869,110 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     opacity: 0.6;
     display: block;
 }
+
+/* ==========================================
+   이미지 라이트박스 (확대/축소) 스타일
+   ========================================== */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 10, 12, 0.9);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.lightbox.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+.lightbox-content-wrapper {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+.lightbox img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.05s linear;
+}
+.lightbox img:active {
+    cursor: grabbing;
+}
+.lightbox-hint {
+    margin-top: 1.2rem;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    background: rgba(15, 23, 42, 0.7);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+.lightbox-close-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+.lightbox-close-btn:hover {
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   인라인 문제 이미지 토글 확대 스타일
+   ========================================== */
+.question-image {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: 8px;
+    margin: 0.3rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: zoom-in;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    object-fit: contain;
+    background: rgba(15, 23, 42, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.question-image:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+.question-image.expanded {
+    max-height: 1400px !important;
+    max-width: 100% !important;
+    cursor: zoom-out;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border-color: rgba(56, 189, 248, 0.5);
+    transform: scale(1.015);
+}
