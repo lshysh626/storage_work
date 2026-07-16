@@ -3448,7 +3448,9 @@ function renderFolderTree(parentId = null, depth = 0) {
             
             let questionsListHtml = '';
             if (folderQuestions.length === 0) {
-                questionsListHtml = `<div style="color: var(--muted); text-align: center; padding: 1.5rem; font-size: 0.9rem; width: 100%;">이 폴더에 저장된 문제가 없습니다.</div>`;
+                if (!hasSubfolders) {
+                    questionsListHtml = `<div style="color: var(--muted); text-align: center; padding: 1.5rem; font-size: 0.9rem; width: 100%;">이 폴더에 저장된 문제가 없습니다.</div>`;
+                }
             } else {
                 questionsListHtml = folderQuestions.map(q => {
                     const snippet = q.question.substring(0, 100).replace(/\n/g, ' ') + (q.question.length > 100 ? '...' : '');
