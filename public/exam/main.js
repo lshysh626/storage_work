@@ -979,6 +979,20 @@ function renderQuestion() {
     
     document.getElementById('q-text').innerHTML = escaped;
 
+    // Render images if exist
+    const imgContainer = document.getElementById('q-image-container');
+    if (imgContainer) {
+        if (q.images && q.images.length > 0) {
+            imgContainer.innerHTML = q.images.map(img => 
+                `<img src="./images/${img}" style="max-width: 100%; border-radius: 6px; margin: 0.5rem 0; border: 1px solid rgba(255,255,255,0.1);" />`
+            ).join('');
+            imgContainer.style.display = 'block';
+        } else {
+            imgContainer.innerHTML = '';
+            imgContainer.style.display = 'none';
+        }
+    }
+
     // Source Info
     const sourceEl = document.getElementById('q-source');
     const sourceTextEl = document.getElementById('q-source-text');
