@@ -959,39 +959,50 @@ function renderQuestion() {
     document.getElementById('q-points').textContent = `${q.points ?? TYPE_POINTS[q.type] ?? 0}점`;
     let questionText = q.question;
     
-    // 이스케이프 및 보기 박스 처리
-    let escaped = questionText.replace(/[&<>'"]/g, 
-        tag => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            "'": '&#39;',
-            '"': '&quot;'
-        }[tag])
-    );
-    
-    // 특정 키워드로 시작하는 보기 영역을 감지하여 박스 처리
-    const bogiRegex = /(\[보기\]|&lt;보기&gt;|\[\s*아파치 로그\s*\]|\[\s*로그\s*\]|\[\s*표\s*\]|\[\s*지문\s*\]|\[\s*설정\s*\]|\[\s*조건\s*\]|\[\s*코드\s*\])([\s\S]*?)(?=(?:\s1\)|\s\(1\)|①|가\.|\[문\]|\(가\)|$))/g;
-    escaped = escaped.replace(bogiRegex, '<div class="bogi-box"><div class="bogi-badge">$1</div>$2</div>');
-    
-    // 개행 문자를 <br>로 변환
-    escaped = escaped.replace(/\n/g, '<br>');
-    
-    document.getElementById('q-text').innerHTML = escaped;
-
-    // Render images if exist
-    const imgContainer = document.getElementById('q-image-container');
-    if (imgContainer) {
-        if (q.images && q.images.length > 0) {
-            imgContainer.innerHTML = q.images.map(img => 
-                `<img src="./images/${img}" style="max-width: 100%; border-radius: 6px; margin: 0.5rem 0; border: 1px solid rgba(255,255,255,0.1);" />`
-            ).join('');
-            imgContainer.style.display = 'block';
-        } else {
-            imgContainer.innerHTML = '';
-            imgContainer.style.display = 'none';
-        }
+    // 이스케이프 헬퍼 함수
+    function escapeHTML(text) {
+        return text.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag])
+        );
     }
+
+    // 보기 박스 처리 및 개행 br 변환 헬퍼 함수
+    function formatBogiAndNewlines(text) {
+        let escaped = escapeHTML(text);
+        const bogiRegex = /(\[보기\]|&lt;보기&gt;|\[\s*아파치 로그\s*\]|\[\s*로그\s*\]|\[\s*표\s*\]|\[\s*지문\s*\]|\[\s*설정\s*\]|\[\s*조건\s*\]|\[\s*코드\s*\])([\s\S]*?)(?=(?:\s1\)|\s\(1\)|①|가\.|\[문\]|\(가\)|$))/g;
+        escaped = escaped.replace(bogiRegex, '<div class="bogi-box"><div class="bogi-badge">$1</div>$2</div>');
+        return escaped.replace(/\n/g, '<br>');
+    }
+
+    let finalHTML = '';
+    
+    if (q.images && q.images.length > 0) {
+        // 이미지가 있는 경우 지문을 (1), ①, [보기], 1) 등 기준으로 나눈다.
+        const splitRegex = /(?:\r?\n)+(?=\(1\)|①|\[보기\]|\b1\))/;
+        const parts = questionText.split(splitRegex);
+        const mainText = parts[0];
+        const subText = parts.slice(1).join('\n');
+        
+        const imagesHTML = `<div style="text-align: center; margin: 1.2rem 0; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; user-select: none;">` + 
+            q.images.map(img => 
+                `<img src="./images/${img}" onclick="openLightbox('./images/${img}')" style="max-width: 100%; max-height: 380px; border-radius: 6px; margin: 0.3rem 0; border: 1px solid rgba(255,255,255,0.1); cursor: zoom-in; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.015)'" onmouseout="this.style.transform='scale(1)'" />`
+            ).join('') + 
+            `<div style="color: var(--muted); font-size: 0.8rem; margin-top: 0.5rem; font-weight: 500;">🔍 클릭하면 이미지 확대 및 줌(Ctrl+휠)이 가능합니다.</div>` +
+            `</div>`;
+            
+        finalHTML = formatBogiAndNewlines(mainText) + imagesHTML + (subText ? formatBogiAndNewlines(subText) : '');
+    } else {
+        // 이미지가 없는 경우 전체 지문을 일반 렌더링
+        finalHTML = formatBogiAndNewlines(questionText);
+    }
+    
+    document.getElementById('q-text').innerHTML = finalHTML;
 
     // Source Info
     const sourceEl = document.getElementById('q-source');
