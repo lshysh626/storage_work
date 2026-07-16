@@ -3403,6 +3403,7 @@ function renderFolderTree(parentId = null, depth = 0) {
         
         const subfoldersCount = bookmarkData.folders.filter(sf => sf.parentId === f.id).length;
         const totalSubQuestionsCount = getFolderKeysRecursive(f.id).size;
+        const hasSubfolders = subfoldersCount > 0;
         
         let countText = '';
         if (subfoldersCount > 0) {
