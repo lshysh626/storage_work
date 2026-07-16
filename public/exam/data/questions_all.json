@@ -3495,7 +3495,7 @@
     {
       "original_id": 94,
       "type": "essay",
-      "question": "다음 로그에서 나타나는 공격을 보고 물음에 답하시오.\n\n[보기]\n웹 서버 액세스 로그 (Access Log):\nGET /view.php?id=1' and substr(password,1,1)='a'# HTTP/1.1  => HTTP 200 OK (성공)\nGET /view.php?id=1' and substr(password,1,1)='b'# HTTP/1.1  => HTTP 404 Not Found (실패)\nGET /view.php?id=1' and substr(password,2,1)='0'# HTTP/1.1  => HTTP 200 OK (성공)",
+      "question": "다음 로그에서 나타나는 공격을 보고 물음에 답하시오.\n\n(1) 어떤 공격이 시도되었는가?\n(2) 해당 공격의 특징에 대해서 서술하시오.\n(3) 공격의 작동 방식을 설명하시오.",
       "answer": "(1) Blind SQL Injection 공격\n\n(2) 단순히 SQL 문을 조작하여 인증을 우회하거나 특정 명령을 수행하는 것 외에 DB 에 저장된 값을 추정 가능\n\n(3) id 가 1 인 사용자의 password 컬럼 값에 대해 substr() 함수를 이용하여 1 부터 순차적으로 한 문자씩 비교를 수행한다.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",

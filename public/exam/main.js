@@ -5050,3 +5050,68 @@ window.removeMultipleQuestionsFromFolderFromTree = async function(folderId, even
 };
 
 initApp();
+
+/* ==========================================
+   이미지 라이트박스 (확대/축소 및 이동) 이벤트 제어
+   ========================================== */
+let zoomScale = 1;
+let isDragging = false;
+let startX = 0, startY = 0;
+let translateX = 0, translateY = 0;
+
+window.openLightbox = function(src) {
+    const lb = document.getElementById('image-lightbox');
+    const img = document.getElementById('lightbox-img');
+    if (!lb || !img) return;
+    
+    img.src = src;
+    zoomScale = 1;
+    translateX = 0;
+    translateY = 0;
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
+    
+    lb.classList.remove('hidden');
+    setTimeout(() => lb.classList.add('active'), 10);
+};
+
+window.closeLightbox = function() {
+    const lb = document.getElementById('image-lightbox');
+    if (!lb) return;
+    lb.classList.remove('active');
+    setTimeout(() => lb.classList.add('hidden'), 250);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('lightbox-img');
+    const lb = document.getElementById('image-lightbox');
+    if (!img || !lb) return;
+    
+    // Ctrl + Mouse Wheel Zoom
+    lb.addEventListener('wheel', (e) => {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.12 : 0.12;
+            zoomScale = Math.min(Math.max(zoomScale + delta, 0.5), 5); // 0.5배 ~ 5배 줌 제한
+            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
+        }
+    }, { passive: false });
+    
+    // Drag to Pan
+    img.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+    });
+    
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
+    });
+    
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+});
