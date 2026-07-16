@@ -3081,11 +3081,16 @@ async function syncBookmarks(overwriteRemote = false) {
         }
     }
     
-    if (local.folders.length === 0) {
-        local.folders.push({
-            id: 'folder_default',
-            name: '기본 폴더',
-            keys: []
+    // Migrate depth 2+ folders to depth 1 (flatten hierarchy)
+    if (local.folders) {
+        local.folders.forEach(f => {
+            if (f.parentId) {
+                const parent = local.folders.find(p => p.id === f.parentId);
+                if (parent && parent.parentId) {
+                    // Parent is a subfolder itself! Move f to grandparent
+                    f.parentId = parent.parentId;
+                }
+            }
         });
     }
     
@@ -3369,20 +3374,20 @@ function renderFolderTree(parentId = null, depth = 0) {
                     </div>
                 </div>
                 <div style="display: flex; gap: 0.3rem; z-index: 10; flex-shrink: 0; align-items: center;">
-                    <button onclick="addNewSubfolder('${f.id}', event)" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">
-                        ➕ 하위 폴더
-                    </button>
+                    ${depth === 0 ? `
+                        <button onclick="addNewSubfolder('${f.id}', event)" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">
+                            ➕ 하위 폴더
+                        </button>
+                    ` : ''}
                     ${folderQuestions.length > 0 ? `
                         <button onclick="startBookmarkFolderQuiz('${f.id}', false, event)" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(251, 191, 36, 0.2)'" onmouseout="this.style.background='rgba(251, 191, 36, 0.1)'">▶️ 풀기</button>
                     ` : ''}
                     <button onclick="renameBookmarkFolder('${f.id}', event)" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
                         ✏️ 수정
                     </button>
-                    ${f.id !== 'folder_default' ? `
-                        <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
-                            🗑️ 삭제
-                        </button>
-                    ` : ''}
+                    <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                        🗑️ 삭제
+                    </button>
                 </div>
             </div>
         `;
@@ -3434,7 +3439,7 @@ function renderFolderTree(parentId = null, depth = 0) {
                                 <div style="color: #cbd5e1; font-size: 0.9rem; font-weight: 500; margin-top: 0.3rem; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${snippet}</div>
                             </div>
                             <div style="display: flex; gap: 0.2rem; flex-shrink: 0; z-index: 10;">
-                                <button onclick="moveQuestionFolderFromTree('${f.id}', '${qKey}', event)" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.3rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">📂 이동</button>
+                                <button onclick="moveQuestionFolderFromTree('${f.id}', '${qKey}', event)" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">📂 이동</button>
                                 <button onclick="removeQuestionFromFolderFromTree('${f.id}', '${qKey}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">❌ 삭제</button>
                             </div>
                         </div>
@@ -3444,6 +3449,7 @@ function renderFolderTree(parentId = null, depth = 0) {
             
             folderDetails = `
                 <div style="margin-left: ${indentPadding}rem; border-left: 2px solid rgba(255,255,255,0.05); padding-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                    ${renderFolderTree(f.id, depth + 1)}
                     ${batchActionBar}
                     ${selectAllBar}
                     <div style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%;">
@@ -3457,7 +3463,6 @@ function renderFolderTree(parentId = null, depth = 0) {
             <div style="display: flex; flex-direction: column; width: 100%;">
                 ${folderHeader}
                 ${folderDetails}
-                ${renderFolderTree(f.id, depth + 1)}
             </div>
         `;
     }).join('');
