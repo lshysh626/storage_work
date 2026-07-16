@@ -3401,8 +3401,15 @@ function renderFolderTree(parentId = null, depth = 0) {
             return f.keys && f.keys.includes(qKey);
         });
         
-        const hasSubfolders = bookmarkData.folders.some(sf => sf.parentId === f.id);
+        const subfoldersCount = bookmarkData.folders.filter(sf => sf.parentId === f.id).length;
         const totalSubQuestionsCount = getFolderKeysRecursive(f.id).size;
+        
+        let countText = '';
+        if (subfoldersCount > 0) {
+            countText = `${subfoldersCount}개 폴더, 총 ${totalSubQuestionsCount}개 문제`;
+        } else {
+            countText = `${f.keys ? f.keys.length : 0}개 문제`;
+        }
         
         let folderHeader = `
             <div class="item-row" onclick="toggleFolderExpand('${f.id}', event)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1rem 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid ${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}; border-radius: 12px; margin-left: ${indentPadding}rem; margin-top: 0.3rem; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}'">
@@ -3412,7 +3419,7 @@ function renderFolderTree(parentId = null, depth = 0) {
                         <strong style="font-size: 1.05rem; color: #fff; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             <span>${isExpanded ? '📂' : '📁'} ${f.name}</span>
                             <span style="font-size: 0.8rem; color: var(--muted); font-weight: 500;">
-                                (${f.keys ? f.keys.length : 0}개 문제${hasSubfolders ? `, 총 ${totalSubQuestionsCount}개` : ''})
+                                (${countText})
                             </span>
                         </strong>
                     </div>
