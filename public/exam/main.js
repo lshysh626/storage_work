@@ -3165,6 +3165,11 @@ window.openBookmarkModal = function(customIndex = null) {
         } else {
             select.innerHTML = optionsHtml;
             select.disabled = false;
+            
+            const lastFolderId = localStorage.getItem('last_selected_bookmark_folder_id');
+            if (lastFolderId && bookmarkData.folders.some(f => f.id === lastFolderId)) {
+                select.value = lastFolderId;
+            }
         }
     }
     
@@ -3238,6 +3243,7 @@ window.createNewBookmarkFolder = async function() {
     
     input.value = '';
     
+    localStorage.setItem('last_selected_bookmark_folder_id', newFolder.id);
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     
@@ -3273,6 +3279,7 @@ window.saveQuestionToBookmark = async function() {
     
     folder.keys.push(qKey);
     
+    localStorage.setItem('last_selected_bookmark_folder_id', folderId);
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     updateBookmarkButtonState();
