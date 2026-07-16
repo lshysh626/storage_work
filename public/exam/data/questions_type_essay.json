@@ -565,10 +565,7 @@
       "answer": "(A): PPTP, L2TP, L2F\n(B): IPSec\n(C) 전송모드: End-to-End, IP 페이로드만 암호화 (호스트 종단간)\n(C) 터널모드: G/W-To-G/W (라우터), IP 헤더 + IP 페이로드 암호화 (라우터간)",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
-      "id": 388,
-      "images": [
-        "essay_93_0.png"
-      ]
+      "id": 388
     },
     {
       "original_id": 94,
@@ -577,7 +574,10 @@
       "answer": "(1) Blind SQL Injection 공격\n\n(2) 단순히 SQL 문을 조작하여 인증을 우회하거나 특정 명령을 수행하는 것 외에 DB 에 저장된 값을 추정 가능\n\n(3) id 가 1 인 사용자의 password 컬럼 값에 대해 substr() 함수를 이용하여 1 부터 순차적으로 한 문자씩 비교를 수행한다.",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 서술형",
-      "id": 389
+      "id": 389,
+      "images": [
+        "essay_94_0.png"
+      ]
     },
     {
       "original_id": 97,
