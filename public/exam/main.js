@@ -3006,7 +3006,12 @@ window.submitNewSubfolderFromDialog = async function(parentId) {
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     closeCustomDialog();
-    selectBookmarkFolder(parentId);
+    
+    if (!state.expandedBookmarkFolderIds) state.expandedBookmarkFolderIds = [];
+    if (!state.expandedBookmarkFolderIds.includes(parentId)) {
+        state.expandedBookmarkFolderIds.push(parentId);
+    }
+    renderBookmarkFoldersList();
 };
 
 window.updateBookmarkButtonState = function() {
@@ -3261,7 +3266,7 @@ window.saveQuestionToBookmark = async function() {
     closeBookmarkModal();
 };
 
-window.toggleBookmarkSelection = function() {
+window.toggleBookmarkSelection = async function() {
     const sub = document.getElementById('sub-list');
     if (state.subMode === 'bookmark') {
         sub.classList.add('hidden');
@@ -3271,6 +3276,18 @@ window.toggleBookmarkSelection = function() {
     state.subMode = 'bookmark';
     sub.style.display = 'block';
     sub.classList.remove('hidden');
+    
+    if (!state.allQuestions) {
+        sub.innerHTML = '<div style="color:var(--muted);padding:1rem">불러오는 중...</div>';
+        try {
+            const res = await fetch('./data/questions_all.json?t=' + Date.now());
+            const data = await res.json();
+            state.allQuestions = data.questions || [];
+        } catch (e) {
+            console.error('Failed to preload questions:', e);
+        }
+    }
+    
     renderBookmarkFoldersList();
 };
 
@@ -3282,7 +3299,6 @@ function renderBookmarkFoldersList() {
         state.selectedBookmarkFolderIds = [];
     }
     
-    const rootFolders = bookmarkData.folders.filter(f => !f.parentId);
     const selectedCount = state.selectedBookmarkFolderIds.length;
     let selectionActionBar = '';
     if (selectedCount > 0) {
@@ -3316,33 +3332,135 @@ function renderBookmarkFoldersList() {
         
         ${selectionActionBar}
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; width: 100%;">
-            ${rootFolders.map(f => {
-                const isChecked = state.selectedBookmarkFolderIds.includes(f.id);
-                return `
-                    <div class="item-row" style="position: relative; display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid ${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}; border-radius: 12px; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}'">
-                        <div style="display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 0;">
-                            <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="toggleSelectFolder('${f.id}', event)" style="width: 1.25rem; height: 1.25rem; accent-color: #fbbf24; cursor: pointer; flex-shrink: 0;" />
-                            <div style="flex: 1; text-align: left; min-width: 0; padding-right: 0.5rem;" onclick="selectBookmarkFolder('${f.id}')">
-                                <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📁 ${f.name}</strong>
-                                <span style="color: var(--muted); font-size: 0.9rem;">${f.keys ? f.keys.length : 0}개 문제 저장됨</span>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 0.3rem; z-index: 10; flex-shrink: 0;">
-                            <button onclick="renameBookmarkFolder('${f.id}', event)" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
-                                ✏️ 수정
-                            </button>
-                            ${f.id !== 'folder_default' ? `
-                                <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
-                                    🗑️ 삭제
-                                </button>
-                            ` : ''}
+        <div style="display: flex; flex-direction: column; gap: 0.8rem; width: 100%;">
+            ${renderFolderTree(null, 0)}
+        </div>
+    `;
+}
+
+function renderFolderTree(parentId = null, depth = 0) {
+    const folders = bookmarkData.folders.filter(f => f.parentId === parentId || (!parentId && !f.parentId));
+    if (folders.length === 0) return '';
+    
+    return folders.map(f => {
+        const isExpanded = state.expandedBookmarkFolderIds && state.expandedBookmarkFolderIds.includes(f.id);
+        const isChecked = state.selectedBookmarkFolderIds && state.selectedBookmarkFolderIds.includes(f.id);
+        const indentPadding = depth * 1.5;
+        
+        const folderQuestions = (state.allQuestions || []).filter(q => {
+            const qKey = (q.original_id || q.id) + "_" + q.type;
+            return f.keys && f.keys.includes(qKey);
+        });
+        
+        const hasSubfolders = bookmarkData.folders.some(sf => sf.parentId === f.id);
+        const totalSubQuestionsCount = getFolderKeysRecursive(f.id).size;
+        
+        let folderHeader = `
+            <div class="item-row" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1rem 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid ${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}; border-radius: 12px; margin-left: ${indentPadding}rem; margin-top: 0.3rem; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}'">
+                <div style="display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 0;">
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="toggleSelectFolder('${f.id}', event)" style="width: 1.25rem; height: 1.25rem; accent-color: #fbbf24; cursor: pointer; flex-shrink: 0;" />
+                    <div style="flex: 1; text-align: left; min-width: 0; padding-right: 0.5rem;" onclick="toggleFolderExpand('${f.id}', event)">
+                        <strong style="font-size: 1.05rem; color: #fff; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <span>${isExpanded ? '📂' : '📁'} ${f.name}</span>
+                            <span style="font-size: 0.8rem; color: var(--muted); font-weight: 500;">
+                                (${f.keys ? f.keys.length : 0}개 문제${hasSubfolders ? `, 총 ${totalSubQuestionsCount}개` : ''})
+                            </span>
+                        </strong>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.3rem; z-index: 10; flex-shrink: 0; align-items: center;">
+                    <button onclick="addNewSubfolder('${f.id}', event)" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">
+                        ➕ 하위 폴더
+                    </button>
+                    ${folderQuestions.length > 0 ? `
+                        <button onclick="startBookmarkFolderQuiz('${f.id}', false, event)" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); padding: 0.35rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(251, 191, 36, 0.2)'" onmouseout="this.style.background='rgba(251, 191, 36, 0.1)'">▶️ 풀기</button>
+                    ` : ''}
+                    <button onclick="renameBookmarkFolder('${f.id}', event)" style="background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.1)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.05)'">
+                        ✏️ 수정
+                    </button>
+                    ${f.id !== 'folder_default' ? `
+                        <button onclick="deleteBookmarkFolder('${f.id}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">
+                            🗑️ 삭제
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        
+        let folderDetails = '';
+        if (isExpanded) {
+            const folderQKeys = f.keys || [];
+            const selectedFolderQKeys = folderQKeys.filter(k => state.selectedBookmarkQuestionKeys && state.selectedBookmarkQuestionKeys.includes(k));
+            
+            let batchActionBar = '';
+            if (selectedFolderQKeys.length > 0) {
+                batchActionBar = `
+                    <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 0.5rem;">
+                        <span style="color: #60a5fa; font-size: 0.85rem; font-weight: 700;">📝 ${selectedFolderQKeys.length}개 선택됨</span>
+                        <div style="display: flex; gap: 0.4rem;">
+                            <button onclick="moveMultipleQuestionsFolderFromTree('${f.id}', event)" style="background: #3b82f6; color: #fff; border: none; padding: 0.35rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 800; transition: 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">일괄 이동</button>
+                            <button onclick="removeMultipleQuestionsFromFolderFromTree('${f.id}', event)" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; padding: 0.35rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.25)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.15)'">일괄 삭제</button>
                         </div>
                     </div>
                 `;
-            }).join('')}
-        </div>
-    `;
+            }
+            
+            const isAllChecked = folderQuestions.length > 0 && folderQuestions.every(q => {
+                const qKey = (q.original_id || q.id) + "_" + q.type;
+                return state.selectedBookmarkQuestionKeys && state.selectedBookmarkQuestionKeys.includes(qKey);
+            });
+            
+            const selectAllBar = folderQuestions.length > 0 ? `
+                <div style="display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.02); padding: 0.5rem 0.8rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.03); width: 100%; margin-bottom: 0.5rem;">
+                    <input type="checkbox" ${isAllChecked ? 'checked' : ''} onclick="toggleSelectAllQuestionsFromTree('${f.id}', event)" style="width: 1.1rem; height: 1.1rem; accent-color: #3b82f6; cursor: pointer;" />
+                    <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">전체 선택 (${folderQuestions.length}개 문제)</span>
+                </div>
+            ` : '';
+            
+            let questionsListHtml = '';
+            if (folderQuestions.length === 0) {
+                questionsListHtml = `<div style="color: var(--muted); text-align: center; padding: 1.5rem; font-size: 0.9rem; width: 100%;">이 폴더에 저장된 문제가 없습니다.</div>`;
+            } else {
+                questionsListHtml = folderQuestions.map(q => {
+                    const snippet = q.question.substring(0, 100).replace(/\n/g, ' ') + (q.question.length > 100 ? '...' : '');
+                    const qKey = (q.original_id || q.id) + "_" + q.type;
+                    const isQuestionChecked = state.selectedBookmarkQuestionKeys && state.selectedBookmarkQuestionKeys.includes(qKey);
+                    return `
+                        <div style="display: flex; align-items: center; background: rgba(30, 41, 59, 0.4); border: 1px solid ${isQuestionChecked ? 'rgba(59,130,246,0.3)' : 'rgba(255,255,255,0.03)'}; border-radius: 8px; padding: 0.6rem 0.8rem; gap: 0.8rem; width: 100%;">
+                            <input type="checkbox" ${isQuestionChecked ? 'checked' : ''} onclick="toggleSelectQuestionFromTree('${f.id}', '${qKey}', event)" style="width: 1.1rem; height: 1.1rem; accent-color: #3b82f6; cursor: pointer; flex-shrink: 0;" />
+                            <div onclick="viewSingleBookmarkQuestion('${f.id}', '${qKey}')" style="flex: 1; text-align: left; cursor: pointer; min-width: 0;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                                <span style="font-size: 0.75rem; color: #fbbf24; font-weight: 700; background: rgba(251, 191, 36, 0.1); padding: 0.15rem 0.4rem; border-radius: 4px; margin-right: 0.4rem;">${TYPE_LABEL[q.type]}</span>
+                                <span style="font-size: 0.8rem; color: var(--muted); font-weight: 500;">${q.session} - ${q.original_id || q.id}번</span>
+                                <div style="color: #cbd5e1; font-size: 0.9rem; font-weight: 500; margin-top: 0.3rem; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${snippet}</div>
+                            </div>
+                            <div style="display: flex; gap: 0.2rem; flex-shrink: 0; z-index: 10;">
+                                <button onclick="moveQuestionFolderFromTree('${f.id}', '${qKey}', event)" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 0.3rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.2)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">📂 이동</button>
+                                <button onclick="removeQuestionFromFolderFromTree('${f.id}', '${qKey}', event)" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">❌ 삭제</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            folderDetails = `
+                <div style="margin-left: ${indentPadding}rem; border-left: 2px solid rgba(255,255,255,0.05); padding-left: 1rem; margin-top: 0.5rem; margin-bottom: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem; width: 100%;">
+                    ${batchActionBar}
+                    ${selectAllBar}
+                    <div style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%;">
+                        ${questionsListHtml}
+                    </div>
+                </div>
+            `;
+        }
+        
+        return `
+            <div style="display: flex; flex-direction: column; width: 100%;">
+                ${folderHeader}
+                ${folderDetails}
+                ${renderFolderTree(f.id, depth + 1)}
+            </div>
+        `;
+    }).join('');
 }
 
 window.toggleSelectFolder = function(folderId, event) {
@@ -3534,31 +3652,18 @@ window.submitRenameFolderFromDialog = async function(folderId) {
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     closeCustomDialog();
-    
-    if (folder.parentId) {
-        selectBookmarkFolder(folder.parentId);
-    } else {
-        renderBookmarkFoldersList();
-    }
+    renderBookmarkFoldersList();
 };
 
 window.deleteBookmarkFolder = async function(folderId, event) {
     if (event) event.stopPropagation();
     if (!confirm('이 폴더와 안에 저장된 모든 북마크 및 하위 폴더들을 삭제하시겠습니까?')) return;
     
-    const folderToDelete = bookmarkData.folders.find(f => f.id === folderId);
-    const parentId = folderToDelete ? folderToDelete.parentId : null;
-    
     deleteFolderRecursive(folderId);
     
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
-    
-    if (parentId) {
-        selectBookmarkFolder(parentId);
-    } else {
-        renderBookmarkFoldersList();
-    }
+    renderBookmarkFoldersList();
 };
 
 async function selectBookmarkFolder(folderId, isRefresh = false) {
@@ -3750,7 +3855,7 @@ window.submitMoveQuestionFolder = async function(sourceFolderId, targetFolderId,
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     closeCustomDialog();
-    selectBookmarkFolder(sourceFolderId);
+    renderBookmarkFoldersList();
 };
 
 window.removeQuestionFromFolder = async function(folderId, qKey, event) {
@@ -3764,7 +3869,7 @@ window.removeQuestionFromFolder = async function(folderId, qKey, event) {
     await syncBookmarks(true);
     updateBookmarkButtonState();
     
-    selectBookmarkFolder(folderId);
+    renderBookmarkFoldersList();
 };
 
 window.toggleSelectQuestion = function(folderId, qKey, event) {
@@ -3778,7 +3883,7 @@ window.toggleSelectQuestion = function(folderId, qKey, event) {
     } else {
         state.selectedBookmarkQuestionKeys.push(qKey);
     }
-    selectBookmarkFolder(folderId, true);
+    renderBookmarkFoldersList();
 };
 
 window.toggleSelectAllQuestions = function(folderId, event) {
@@ -3797,7 +3902,7 @@ window.toggleSelectAllQuestions = function(folderId, event) {
             }
         });
     }
-    selectBookmarkFolder(folderId, true);
+    renderBookmarkFoldersList();
 };
 
 window.moveMultipleQuestionsFolder = function(sourceFolderId) {
@@ -3878,7 +3983,7 @@ window.submitMoveMultipleQuestionsFolder = async function(sourceFolderId, target
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     closeCustomDialog();
-    selectBookmarkFolder(sourceFolderId);
+    renderBookmarkFoldersList();
 };
 
 window.removeMultipleQuestionsFromFolder = async function(folderId) {
@@ -3895,10 +4000,11 @@ window.removeMultipleQuestionsFromFolder = async function(folderId) {
     localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
     await syncBookmarks(true);
     updateBookmarkButtonState();
-    selectBookmarkFolder(folderId);
+    renderBookmarkFoldersList();
 };
 
-window.startBookmarkFolderQuiz = async function(folderId, shuffle = false) {
+window.startBookmarkFolderQuiz = async function(folderId, shuffle = false, event) {
+    if (event) event.stopPropagation();
     const folder = bookmarkData.folders.find(f => f.id === folderId);
     if (!folder || !folder.keys || folder.keys.length === 0) return;
     
@@ -4741,6 +4847,105 @@ window.closeGuideModal = function() {
             modal.style.display = 'none';
         }, 300);
     }
+};
+
+window.toggleFolderExpand = function(folderId, event) {
+    if (event) event.stopPropagation();
+    if (!state.expandedBookmarkFolderIds) {
+        state.expandedBookmarkFolderIds = [];
+    }
+    const idx = state.expandedBookmarkFolderIds.indexOf(folderId);
+    if (idx > -1) {
+        state.expandedBookmarkFolderIds.splice(idx, 1);
+    } else {
+        state.expandedBookmarkFolderIds.push(folderId);
+    }
+    renderBookmarkFoldersList();
+};
+
+window.toggleSelectQuestionFromTree = function(folderId, qKey, event) {
+    if (event) event.stopPropagation();
+    if (!state.selectedBookmarkQuestionKeys) {
+        state.selectedBookmarkQuestionKeys = [];
+    }
+    const idx = state.selectedBookmarkQuestionKeys.indexOf(qKey);
+    if (idx > -1) {
+        state.selectedBookmarkQuestionKeys.splice(idx, 1);
+    } else {
+        state.selectedBookmarkQuestionKeys.push(qKey);
+    }
+    renderBookmarkFoldersList();
+};
+
+window.toggleSelectAllQuestionsFromTree = function(folderId, event) {
+    if (event) event.stopPropagation();
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    const folderQuestions = (state.allQuestions || []).filter(q => {
+        const qKey = (q.original_id || q.id) + "_" + q.type;
+        return folder.keys && folder.keys.includes(qKey);
+    }).map(q => (q.original_id || q.id) + "_" + q.type);
+    
+    const isAllChecked = folderQuestions.length > 0 && folderQuestions.every(k => state.selectedBookmarkQuestionKeys && state.selectedBookmarkQuestionKeys.includes(k));
+    
+    if (isAllChecked) {
+        state.selectedBookmarkQuestionKeys = (state.selectedBookmarkQuestionKeys || []).filter(k => !folderQuestions.includes(k));
+    } else {
+        if (!state.selectedBookmarkQuestionKeys) state.selectedBookmarkQuestionKeys = [];
+        folderQuestions.forEach(k => {
+            if (!state.selectedBookmarkQuestionKeys.includes(k)) {
+                state.selectedBookmarkQuestionKeys.push(k);
+            }
+        });
+    }
+    renderBookmarkFoldersList();
+};
+
+window.moveQuestionFolderFromTree = function(folderId, qKey, event) {
+    if (event) event.stopPropagation();
+    moveQuestionFolder(folderId, qKey, event);
+};
+
+window.removeQuestionFromFolderFromTree = async function(folderId, qKey, event) {
+    if (event) event.stopPropagation();
+    if (!confirm('이 문제를 해당 폴더의 북마크에서 제거하시겠습니까?')) return;
+    
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    folder.keys = folder.keys.filter(k => k !== qKey);
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks(true);
+    updateBookmarkButtonState();
+    renderBookmarkFoldersList();
+};
+
+window.moveMultipleQuestionsFolderFromTree = function(folderId, event) {
+    if (event) event.stopPropagation();
+    moveMultipleQuestionsFolder(folderId);
+};
+
+window.removeMultipleQuestionsFromFolderFromTree = async function(folderId, event) {
+    if (event) event.stopPropagation();
+    if (!state.selectedBookmarkQuestionKeys || state.selectedBookmarkQuestionKeys.length === 0) return;
+    
+    const folder = bookmarkData.folders.find(f => f.id === folderId);
+    if (!folder) return;
+    
+    const folderQKeys = folder.keys || [];
+    const keysToRemove = state.selectedBookmarkQuestionKeys.filter(k => folderQKeys.includes(k));
+    
+    if (keysToRemove.length === 0) return;
+    if (!confirm(`이 폴더에서 선택한 ${keysToRemove.length}개 문제를 북마크에서 삭제하시겠습니까?`)) return;
+    
+    folder.keys = folder.keys.filter(k => !keysToRemove.includes(k));
+    state.selectedBookmarkQuestionKeys = state.selectedBookmarkQuestionKeys.filter(k => !keysToRemove.includes(k));
+    
+    localStorage.setItem('review_bookmarks', JSON.stringify(bookmarkData));
+    await syncBookmarks(true);
+    updateBookmarkButtonState();
+    renderBookmarkFoldersList();
 };
 
 initApp();
