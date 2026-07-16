@@ -3340,6 +3340,16 @@ function renderBookmarkFoldersList() {
         `;
     }
     
+    const allFolderIds = bookmarkData.folders.map(f => f.id);
+    const isAllFoldersChecked = allFolderIds.length > 0 && allFolderIds.every(id => state.selectedBookmarkFolderIds.includes(id));
+    
+    const selectAllFoldersBar = bookmarkData.folders.length > 0 ? `
+        <div style="display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.02); padding: 0.6rem 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); width: 100%; margin-bottom: 0.8rem; text-align: left; box-sizing: border-box;">
+            <input type="checkbox" ${isAllFoldersChecked ? 'checked' : ''} onclick="toggleSelectAllFolders(event)" style="width: 1.15rem; height: 1.15rem; accent-color: #fbbf24; cursor: pointer; margin: 0;" />
+            <span style="font-size: 0.88rem; color: #cbd5e1; font-weight: 600; cursor: pointer; user-select: none;" onclick="toggleSelectAllFolders(event)">📂 모든 폴더 선택 (${bookmarkData.folders.length}개)</span>
+        </div>
+    ` : '';
+    
     sub.innerHTML = `
         <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; width: 100%;">
             <span style="color: #cbd5e1; font-weight: 700; font-size: 1.05rem;">📂 북마크 폴더 관리</span>
@@ -3349,6 +3359,7 @@ function renderBookmarkFoldersList() {
         </div>
         
         ${selectionActionBar}
+        ${selectAllFoldersBar}
         
         <div style="display: flex; flex-direction: column; gap: 0.8rem; width: 100%;">
             ${renderFolderTree(null, 0)}
@@ -3491,6 +3502,23 @@ window.toggleSelectFolder = function(folderId, event) {
         state.selectedBookmarkFolderIds.splice(idx, 1);
     } else {
         state.selectedBookmarkFolderIds.push(folderId);
+    }
+    renderBookmarkFoldersList();
+};
+
+window.toggleSelectAllFolders = function(event) {
+    if (event) event.stopPropagation();
+    if (!state.selectedBookmarkFolderIds) {
+        state.selectedBookmarkFolderIds = [];
+    }
+    
+    const allFolderIds = bookmarkData.folders.map(f => f.id);
+    const isAllChecked = allFolderIds.length > 0 && allFolderIds.every(id => state.selectedBookmarkFolderIds.includes(id));
+    
+    if (isAllChecked) {
+        state.selectedBookmarkFolderIds = [];
+    } else {
+        state.selectedBookmarkFolderIds = [...allFolderIds];
     }
     renderBookmarkFoldersList();
 };
