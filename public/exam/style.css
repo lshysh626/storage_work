@@ -861,3 +861,11 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     border: 1px solid rgba(56, 189, 248, 0.3);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+
+/* contenteditable placeholder */
+#memo-pad[contenteditable=true]:empty:before {
+    content: attr(placeholder);
+    color: #94a3b8;
+    opacity: 0.6;
+    display: block;
+}

@@ -928,7 +928,7 @@ function launchQuiz(questions, title) {
     if (btnMemo) btnMemo.classList.remove('active');
     
     const memo = document.getElementById('memo-pad');
-    if (memo) memo.value = '';
+    if (memo) memo.innerHTML = '';
 
     switchView('quiz-view');
     renderQuestion();
@@ -946,7 +946,7 @@ function renderQuestion() {
     if (memoPad) {
         const qKey = (q.original_id || q.id) + "_" + q.type;
         const memos = JSON.parse(localStorage.getItem('question_memos') || '{}');
-        memoPad.value = memos[qKey] || '';
+        memoPad.innerHTML = memos[qKey] || '';
     }
 
     if (typeof updateBookmarkButtonState === 'function') {
@@ -2050,7 +2050,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const q = state.questions && state.questions[state.index];
             if (!q) return;
             const qKey = (q.original_id || q.id) + "_" + q.type;
-            saveMemoDebounced(qKey, memoPad.value);
+            saveMemoDebounced(qKey, memoPad.innerHTML);
+        });
+        
+        memoPad.addEventListener('keydown', e => {
+            if (e.ctrlKey && (e.key === 'b' || e.key === 'B')) {
+                e.preventDefault();
+                document.execCommand('bold', false, null);
+                
+                const q = state.questions && state.questions[state.index];
+                if (q) {
+                    const qKey = (q.original_id || q.id) + "_" + q.type;
+                    saveMemoDebounced(qKey, memoPad.innerHTML);
+                }
+            }
         });
     }
 });

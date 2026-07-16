@@ -200,7 +200,7 @@
                 <!-- NEW: Memo Panel -->
                 <div class="quiz-memo-panel hidden" id="quiz-memo-panel" style="height: calc((100vh - 100px) / 0.8); min-height: calc(650px / 0.8);">
                     <div class="chat-header" style="background: rgba(15, 23, 42, 0.6); border-bottom: 1px solid rgba(255,255,255,0.05);">나만의 메모장</div>
-                    <textarea id="memo-pad" placeholder="여기에 자유롭게 메모하세요. 세션 동안 유지됩니다..." style="flex: 1; background: transparent; border: none; padding: 1.5rem; color: #cbd5e1; font-size: 1rem; line-height: 1.6; resize: none; outline: none; font-family: 'Inter', sans-serif;"></textarea>
+                    <div id="memo-pad" contenteditable="true" placeholder="여기에 자유롭게 메모하세요. 글자 선택 후 Ctrl+B로 진하게 강조할 수 있습니다." style="flex: 1; background: transparent; border: none; padding: 1.5rem; color: #cbd5e1; font-size: 1rem; line-height: 1.6; outline: none; font-family: 'Inter', sans-serif; overflow-y: auto; text-align: left;"></div>
                 </div>
             </div>
 
