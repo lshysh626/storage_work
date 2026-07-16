@@ -1631,7 +1631,7 @@ function showSessionResult() {
         if (bookmarkData && bookmarkData.folders) {
             bookmarkData.folders.forEach(f => {
                 if (f.keys && f.keys.includes(qKey)) {
-                    bookmarkedFolders.push(f.name);
+                    bookmarkedFolders.push(getFolderPathName(f.id));
                 }
             });
         }
@@ -3028,6 +3028,20 @@ window.submitNewSubfolderFromDialog = async function(parentId) {
     renderBookmarkFoldersList();
 };
 
+window.getFolderPathName = function(folderId) {
+    const path = [];
+    let currentId = folderId;
+    const visited = new Set();
+    while (currentId && !visited.has(currentId)) {
+        visited.add(currentId);
+        const folder = bookmarkData.folders.find(f => f.id === currentId);
+        if (!folder) break;
+        path.unshift(folder.name);
+        currentId = folder.parentId;
+    }
+    return path.join(' > ');
+};
+
 window.updateBookmarkButtonState = function() {
     const btn = document.getElementById('bookmark-btn');
     if (!btn) return;
@@ -3039,7 +3053,7 @@ window.updateBookmarkButtonState = function() {
     let bookmarkedFolders = [];
     bookmarkData.folders.forEach(f => {
         if (f.keys && f.keys.includes(qKey)) {
-            bookmarkedFolders.push(f.name);
+            bookmarkedFolders.push(getFolderPathName(f.id));
         }
     });
     
@@ -3134,7 +3148,7 @@ window.openBookmarkModal = function(customIndex = null) {
         } else {
             listContainer.innerHTML = savedFolders.map(f => `
                 <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); padding:0.5rem 0.8rem; border-radius:8px;">
-                    <span style="font-size:0.95rem; color:#fff; font-weight:600; text-align:left;">📁 ${f.name}</span>
+                    <span style="font-size:0.95rem; color:#fff; font-weight:600; text-align:left;">📁 ${getFolderPathName(f.id)}</span>
                     <button onclick="unbookmarkFromFolderInModal('${f.id}')" style="background:rgba(239,68,68,0.1); color:#ef4444; border:1px solid rgba(239,68,68,0.2); padding:0.25rem 0.6rem; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:700; transition:0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">해제</button>
                 </div>
             `).join('');
