@@ -3180,8 +3180,7 @@ window.unbookmarkFromFolderInModal = async function(folderId) {
     openBookmarkModal(targetIndex);
     
     // Refresh result list if result view is currently open
-    const bulkResultView = document.getElementById('bulk-result-view');
-    if (bulkResultView && !bulkResultView.classList.contains('hidden') && bulkResultView.style.display !== 'none') {
+    if (state.view === 'bulk-result-view') {
         showSessionResult();
     }
 };
@@ -3276,8 +3275,7 @@ window.saveQuestionToBookmark = async function() {
     }
     
     // Refresh result list if result view is currently open
-    const bulkResultView = document.getElementById('bulk-result-view');
-    if (bulkResultView && !bulkResultView.classList.contains('hidden') && bulkResultView.style.display !== 'none') {
+    if (state.view === 'bulk-result-view') {
         showSessionResult();
     }
     
