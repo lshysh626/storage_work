@@ -1108,7 +1108,7 @@ function renderQuestion() {
 
             blanks.forEach(label => {
                 const row = document.createElement('div');
-                const isDescriptive = q.type === 'essay' || q.type === 'practical';
+                const isDescriptive = q.type === 'essay' || q.type === 'practical' || (q.answer && (q.answer.includes('\n') || q.answer.length > 50)) || q.question.includes('기술하시오') || q.question.includes('서술하시오');
 
                 const currentVal = (savedAns && savedAns.includes(`(${label})`)) 
                     ? savedAns.split(`(${label})`)[1].split(' / ')[0].trim() 
