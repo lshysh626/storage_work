@@ -3358,8 +3358,8 @@ function renderBookmarkFoldersList() {
             </button>
         </div>
         
-        ${selectionActionBar}
         ${selectAllFoldersBar}
+        ${selectionActionBar}
         
         <div style="display: flex; flex-direction: column; gap: 0.8rem; width: 100%;">
             ${renderFolderTree(null, 0)}
