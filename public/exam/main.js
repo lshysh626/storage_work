@@ -2970,7 +2970,8 @@ function deleteFolderRecursive(folderId) {
     bookmarkData.folders = bookmarkData.folders.filter(f => f.id !== folderId);
 }
 
-window.addNewSubfolder = function(parentId) {
+window.addNewSubfolder = function(parentId, event) {
+    if (event) event.stopPropagation();
     const title = document.getElementById('custom-dialog-title');
     const body = document.getElementById('custom-dialog-body');
     const actions = document.getElementById('custom-dialog-actions');
@@ -3383,10 +3384,10 @@ function renderFolderTree(parentId = null, depth = 0) {
         const totalSubQuestionsCount = getFolderKeysRecursive(f.id).size;
         
         let folderHeader = `
-            <div class="item-row" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1rem 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid ${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}; border-radius: 12px; margin-left: ${indentPadding}rem; margin-top: 0.3rem; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}'">
+            <div class="item-row" onclick="toggleFolderExpand('${f.id}', event)" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1rem 1.2rem; background: rgba(30, 41, 59, 0.7); border: 1px solid ${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}; border-radius: 12px; margin-left: ${indentPadding}rem; margin-top: 0.3rem; transition: 0.2s;" onmouseover="this.style.borderColor='rgba(251,191,36,0.3)'" onmouseout="this.style.borderColor='${isChecked ? 'rgba(251,191,36,0.5)' : 'rgba(255,255,255,0.05)'}'">
                 <div style="display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 0;">
                     <input type="checkbox" ${isChecked ? 'checked' : ''} onclick="toggleSelectFolder('${f.id}', event)" style="width: 1.25rem; height: 1.25rem; accent-color: #fbbf24; cursor: pointer; flex-shrink: 0;" />
-                    <div style="flex: 1; text-align: left; min-width: 0; padding-right: 0.5rem;" onclick="toggleFolderExpand('${f.id}', event)">
+                    <div style="flex: 1; text-align: left; min-width: 0; padding-right: 0.5rem;">
                         <strong style="font-size: 1.05rem; color: #fff; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             <span>${isExpanded ? '📂' : '📁'} ${f.name}</span>
                             <span style="font-size: 0.8rem; color: var(--muted); font-weight: 500;">
