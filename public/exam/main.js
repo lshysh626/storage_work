@@ -3090,7 +3090,7 @@ async function syncBookmarks(overwriteRemote = false) {
                     if (data.bookmarks && data.bookmarks.folders) {
                         const remoteFolders = data.bookmarks.folders;
                         remoteFolders.forEach(rf => {
-                            const localFolder = local.folders.find(f => f.id === rf.id || f.name === rf.name);
+                            const localFolder = local.folders.find(f => f.id === rf.id);
                             if (localFolder) {
                                 localFolder.keys = [...new Set([...(localFolder.keys || []), ...(rf.keys || [])])];
                             } else {
