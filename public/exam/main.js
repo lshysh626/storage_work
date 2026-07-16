@@ -989,9 +989,9 @@ function renderQuestion() {
         const mainText = parts[0];
         const subText = parts.slice(1).join('\n');
         
-        const imagesHTML = `<div style="text-align: center; margin: 1.2rem 0; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.04); padding: 0.8rem; border-radius: 8px; user-select: none; overflow-x: auto;">` + 
+        const imagesHTML = `<div class="image-zoom-container">` + 
             q.images.map(img => 
-                `<img src="./images/${img}" class="question-image" onclick="this.classList.toggle('expanded')" />`
+                `<img src="./images/${img}" class="question-image" onmousedown="handleImageMouseDown(event, this)" onmousemove="handleImageMouseMove(event, this)" onmouseup="handleImageMouseUp(event, this)" onclick="handleImageClick(event, this)" />`
             ).join('') + 
             `</div>`;
             
@@ -5114,3 +5114,57 @@ document.addEventListener('DOMContentLoaded', () => {
         isDragging = false;
     });
 });
+
+
+/* ==========================================
+   인라인 이미지 확대/축소 및 드래그 스크롤 제어
+   ========================================== */
+let isImageDragging = false;
+let imageStartX = 0, imageStartY = 0;
+let imageScrollLeft = 0, imageScrollTop = 0;
+let imageMoved = false;
+
+window.handleImageMouseDown = function(e, img) {
+    if (!img.classList.contains('zoomed-in')) return;
+    const container = img.parentElement;
+    isImageDragging = true;
+    imageMoved = false;
+    imageStartX = e.clientX;
+    imageStartY = e.clientY;
+    imageScrollLeft = container.scrollLeft;
+    imageScrollTop = container.scrollTop;
+    img.style.cursor = 'grabbing';
+};
+
+window.handleImageMouseMove = function(e, img) {
+    if (!isImageDragging) return;
+    const dx = e.clientX - imageStartX;
+    const dy = e.clientY - imageStartY;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+        imageMoved = true;
+        const container = img.parentElement;
+        container.scrollLeft = imageScrollLeft - dx;
+        container.scrollTop = imageScrollTop - dy;
+    }
+};
+
+window.handleImageMouseUp = function(e, img) {
+    isImageDragging = false;
+    img.style.cursor = img.classList.contains('zoomed-in') ? 'zoom-out' : 'zoom-in';
+};
+
+window.handleImageClick = function(e, img) {
+    if (imageMoved) {
+        e.stopPropagation();
+        return;
+    }
+    img.classList.toggle('zoomed-in');
+    const container = img.parentElement;
+    if (img.classList.contains('zoomed-in')) {
+        img.style.cursor = 'zoom-out';
+    } else {
+        img.style.cursor = 'zoom-in';
+        container.scrollLeft = 0;
+        container.scrollTop = 0;
+    }
+};

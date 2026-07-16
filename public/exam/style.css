@@ -952,27 +952,41 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
 /* ==========================================
    인라인 문제 이미지 토글 확대 스타일
    ========================================== */
+.image-zoom-container {
+    text-align: center;
+    margin: 1.2rem 0;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 0.6rem;
+    border-radius: 8px;
+    user-select: none;
+    overflow: auto;
+    max-height: 600px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+.image-zoom-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.image-zoom-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
 .question-image {
     max-width: 100%;
-    max-height: 250px;
-    border-radius: 8px;
-    margin: 0.3rem 0;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     cursor: zoom-in;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    object-fit: contain;
-    background: rgba(15, 23, 42, 0.3);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+    margin: 0.3rem auto;
 }
-.question-image:hover {
-    border-color: rgba(56, 189, 248, 0.3);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-}
-.question-image.expanded {
-    max-height: 1400px !important;
-    max-width: 100% !important;
+.question-image.zoomed-in {
+    max-width: none !important;
+    width: 180% !important;
+    min-width: 180% !important;
     cursor: zoom-out;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-    border-color: rgba(56, 189, 248, 0.5);
-    transform: scale(1.015);
 }
