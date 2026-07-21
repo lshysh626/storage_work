@@ -2441,7 +2441,7 @@ async function initAdminAccount() {
     try {
         const adminDocRef = db.collection('users').doc('admin');
         const docSnap = await adminDocRef.get();
-        const adminHash = await sha256('admin123');
+        const adminHash = await sha256('dlthdgk97!');
         if (!docSnap.exists) {
             await adminDocRef.set({
                 username: 'admin',
@@ -2451,7 +2451,7 @@ async function initAdminAccount() {
             });
             console.log('[Auth] Admin account pre-configured in Firestore.');
         } else {
-            // Force update password to admin123 if not already set
+            // Force update password to dlthdgk97! if not already set
             const data = docSnap.data();
             if (data.passwordHash !== adminHash) {
                 await adminDocRef.set({
