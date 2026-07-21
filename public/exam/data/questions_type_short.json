@@ -903,7 +903,7 @@
     {
       "original_id": 102,
       "type": "short",
-      "question": "ISO/IEC 에서 정의한 위험 관리 모델은 위험 구성 요소들 간의 관계를 도표로 표현하고 있다. 괄호 안에 들어갈 용어를 기술하시오.\n\n[보기]\n공격 --------- 취약성 ----------> 노출\n ↑                                ↓\n(A) -- 증가 → 위험 ← 증가 --- (B)\n               ↑\n보안대책 ----→ (C)",
+      "question": "ISO/IEC 에서 정의한 위험 관리 모델은 위험 구성 요소들 간의 관계를 도표로 표현하고 있다. 괄호 안에 들어갈 용어를 기술하시오.\n\n[보기]\n<table class=\"diagram-table\">\n  <tr>\n    <td><b>공격</b></td>\n    <td class=\"arrow-dash\">-------------------→</td>\n    <td><b>취약성</b></td>\n    <td class=\"arrow-dash\">-------------------→</td>\n    <td><b>노출</b></td>\n  </tr>\n  <tr>\n    <td class=\"arrow-v\">↑</td>\n    <td></td>\n    <td></td>\n    <td></td>\n    <td class=\"arrow-v\">↓</td>\n  </tr>\n  <tr>\n    <td><b>(A)</b></td>\n    <td class=\"label-txt\">-- 증가 --→</td>\n    <td><b class=\"highlight-red\">위험</b></td>\n    <td class=\"label-txt\">←-- 증가 --</td>\n    <td><b>(B)</b></td>\n  </tr>\n  <tr>\n    <td></td>\n    <td></td>\n    <td class=\"arrow-v\">↑</td>\n    <td></td>\n    <td></td>\n  </tr>\n  <tr>\n    <td colspan=\"2\" style=\"text-align:right;\"><b>보안대책</b></td>\n    <td class=\"arrow-dash\">-------------------→</td>\n    <td colspan=\"2\" style=\"text-align:left;\"><b>(C)</b></td>\n  </tr>\n</table>",
       "answer": "위협, 자산, 감소",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
@@ -2271,7 +2271,7 @@
     {
       "original_id": 254,
       "type": "short",
-      "question": "빈칸에 알맞은 단어는?\n\n[보기]\n공격 -------------- (A) -------------→ 노출\n ↑        ↓ 증가       ↓\n보안대책 – (B) → 위험      자산\n     ↑ 증가     ↓\n가치(사업영향) ------------ (C)",
+      "question": "빈칸에 알맞은 단어는?\n\n[보기]\n<table class=\"diagram-table\">\n  <tr>\n    <td><b>공격</b></td>\n    <td class=\"arrow-dash\">-------------------→</td>\n    <td><b>(A)</b></td>\n    <td class=\"arrow-dash\">-------------------→</td>\n    <td><b>노출</b></td>\n  </tr>\n  <tr>\n    <td class=\"arrow-v\">↑</td>\n    <td></td>\n    <td class=\"label-txt\">↓ 증가</td>\n    <td></td>\n    <td class=\"arrow-v\">↓</td>\n  </tr>\n  <tr>\n    <td><b>보안대책</b></td>\n    <td class=\"arrow-dash\">----------→</td>\n    <td><b>(B)</b> → <b>위험</b></td>\n    <td></td>\n    <td><b>자산</b></td>\n  </tr>\n  <tr>\n    <td></td>\n    <td></td>\n    <td class=\"label-txt\">↑ 증가</td>\n    <td></td>\n    <td class=\"arrow-v\">↓</td>\n  </tr>\n  <tr>\n    <td colspan=\"2\"><b>가치(사업영향)</b></td>\n    <td colspan=\"3\" class=\"arrow-dash\">←----------------------------------- <b>(C)</b></td>\n  </tr>\n</table>",
       "answer": "취약성, 감소, 보유",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",

@@ -977,7 +977,15 @@ function renderQuestion() {
         let escaped = escapeHTML(text);
         const bogiRegex = /(\[보기\]|&lt;보기&gt;|\[\s*아파치 로그\s*\]|\[\s*로그\s*\]|\[\s*표\s*\]|\[\s*지문\s*\]|\[\s*설정\s*\]|\[\s*조건\s*\]|\[\s*코드\s*\])([\s\S]*?)(?=(?:\s1\)|\s\(1\)|①|가\.|\[문\]|\(가\)|$))/g;
         escaped = escaped.replace(bogiRegex, '<div class="bogi-box"><div class="bogi-badge">$1</div>$2</div>');
-        return escaped.replace(/\n/g, '<br>');
+        
+        // Unescape safe HTML tags
+        escaped = escaped.replace(/&lt;(\/?(table|tr|td|th|tbody|thead|span|div|b|i|strong|em|pre|code|p|br)\b[^&]*?)&gt;/gi, '<$1>');
+        escaped = escaped.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+
+        let res = escaped.replace(/\n/g, '<br>');
+        res = res.replace(/<br>\s*<(table|tr|td|th|tbody|thead|\/table|\/tr|\/td|\/th|\/tbody|\/thead)/gi, '<$1');
+        res = res.replace(/<\/(table|tr|td|th|tbody|thead)>\s*<br>/gi, '</$1>');
+        return res;
     }
 
     let finalHTML = '';

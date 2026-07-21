@@ -850,6 +850,43 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     word-break: keep-all;
 }
 
+/* ==========================================
+   스마트 도표/테이블 스타일 (.diagram-table)
+   ========================================== */
+.diagram-table {
+    margin: 0.8rem auto;
+    border-collapse: separate;
+    border-spacing: 12px 6px;
+    text-align: center;
+    color: #e2e8f0;
+    font-family: 'JetBrains Mono', 'Noto Sans KR', sans-serif;
+    font-size: 0.95rem;
+}
+.diagram-table td {
+    padding: 0.25rem 0.5rem;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.diagram-table .arrow-v {
+    color: #38bdf8;
+    font-size: 1.15rem;
+    font-weight: bold;
+}
+.diagram-table .arrow-dash {
+    color: #94a3b8;
+    font-family: monospace;
+    letter-spacing: -1px;
+}
+.diagram-table .highlight-red {
+    color: #f43f5e;
+    font-weight: bold;
+}
+.diagram-table .label-txt {
+    color: #38bdf8;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
 .bogi-badge {
     display: inline-block;
     background: rgba(56, 189, 248, 0.15);
