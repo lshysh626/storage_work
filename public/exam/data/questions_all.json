@@ -426,8 +426,8 @@
     {
       "original_id": 48,
       "type": "short",
-      "question": "MASTER 와 SLAVE DNS 서버의 존 파일 설정과 관련하여 다음 물음에 답하시오.\n[보기]\n- master name 서버 : ns1.korea.co.kr (192.168.1.1)\n- slave name 서버 : ns2.korea.co.kr (192.168.1.2)\n1) Master DNS 서버의 zone 파일 설정을 위하여 다음 ( )에 들어갈 설정 값을 쓰시오.\n/etc/named.conf zone \"korea.co.kr\" IN { type ( A );\nfile \"korea.co.kr.db\";\nallow-update { (B) }' };\n\n/var/named/korea.co.kr.db\n$TTL 1000 @ IN SOA ns1.korea.co.kr master.korea.co.kr. ( 2022113001 ; serial 21600 ; refresh 3600 ; retry 604800 ; expire 3600 ) ; minimum IN NS ns1.korea.co.kr.\nIN NS ns2.korea.co.kr.\nns1 IN A ( C ) ns2 IN A ( D )",
-      "answer": "master, 192.168.1.2;, 192.168.1.1,\n192.168.1.2\n\n\n\n\n\n\n2) Slave DNS 서버의 zone 파일 설정을 위하여, 다음 ( ) 에 들어갈 설정값을 쓰시오.\n/etc/named.conf zone \"korea.co.kr\" IN { type ( E );\nfile \"slave/korea.co.kr.db\";\nmasters { ( F ) }' };\n(답) slave, 192.168.1.1;",
+      "question": "MASTER 와 SLAVE DNS 서버의 존 파일 설정과 관련하여 다음 물음에 답하시오.\n\n[보기]\n- master name 서버 : ns1.korea.co.kr (192.168.1.1)\n- slave name 서버 : ns2.korea.co.kr (192.168.1.2)\n\n1) Master DNS 서버의 zone 파일 설정을 위하여 다음 ( )에 들어갈 설정 값을 쓰시오.\n\n[설정]\n# /etc/named.conf\nzone \"korea.co.kr\" IN {\n    type ( A );\n    file \"korea.co.kr.db\";\n    allow-update { ( B ) };\n};\n\n# /var/named/korea.co.kr.db\n$TTL 1000\n@ IN SOA ns1.korea.co.kr. master.korea.co.kr. (\n    2022113001 ; serial\n    21600      ; refresh\n    3600       ; retry\n    604800     ; expire\n    3600       ; minimum\n)\n      IN NS ns1.korea.co.kr.\n      IN NS ns2.korea.co.kr.\nns1   IN A  ( C )\nns2   IN A  ( D )\n\n2) Slave DNS 서버의 zone 파일 설정을 위하여, 다음 ( )에 들어갈 설정값을 쓰시오.\n\n[설정]\n# /etc/named.conf\nzone \"korea.co.kr\" IN {\n    type ( E );\n    file \"slave/korea.co.kr.db\";\n    masters { ( F ) };\n};",
+      "answer": "master\n192.168.1.2;\n192.168.1.1\n192.168.1.2\nslave\n192.168.1.1;",
       "explanation": "",
       "session": "[문제+답] 1회~28회 정보보안기사 실기 단답형",
       "id": 48
