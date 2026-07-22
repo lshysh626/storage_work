@@ -267,10 +267,10 @@ async function renderDashboard() {
 
     // Feature and Shortcut Data for Exam Trainer
     const examFeatures = [
-        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`, title: '실전 모드', desc: '실제 시험처럼 모든 문제를 푼 뒤 한꺼번에 AI 채점을 받습니다.', color: '#0ea5e9' },
-        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`, title: '즉시 채점', desc: '문제를 풀 때마다 실시간으로 AI의 정밀 채점과 피드백을 확인합니다.', color: '#10b981' },
-        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>`, title: '학습 모드', desc: '정답을 미리 보며 해설과 함께 개념을 익히는 학습 중심 모드입니다.', color: '#f59e0b' },
-        { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`, title: 'AI 튜터', desc: '모르는 부분은 언제든 AI에게 질문하고 상세한 해설을 스트리밍으로 받으세요.', color: '#8b5cf6' }
+        { icon: '<span style="font-size: 1.3rem; line-height: 1;">🎯</span>', title: '실전 모드', desc: '실제 시험처럼 모든 문제를 푼 뒤 한꺼번에 AI 채점을 받습니다.', color: '#0ea5e9' },
+        { icon: '<span style="font-size: 1.3rem; line-height: 1;">⚡</span>', title: '즉시 채점', desc: '문제를 풀 때마다 실시간으로 AI의 정밀 채점과 피드백을 확인합니다.', color: '#10b981' },
+        { icon: '<span style="font-size: 1.3rem; line-height: 1;">📖</span>', title: '학습 모드', desc: '정답을 미리 보며 해설과 함께 개념을 익히는 학습 중심 모드입니다.', color: '#f59e0b' },
+        { icon: '<span style="font-size: 1.3rem; line-height: 1;">🤖</span>', title: 'AI 튜터', desc: '모르는 부분은 언제든 AI에게 질문하고 상세한 해설을 스트리밍으로 받으세요.', color: '#8b5cf6' }
     ];
 
     const shortcuts = [
