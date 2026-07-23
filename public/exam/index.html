@@ -426,11 +426,10 @@
     if (window.lucide) lucide.createIcons();
 </script>
     <!-- Image Lightbox Modal -->
-    <div id="image-lightbox" class="lightbox hidden" onclick="closeLightbox()">
+    <div id="image-lightbox" class="lightbox hidden">
         <div class="lightbox-content-wrapper">
             <button class="lightbox-close-btn" onclick="closeLightbox()">×</button>
-            <img id="lightbox-img" src="" style="transform: scale(1);" onclick="event.stopPropagation()" alt="확대 이미지" />
-            <div class="lightbox-hint">마우스 휠로 확대/축소 (드래그로 이동, ESC 키 또는 이미지 외 다른 곳 클릭 시 닫기)</div>
+            <img id="lightbox-img" src="" style="transform: scale(1);" alt="확대 이미지" />
         </div>
     </div>
 </body>
