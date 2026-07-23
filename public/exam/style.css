@@ -929,7 +929,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
 }
 .lightbox.active {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: none; /* 포인터 이벤트가 투명 배경을 통과하여 뒷배경 클릭 가능 */
 }
 .lightbox-content-wrapper {
     position: relative;
@@ -940,6 +940,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     align-items: center;
     justify-content: center;
     outline: none;
+    pointer-events: none; /* 본체 래퍼 영역도 통과하도록 설정 */
 }
 .lightbox img {
     max-width: 100%;
@@ -949,6 +950,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     cursor: grab;
     user-select: none;
     transition: transform 0.05s linear;
+    pointer-events: auto; /* 이미지 자체는 드래그 및 줌 제어를 위해 포인터 이벤트 활성화 */
 }
 .lightbox img:active {
     cursor: grabbing;
@@ -981,6 +983,7 @@ h1 { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; }
     align-items: center;
     justify-content: center;
     transition: 0.2s;
+    pointer-events: auto; /* 닫기 버튼은 클릭 가능하도록 포인터 이벤트 활성화 */
 }
 .lightbox-close-btn:hover {
     background: rgba(255,255,255,0.25);

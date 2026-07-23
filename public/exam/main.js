@@ -5094,7 +5094,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!img || !lb) return;
     
     // Mouse Wheel Zoom (without requiring Ctrl key)
-    lb.addEventListener('wheel', (e) => {
+    img.addEventListener('wheel', (e) => {
         e.preventDefault();
         const delta = e.deltaY > 0 ? -0.15 : 0.15;
         zoomScale = Math.min(Math.max(zoomScale + delta, 0.5), 8); // 0.5배 ~ 8배 제한
