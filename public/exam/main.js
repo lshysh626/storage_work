@@ -712,7 +712,7 @@ async function startMockExamQuiz() {
     try {
         const res = await fetch('./data/questions_all.json?t=' + Date.now());
         const data = await res.json();
-        const allQuestions = data.questions;
+        const allQuestions = deduplicateQuestions(data.questions || []);
         
         // Group by type
         const shortList = allQuestions.filter(q => q.type === 'short');
@@ -804,6 +804,7 @@ async function startTypeQuiz(type) {
     }
 
     // 1. 순서 랜덤 셔플
+    questions = deduplicateQuestions(questions);
     questions.sort(() => Math.random() - 0.5);
 
     // 2. 풀 문항 수 읽어오기 (하단 통합 input에서)
@@ -864,7 +865,26 @@ async function startSessionQuiz(sessionId) {
     launchQuiz(questions, `📅 ${title}`);
 }
 
+function deduplicateQuestions(list) {
+    if (!list || !Array.isArray(list)) return [];
+    const seenText = new Set();
+    const seenKey = new Set();
+    const result = [];
+    for (const q of list) {
+        if (!q || !q.question) continue;
+        const qKey = (q.original_id || q.id) + "_" + q.type;
+        const normalizedText = q.question.trim().replace(/\s+/g, '');
+        if (!seenKey.has(qKey) && !seenText.has(normalizedText)) {
+            seenKey.add(qKey);
+            seenText.add(normalizedText);
+            result.push(q);
+        }
+    }
+    return result;
+}
+
 function launchQuiz(questions, title) {
+    questions = deduplicateQuestions(questions);
     if (!questions || questions.length === 0) {
         alert('문제가 없습니다. 동기화를 먼저 해주세요.');
         return;
@@ -3614,6 +3634,7 @@ window.startSelectedFoldersQuiz = async function(shuffle = false) {
             return;
         }
         
+        matchingQuestions = deduplicateQuestions(matchingQuestions);
         if (shuffle) {
             matchingQuestions = [...matchingQuestions].sort(() => Math.random() - 0.5);
         }
@@ -4131,6 +4152,7 @@ window.startBookmarkFolderQuiz = async function(folderId, shuffle = false, event
             return;
         }
         
+        matchingQuestions = deduplicateQuestions(matchingQuestions);
         if (shuffle) {
             matchingQuestions = [...matchingQuestions].sort(() => Math.random() - 0.5);
         }
